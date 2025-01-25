@@ -1,0 +1,241 @@
+/* General Styling */
+body, html {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: Arial, sans-serif;
+}
+
+/* Smooth Transition for Background */
+.hero {
+  position: relative;
+  background-size: cover;
+  background-position: center;
+  background-attachment: fixed;
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  padding: 0 50px;
+  overflow: hidden;
+  transition: background-image 1s ease-in-out; /* Smooth transition for sliding effect */
+}
+
+
+.hero-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 1;
+  opacity: 1;
+  animation: fadeIn 2s forwards;
+}
+
+.hero-content {
+  position: relative;
+  color: white;
+  text-align: left;
+  z-index: 2;
+  max-width: 500px;
+  opacity: 0;
+  transform: translateX(-100%);
+  animation: slideInFromLeft 3s forwards ease-in-out;
+}
+
+.hero-content h1 {
+  font-size: 3rem;
+  margin-bottom: 20px;
+}
+
+.hero-content p {
+  font-size: 1.2rem;
+  margin-bottom: 20px;
+}
+
+.social-icons {
+  margin: 20px 0;
+  display: flex;
+  gap: 15px;
+}
+
+.icon {
+  color: white;
+  font-size: 1.5rem;
+  text-decoration: none;
+  transition: transform 0.3s, color 0.3s;
+}
+
+.icon:hover {
+  transform: scale(1.2);
+  color: #ff5733;
+  text-shadow: 0px 0px 10px rgba(255, 87, 51, 0.7);
+}
+
+.contact-button {
+  background-color: #ff5733;
+  color: white;
+  border: none;
+  padding: 12px 24px;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 1rem;
+  transition: background-color 0.3s ease, transform 0.3s ease;
+  margin-top: 20px;
+}
+
+.contact-button:hover {
+  background-color: #e94e2e;
+  transform: scale(1.05);
+}
+
+/* Keyframes for Animations */
+@keyframes fadeIn {
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes slideInFromLeft {
+  0% {
+    transform: translateX(-100%);
+    opacity: 0;
+  }
+  100% {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+/* Events Section Styling */
+.events-section {
+  padding: 2rem;
+  background-color: #f9f9f9;
+}
+
+.events-section h2 {
+  text-align: center;
+  font-size: 2.5rem;
+  margin-bottom: 1.5rem;
+}
+
+.events-section ul {
+  list-style-type: none;
+  padding: 0;
+}
+
+.events-section li {
+  margin-bottom: 1.5rem;
+}
+
+.events-section li h3 {
+  font-size: 1.8rem;
+  margin-bottom: 0.5rem;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .hero-content {
+    max-width: 100%;
+    text-align: center;
+  }
+  .social-icons {
+    justify-content: center;
+  }
+  .hero-content h1 {
+    font-size: 5vw;
+  }
+  .hero-content p {
+    font-size: 1.5rem;
+  }
+}
+/* Services Section */
+.services-section {
+  padding: 50px 20px;
+  text-align: center;
+  background-color: #f9f9f9;
+}
+
+.services-section h2 {
+  font-size: 2.5rem;
+  margin-bottom: 20px;
+  color: #333;
+}
+
+.services-section p {
+  font-size: 1.2rem;
+  margin-bottom: 40px;
+  color: #555;
+}
+
+.services-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+  justify-content: center;
+}
+
+.service-card {
+  width: 300px;
+  border: 1px solid #ddd;
+  border-radius: 10px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+  transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+  background-color: #fff;
+  text-align: left;
+}
+
+.service-card:hover {
+  transform: translateY(-10px);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+}
+
+.service-card img {
+  width: 100%;
+  height: 200px;
+  object-fit: cover;
+}
+
+.service-card h3 {
+  margin: 15px 20px 10px;
+  font-size: 1.5rem;
+  color: #222;
+}
+
+.service-card p {
+  margin: 0 20px 15px;
+  font-size: 1rem;
+  color: #555;
+}
+
+.learn-more-button {
+  margin: 0 20px 20px;
+  padding: 10px 20px;
+  background-color: #ff5733;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 1rem;
+  transition: background-color 0.3s ease, transform 0.3s ease;
+}
+
+.learn-more-button:hover {
+  background-color: #e94e2e;
+  transform: scale(1.05);
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .services-container {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .service-card {
+    width: 90%;
+  }
+}

@@ -1,0 +1,127 @@
+/* Navbar styling */
+.navbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: white;
+  padding: 15px 30px;
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Keep shadow for visibility */
+}
+
+.navbar-logo {
+  display: flex;
+  align-items: center;
+}
+
+.navbar-logo img {
+  height: 40px; /* Adjust logo size */
+  margin-right: 10px;
+}
+
+.navbar-logo span {
+  font-size: 1.5rem;
+  font-weight: bold;
+  color: #333333;
+}
+
+.navbar-links {
+  display: flex;
+  gap: 20px;
+}
+
+.navbar-links a {
+  text-decoration: none;
+  color: #333333;
+  font-size: 1rem;
+  transition: color 0.3s ease;
+}
+
+.navbar-links a:hover {
+  color: #ff5733; /* Highlight color */
+}
+
+.navbar-contact {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
+.navbar-contact a {
+  text-decoration: none;
+  color: #333333;
+  font-size: 0.9rem;
+  display: flex;
+  align-items: center;
+}
+
+.navbar-contact .whatsapp-icon {
+  color: #25d366; /* WhatsApp green color */
+  font-size: 1.5rem;
+  transition: transform 0.3s ease;
+}
+
+.navbar-contact .whatsapp-icon:hover {
+  transform: scale(1.2);
+}
+
+/* Hamburger Menu - Hidden on larger screens */
+.hamburger {
+  display: none;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+  cursor: pointer;
+  height: 24px;
+  width: 30px;
+}
+
+.hamburger div {
+  width: 30px;
+  height: 4px;
+  background-color: #333;
+  transition: transform 0.3s ease;
+}
+
+/* Mobile Menu (hidden by default) */
+.navbar-menu {
+  display: none;
+  flex-direction: column;
+  gap: 15px;
+  background-color: white;
+  padding: 15px;
+  position: absolute;
+  top: 60px;
+  right: 30px;
+  border-radius: 5px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.navbar-menu a {
+  text-decoration: none;
+  color: #333333;
+  font-size: 1rem;
+}
+
+.navbar-menu.active {
+  display: flex;
+}
+
+/* Media Queries for Responsiveness */
+@media (max-width: 768px) {
+  /* Hide the navbar links on mobile */
+  .navbar-links {
+      display: none;
+  }
+
+  /* Show hamburger menu on mobile */
+  .hamburger {
+      display: flex;
+  }
+
+  .navbar-contact {
+      display: none; /* Hide contact info on small screens */
+  }
+}
