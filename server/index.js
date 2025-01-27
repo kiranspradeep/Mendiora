@@ -5,6 +5,7 @@ const app = express()
 const userRouter=require("./routes/userRouter")
 const attendeeRouter=require("./routes/attendeeRouter")
 const eventRouter=require("./routes/eventRouter")
+const venueRouter=require("./routes/venueRouter")
 require('dotenv').config()
 app.use(cors())
 app.use(express.json())
@@ -21,6 +22,7 @@ connectDB()
 app.use('/',userRouter)
 app.use('/attendee',attendeeRouter)
 app.use('/event',eventRouter)
+app.use('/venue',venueRouter)
 
 app.listen(process.env.PORT,()=>{
     console.log(`server is running on port 3000`);
