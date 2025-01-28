@@ -13,11 +13,11 @@ function AttendLogin() {
     e.preventDefault();
     try {
       const response = await axios.post(
-        'http://localhost:3000/loginAtt', // Adjusted endpoint
+        'http://localhost:3000/attendee/loginAtt', // Adjusted endpoint
         { email, password }
       );
       setMessage(response.data.message || "Login successful");
-      navigate('/home'); // Redirect to home after successful login
+      navigate('/'); // Redirect to home after successful login
     } catch (error) {
       setMessage(error.response?.data.message || "Something went wrong");
     }
