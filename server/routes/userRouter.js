@@ -3,11 +3,11 @@ const userRouter=express.Router()
 const userController = require('../controllers/userController')
 const Auth =require('../middlewares/authMiddleware')
 
-userRouter.post('/signupUser',userController.signupUser)
-userRouter.post('/loginUser',userController.loginUser)
-userRouter.get('/getOrganizers',userController.getOrganizers)
-userRouter.get('/getLoggedInUser',Auth,userController.getLoggedInUser)
-userRouter.put('/updateUser',Auth,userController.updateUser)
-userRouter.delete('/deleteUser',Auth,userController.deleteUser)
+userRouter.post('/signupUser',userController.signupAttendee)
+userRouter.post('/loginUser',userController.loginAttendee)
+userRouter.get('/getAllUser',userController.getAllAttendee)
+userRouter.get('/getSingleUser',Auth,userController.getSingleattendee)
+userRouter.put('/updateUser',Auth,userController.updateAttendee)
+userRouter.delete('/deleteUser',Auth,userController.deleteAttendee)
 
 module.exports=userRouter
