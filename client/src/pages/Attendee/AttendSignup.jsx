@@ -16,11 +16,11 @@ function AttendSignup() {
     e.preventDefault();
     try {
       const response = await axios.post(
-        'http://localhost:3000/signupAtt', // Adjusted endpoint
+        'http://localhost:3000/attendee/signupAtt', // Adjusted endpoint
         { username, email, password, firstName, lastName } // Include new fields
       );
       setMessage(response.data.message || "Signup successful");
-      navigate('/login'); // Redirect to login after successful signup
+      navigate('/loginatt'); // Redirect to login after successful signup
     } catch (error) {
       setMessage(error.response?.data.message || "Something went wrong");
     }
@@ -47,7 +47,7 @@ function AttendSignup() {
         </div>
         <input type="submit" />
         <div className="link-container">
-          <a href="/login">Already have an account? Login</a>
+          <a href="/loginatt">Already have an account? Login</a>
         </div>
         {message && <p>{message}</p>}
       </form>

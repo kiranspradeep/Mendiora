@@ -2,8 +2,8 @@ const express = require('express')
 const cors = require('cors')
 const mongoose =require('mongoose')
 const app = express()
+const organizerAdminRouter=require("./routes/OrganizerAdminRouter")
 const userRouter=require("./routes/userRouter")
-const attendeeRouter=require("./routes/attendeeRouter")
 const eventRouter=require("./routes/eventRouter")
 const venueRouter=require("./routes/venueRouter")
 require('dotenv').config()
@@ -19,8 +19,8 @@ const connectDB =async  function main(){
 };
 connectDB()
 
-app.use('/',userRouter)
-app.use('/attendee',attendeeRouter)
+app.use('/',organizerAdminRouter)
+app.use('/user',userRouter)
 app.use('/event',eventRouter)
 app.use('/venue',venueRouter)
 

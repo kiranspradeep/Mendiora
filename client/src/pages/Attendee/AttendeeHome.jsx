@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import './Home.css';
-import Navbar from '../../components/Navbar';
+import './AttendeeHome.css';
+import Navbar from '../../components/attendee/Navbar';
 import Footer from '../../components/Footer';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faInstagram, faYoutube, faFacebook, faLinkedin, faTwitter } from '@fortawesome/free-brands-svg-icons';
@@ -11,7 +11,7 @@ import party2 from '../../assets/party2.jpg';
 import party3 from '../../assets/party3.jpg';
 import event from '../../assets/event.avif'
 
-function Home() {
+function AttendeeHome() {
   const [currentIndex, setCurrentIndex] = useState(0);
   const images = [party1, party2, party3,event];
 
@@ -94,4 +94,4 @@ function Home() {
   );
 }
 
-export default Home;
+export default AttendeeHome;

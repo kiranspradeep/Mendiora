@@ -4,9 +4,15 @@ const jwt = require("jsonwebtoken");
 require("dotenv").config();
 
 //signup function
-async function signupUser(req, res) {
+async function signupAttendee(req, res) {
   try {
     const { email, password, username, firstName, lastName } = req.body;
+
+    //emailvalidation
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(email)) {
+      return res.status(400).json({ message: "Invalid email format" });
+    }
 
     const userExit = await User.findOne({ email });
     if (userExit) {
@@ -19,7 +25,9 @@ async function signupUser(req, res) {
         password: hashedPassword,
         firstName,
         lastName: lastName,
+        role:"attendee"
       });
+      
 
       await userData.save();
       const token = jwt.sign(
@@ -35,16 +43,16 @@ async function signupUser(req, res) {
 }
 
 //login
-async function loginUser(req, res) {
+async function loginAttendee(req, res) {
   try {
     const { email, password } = req.body;
     const user = await User.findOne({ email });
     if (!user) {
-      return res.status(400).json({ message: "Invalid email or password" });
+      return res.status(400).json({ message: "Invalid email" });
     }
     const isValidPassword = await bcrypt.compare(password, user.password);
     if (!isValidPassword) {
-      return res.status(400).json({ message: "Invalid email or password" });
+      return res.status(400).json({ message: "Invalid password" });
     }
     const token = jwt.sign(
       { userId: user._id, email: user.email },
@@ -56,7 +64,7 @@ async function loginUser(req, res) {
     res.status(500).json({ message: error.message });
   }
 }
-const updateUser = async (req, res) => {
+const updateAttendee = async (req, res) => {
   try {
     const { userId } = req.user; // Assuming `req.user` contains the authenticated user's details
     const updates = req.body; // Extract fields to update from the request body
@@ -67,13 +75,7 @@ const updateUser = async (req, res) => {
     }
 
     // Ensure only the allowed fields are updated
-    const allowedFields = [
-      "username",
-      "email",
-      "password",
-      "firstName",
-      "lastName",
-    ];
+    const allowedFields = ['username', 'email', 'password', 'firstName', 'lastName'];
     const filteredUpdates = {};
     for (const field of allowedFields) {
       if (updates[field] !== undefined) {
@@ -81,71 +83,94 @@ const updateUser = async (req, res) => {
       }
     }
 
+    // Fetch the current user from the database
+    const currentUser = await User.findById(userId);
+    if (!currentUser) {
+      return res.status(404).json({ message: 'User not found' });
+    }
+
+    // Check if there are any actual changes
+    const isIdentical = Object.keys(filteredUpdates).every(
+      (key) => 
+        key === 'password'
+          ? false // Always treat password as different for security purposes
+          : filteredUpdates[key] === currentUser[key]
+    );
+
+    if (isIdentical) {
+      return res.status(400).json({ message: 'Nothing to update. All values are the same.' });
+    }
+
+    // Proceed with the update
     const updatedUser = await User.findByIdAndUpdate(
       userId,
       { $set: filteredUpdates },
       { new: true, runValidators: true } // Return the updated document and validate against schema
     );
 
-    if (!updatedUser) {
-      return res.status(404).json({ message: "User not found" });
-    }
-
-    res
-      .status(200)
-      .json({ message: "User updated successfully", user: updatedUser });
+    res.status(200).json({ message: 'User updated successfully', user: updatedUser });
   } catch (error) {
     console.error(error);
-    res.status(500).json({ message: "Server error: " + error.message });
+    res.status(500).json({ message: 'Server error: ' + error.message });
   }
 };
 
+  
+  
 //   code to delete users
-const deleteUser = async (req, res) => {
-  try {
-    const { userId } = req.user;
-
-    const deletedUser = await User.findByIdAndDelete(userId);
-
-    if (!deletedUser) {
-      return res.status(404).json({ message: "User not found" });
+  const deleteAttendee = async (req, res) => {
+    try {
+      const { userId } = req.user;
+  
+      const deletedUser = await User.findByIdAndDelete(userId);
+  
+      if (!deletedUser) {
+        return res.status(404).json({ message: 'User not found' });
+      }
+  
+      res.status(200).json({ message: 'User deleted successfully' });
+    } catch (error) {
+      console.error(error);
+      res.status(500).json({ message: 'Server error: ' + error.message });
     }
+  };
 
-    res.status(200).json({ message: "User deleted successfully" });
-  } catch (error) {
-    console.error(error);
-    res.status(500).json({ message: "Server error: " + error.message });
-  }
-};
-
-//a function to get users with role organizer
-const getOrganizers = async (req, res) => {
-  try {
-    const users = await User.find({ role: "organizer" });
-    res.status(200).json({ users });
-  } catch (error) {
-    console.error(error);
-    res.status(500).json({ message: "Server error: " + error.message });
-  }
-};
-
-//function to get details of user loged in using auth
-const getLoggedInUser = async (req, res) => {
-  try {
-    const user = await User.findById(req.user.userId);
-    res.status(200).json({ user });
+  const getAllAttendee = async (req, res) => {
+    try {
+      const users = await User.find(); // Fetch all users
+      console.log(users);
+  
+      res.status(200).json({ users });
     } catch (error) {
       console.error(error);
       res.status(500).json({ message: "Server error: " + error.message });
-      }
-      };
+    }
+  };
 
+  const getSingleattendee = async (req, res) => {
+    try {
+      const { userId } = req.user; // Assuming `req.user` contains authenticated user's details
+  
+      // Fetch the user by their ID
+      const user = await User.findById(userId);
+  
+      if (!user) {
+        return res.status(404).json({ message: "User not found" });
+      }
+  
+      res.status(200).json({ user });
+    } catch (error) {
+      console.error(error);
+      res.status(500).json({ message: "Server error: " + error.message });
+    }
+  };
+  
 
 module.exports = {
-  signupUser,
-  loginUser,
-  updateUser,
-  deleteUser,
-  getOrganizers,
-  getLoggedInUser
+  signupAttendee,
+  loginAttendee,
+  updateAttendee,
+  deleteAttendee,
+  getAllAttendee,
+  getSingleattendee
 };

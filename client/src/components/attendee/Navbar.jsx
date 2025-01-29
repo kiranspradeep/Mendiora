@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import "./Navbar.css";
-import logo from "../assets/logo.webp";
+import logo from "../../assets/logo.webp";
 import { FaPhoneAlt, FaWhatsapp } from "react-icons/fa";
 
 const Navbar = () => {
@@ -21,7 +21,7 @@ const Navbar = () => {
         <a href="#about">About Us</a>
         <a href="#services">Services</a>
         <a href="#venues">Venues</a>
-        <a href="/signup">Signup</a>
+        <a href="/signupatt">Signup</a>
         <a href="#contact">Contact Us</a>
       </nav>
       <div className="navbar-contact">

@@ -1,5 +1,5 @@
 const jwt = require('jsonwebtoken');
-const User = require('../models/userModels'); // Adjust the path to your User model
+const OrganizerAdmin = require('../models/OrganizerAdminModel'); // Adjust the path to your User model
 
 const roleMiddleware = (roles) => {
   return async (req, res, next) => {
@@ -14,7 +14,7 @@ const roleMiddleware = (roles) => {
       const decoded = jwt.verify(token, process.env.JWT_SECRETKEY); // Ensure `JWT_SECRET` is defined in your environment variables
       
       // Fetch user from the database
-      const user = await User.findById(decoded.userId); // Assumes the token contains `id`
+      const user = await OrganizerAdmin.findById(decoded.userId); // Assumes the token contains `id`
       
       if (!user) {
         return res.status(404).json({ message: 'User not found' });

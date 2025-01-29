@@ -1,6 +1,6 @@
 const mongoose =require('mongoose')
 
-const attendeeSchema = new mongoose.Schema({
+const OrganizerAdminSchema = new mongoose.Schema({
     username: {
         type: String,
         required: true,
@@ -25,7 +25,8 @@ const attendeeSchema = new mongoose.Schema({
     },
     role: {
         type: String,
-        default: 'attendee'
+        enum: ['admin', 'organizer'],
+        default: 'organizer'
     },
     createdAt: {
         type: Date,
@@ -37,6 +38,5 @@ const attendeeSchema = new mongoose.Schema({
     }
 });
 
-
-const Attendee = mongoose.model('Attendee',attendeeSchema)
-module.exports=Attendee
+const OrganizerAdmin = mongoose.model('OrganizerAdmin',OrganizerAdminSchema)
+module.exports=OrganizerAdmin
