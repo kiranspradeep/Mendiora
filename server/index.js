@@ -9,6 +9,7 @@ const venueRouter=require("./routes/venueRouter")
 require('dotenv').config()
 app.use(cors())
 app.use(express.json())
+app.use("/uploads", express.static("uploads"));
 const connectDB =async  function main(){
     try {
         await mongoose.connect(process.env.MONGO_URL);

@@ -26,7 +26,7 @@ const VenueSchema = new mongoose.Schema({
     enum: ["marriage", "music event", "corporate event", "get-together", "birthday party"],
     required: true,
   },
-  owner: { type: mongoose.Schema.Types.ObjectId, ref: "User", required: true },
+  owner: { type: mongoose.Schema.Types.ObjectId, ref: "OrganizerAdmin", required: true },
   reviews: [
     {
       user: { type: mongoose.Schema.Types.ObjectId, ref: "User" },
@@ -34,7 +34,12 @@ const VenueSchema = new mongoose.Schema({
       comment: { type: String },
     },
   ],
+  unavailableDates: [{ type: Date }],
   createdAt: { type: Date, default: Date.now },
+  isapproved:{
+    type:Boolean,
+    default:false
+  }
 });
 
 

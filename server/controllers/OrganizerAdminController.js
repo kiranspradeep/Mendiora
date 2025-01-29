@@ -6,33 +6,50 @@ require("dotenv").config();
 //signup function
 async function signupUser(req, res) {
   try {
-    const { email, password, username, firstName, lastName } = req.body;
+    const { email, password, username, Name } = req.body;
 
-    const userExit = await OrganizerAdmin.findOne({ email });
-    if (userExit) {
-      res.status(400).json({ message: "User already exist" });
-    } else {
-      const hashedPassword = await bcrypt.hash(password, 10);
-      const userData = new OrganizerAdmin({
-        username: username,
-        email: email,
-        password: hashedPassword,
-        firstName,
-        lastName: lastName,
+    // Check if email or username already exists
+    const existingUser = await OrganizerAdmin.findOne({ 
+      $or: [{ email }, { username }] 
+    });
+
+    if (existingUser) {
+      return res.status(400).json({ 
+        message: existingUser.email === email 
+          ? "Email already exists" 
+          : "Username already exists" 
       });
-
-      await userData.save();
-      const token = jwt.sign(
-        { userId: userData._id, email: userData.email },
-        process.env.JWT_SECRETKEY,
-        { expiresIn: "1d" }
-      );
-      res.status(201).json({ message: "account created", token });
     }
+
+    // Hash password and create a new user
+    const hashedPassword = await bcrypt.hash(password, 10);
+    const userData = new OrganizerAdmin({
+      username,
+      email,
+      password: hashedPassword,
+      Name
+    });
+
+    await userData.save();
+
+    // Generate JWT token
+    const token = jwt.sign(
+      { userId: userData._id, email: userData.email },
+      process.env.JWT_SECRETKEY,
+      { expiresIn: "1d" }
+    );
+
+    res.status(201).json({ message: "Account created successfully", token });
+
   } catch (error) {
-    res.status(500).json({ message: error.message });
+    // Handle duplicate key error
+    if (error.code === 11000) {
+      return res.status(400).json({ message: "Username or email already exists" });
+    }
+    res.status(500).json({ message: "Server error", error: error.message });
   }
 }
+
 
 //login
 async function loginUser(req, res) {
@@ -71,8 +88,7 @@ const updateUser = async (req, res) => {
       "username",
       "email",
       "password",
-      "firstName",
-      "lastName",
+      "Name",
     ];
     const filteredUpdates = {};
     for (const field of allowedFields) {

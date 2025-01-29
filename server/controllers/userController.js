@@ -6,41 +6,54 @@ require("dotenv").config();
 //signup function
 async function signupAttendee(req, res) {
   try {
-    const { email, password, username, firstName, lastName } = req.body;
+    const { email, password, username, Name } = req.body;
 
-    //emailvalidation
+    // Email validation
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!emailRegex.test(email)) {
       return res.status(400).json({ message: "Invalid email format" });
     }
 
-    const userExit = await User.findOne({ email });
-    if (userExit) {
-      res.status(400).json({ message: "User already exist" });
-    } else {
-      const hashedPassword = await bcrypt.hash(password, 10);
-      const userData = new User({
-        username: username,
-        email: email,
-        password: hashedPassword,
-        firstName,
-        lastName: lastName,
-        role:"attendee"
+    // Check if username or email already exists
+    const existingUser = await User.findOne({ $or: [{ email }, { username }] });
+    if (existingUser) {
+      return res.status(400).json({ 
+        message: existingUser.email === email 
+          ? "Email already exists" 
+          : "Username already exists" 
       });
-      
-
-      await userData.save();
-      const token = jwt.sign(
-        { userId: userData._id, email: userData.email },
-        process.env.JWT_SECRETKEY,
-        { expiresIn: "1d" }
-      );
-      res.status(201).json({ message: "account created", token });
     }
+
+    // Hash password and create new user
+    const hashedPassword = await bcrypt.hash(password, 10);
+    const userData = new User({
+      username,
+      email,
+      password: hashedPassword,
+      Name,
+      role: "attendee"
+    });
+
+    await userData.save();
+
+    // Generate JWT token
+    const token = jwt.sign(
+      { userId: userData._id, email: userData.email },
+      process.env.JWT_SECRETKEY,
+      { expiresIn: "1d" }
+    );
+
+    res.status(201).json({ message: "Account created successfully", token });
+
   } catch (error) {
-    res.status(500).json({ message: error.message });
+    // Handle duplicate key error
+    if (error.code === 11000) {
+      return res.status(400).json({ message: "Username or email already exists" });
+    }
+    res.status(500).json({ message: "Server error", error: error.message });
   }
 }
+
 
 //login
 async function loginAttendee(req, res) {
@@ -75,7 +88,7 @@ const updateAttendee = async (req, res) => {
     }
 
     // Ensure only the allowed fields are updated
-    const allowedFields = ['username', 'email', 'password', 'firstName', 'lastName'];
+    const allowedFields = ['username', 'email', 'password', 'Name'];
     const filteredUpdates = {};
     for (const field of allowedFields) {
       if (updates[field] !== undefined) {

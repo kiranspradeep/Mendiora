@@ -2,63 +2,30 @@ const Venue = require("../models/venueModels");
 
 // Create a new venue
 const createVenue = async (req, res) => {
-    try {
-      const {
-        name,
-        description,
-        location,
-        capacity,
-        minPrice,
-        maxPrice,
-        images,
-        categories,
-      } = req.body;
-  
-      // Check if the venue already exists for this owner
-      const existingVenue = await Venue.findOne({
-        name,
-        "location.address": location.address,
-        owner: req.user.id,
-      });
-  
-      if (existingVenue) {
-        return res.status(400).json({
-          message: "You cannot create a venue with the same name and address.",
-        });
-      }
-  
-      // Create a new venue
-      const newVenue = new Venue({
-        name,
-        description,
-        location,
-        capacity,
-        minPrice,
-        maxPrice,
-        images,
-        categories,
-        owner: req.user.id, // req.user is set by auth middleware
-      });
-  
-      const savedVenue = await newVenue.save();
-  
-      res.status(201).json({
-        message: "Venue created successfully",
-        venue: savedVenue,
-      });
-    } catch (error) {
-      // Handle duplicate key error from the database (if any)
-      if (error.code === 11000) {
-        return res.status(400).json({
-          message: "Duplicate venue name and address for this owner.",
-        });
-      }
-      res.status(500).json({
-        message: "Server error",
-        error: error.message,
-      });
-    }
-  };
+  try {
+    const { name, description, location, capacity, minPrice, maxPrice, categories } = req.body;
+
+    // Extract secure URLs from uploaded files
+    const images = req.files.map(file => file.path);
+
+    const venue = new Venue({
+      name,
+      description,
+      location: JSON.parse(location),
+      capacity,
+      minPrice,
+      maxPrice,
+      categories,
+      owner: req.user._id,
+      images,
+    });
+
+    await venue.save();
+    res.status(201).json({ message: "Venue created successfully", venue });
+  } catch (error) {
+    res.status(500).json({ message: "Server error", error: error.message });
+  }
+};
   
 
 // Get all venues
