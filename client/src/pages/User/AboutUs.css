@@ -1,0 +1,152 @@
+/* About Hero Section */
+.about-hero {
+    position: relative;
+    background-size: cover;
+    background-position: center;
+    background-attachment: fixed;
+    height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    padding: 0 50px;
+    overflow: hidden;
+    transition: background-image 1s ease-in-out; /* Smooth transition for sliding effect */
+  }
+  
+  .about-hero-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 1;
+    opacity: 1;
+    animation: fadeIn 2s forwards;
+  }
+  
+  .about-hero-content {
+    position: relative;
+    color: white;
+    text-align: left;
+    z-index: 2;
+    max-width: 500px;
+    opacity: 0;
+    transform: translateX(-100%);
+    animation: slideInFromLeft 3s forwards ease-in-out;
+  }
+  
+  .about-hero-content h1 {
+    font-size: 3rem;
+    margin-bottom: 20px;
+    
+  }
+  
+  .about-hero-content p {
+    font-size: 1.2rem;
+    margin-bottom: 20px;
+  }
+  
+  .about-social-icons {
+    margin: 20px 0;
+    display: flex;
+    gap: 15px;
+  }
+  
+  .about-icon {
+    color: white;
+    font-size: 1.5rem;
+    text-decoration: none;
+    transition: transform 0.3s, color 0.3s;
+  }
+  
+  .about-icon:hover {
+    transform: scale(1.2);
+    color: #ff5733;
+    text-shadow: 0px 0px 10px rgba(255, 87, 51, 0.7);
+  }
+  
+  .about-contact-button {
+    background-color: #ff5733;
+    color: white;
+    border: none;
+    padding: 12px 24px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 1rem;
+    transition: background-color 0.3s ease, transform 0.3s ease;
+    margin-top: 20px;
+  }
+  
+  .about-contact-button:hover {
+    background-color: #e94e2e;
+    transform: scale(1.05);
+  }
+  
+  /* About Content Section */
+  .about-content-section {
+    padding: 50px 20px;
+    max-width: 1200px;
+    margin: 0 auto;
+    text-align: left;
+  }
+  
+  .about-content-section h2 {
+    font-size: 2.5rem;
+    margin-bottom: 20px;
+    color: #333;
+  }
+  
+  .about-content-section p {
+    font-size: 1.2rem;
+    margin-bottom: 20px;
+    color: #555;
+    line-height: 1.6;
+  }
+  
+  .about-content-section ul {
+    list-style-type: disc;
+    margin-left: 20px;
+    margin-bottom: 20px;
+  }
+  
+  .about-content-section ul li {
+    font-size: 1.1rem;
+    color: #555;
+    margin-bottom: 10px;
+  }
+  
+  /* Keyframes for Animations */
+  @keyframes fadeIn {
+    to {
+      opacity: 1;
+    }
+  }
+  
+  @keyframes slideInFromLeft {
+    0% {
+      transform: translateX(-100%);
+      opacity: 0;
+    }
+    100% {
+      transform: translateX(0);
+      opacity: 1;
+    }
+  }
+  
+  /* Responsive Design */
+  @media (max-width: 768px) {
+    .about-hero-content {
+      max-width: 100%;
+      text-align: center;
+    }
+    .about-social-icons {
+      justify-content: center;
+    }
+    .about-hero-content h1 {
+      font-size: 5vw;
+    }
+    .about-hero-content p {
+      font-size: 1.5rem;
+    }
+  }
