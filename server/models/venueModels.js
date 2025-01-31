@@ -23,7 +23,6 @@ const VenueSchema = new mongoose.Schema({
   images: [String], // Store image URLs
   categories: {
     type: [String], // Allow multiple categories per venue
-    enum: ["marriage", "music event", "corporate event", "get-together", "birthday party"],
     required: true,
   },
   owner: { type: mongoose.Schema.Types.ObjectId, ref: "OrganizerAdmin", required: true },

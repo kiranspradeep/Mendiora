@@ -61,8 +61,11 @@ const VenueForm = ({ onSuccess, token }) => {
     e.preventDefault();
     setLoading(true);
     setError("");
-
+          
+    const token = localStorage.getItem("token")
     try {
+      console.log(token);
+      
       const formData = new FormData();
       formData.append("name", venue.name);
       formData.append("description", venue.description);
@@ -86,6 +89,8 @@ const VenueForm = ({ onSuccess, token }) => {
 
       if (res.status === 201) {
         onSuccess(res.data.venue);
+        console.log(res.data);
+        
       }
     } catch (err) {
       setError(err.response?.data?.message || "Something went wrong");

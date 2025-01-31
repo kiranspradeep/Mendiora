@@ -19,10 +19,11 @@ const roleMiddleware = (roles) => {
       if (!user) {
         return res.status(404).json({ message: 'User not found' });
       }
-
+      
       // Attach user and role to the request object
-      req.user = { id: user._id, role: user.role };
-
+      req.user = { _id: user._id, role: user.role };
+      console.log(req.user);
+      
       // Check if the user's role is in the allowed roles
       if (!roles.includes(user.role)) {
         return res.status(403).json({ message: 'Access denied' });
