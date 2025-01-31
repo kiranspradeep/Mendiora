@@ -6,8 +6,7 @@ function UserSignup() {
   const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [firstName, setFirstName] = useState(""); // New field
-  const [lastName, setLastName] = useState(""); // New field
+  const [Name, setName] = useState(""); // New field
   const [message, setMessage] = useState("");
 
   const navigate = useNavigate();
@@ -34,10 +33,7 @@ function UserSignup() {
           <input type="text" id="username" placeholder="Username" required onChange={(e) => setUsername(e.target.value)} value={username} />
         </div>
         <div className="inputBox">
-          <input type="text" id="firstName" placeholder="First Name" required onChange={(e) => setFirstName(e.target.value)} value={firstName} />
-        </div>
-        <div className="inputBox">
-          <input type="text" id="lastName" placeholder="Last Name" required onChange={(e) => setLastName(e.target.value)} value={lastName} />
+          <input type="text" id="Name" placeholder="Name" required onChange={(e) => setName(e.target.value)} value={Name} />
         </div>
         <div className="inputBox">
           <input type="email" id="user" placeholder="Email" required onChange={(e) => setEmail(e.target.value)} value={email} />

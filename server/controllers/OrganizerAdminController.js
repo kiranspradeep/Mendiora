@@ -55,13 +55,15 @@ async function signupUser(req, res) {
 async function loginUser(req, res) {
   try {
     const { email, password } = req.body;
+    
     const user = await OrganizerAdmin.findOne({ email });
+    
     if (!user) {
-      return res.status(400).json({ message: "Invalid email or password" });
+      return res.status(400).json({ message: "Invalid email" });
     }
     const isValidPassword = await bcrypt.compare(password, user.password);
     if (!isValidPassword) {
-      return res.status(400).json({ message: "Invalid email or password" });
+      return res.status(400).json({ message: "Invalid  password" });
     }
     const token = jwt.sign(
       { userId: user._id, email: user.email },

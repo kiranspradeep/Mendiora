@@ -8,6 +8,7 @@ import Signup from './pages/Org&Ad/Signup';
 import AboutUs from './pages/User/AboutUs';
 import WeddingPlanners from './pages/User/WeddingPlanners'; // Importing the Wedding Planners page
 import ContactUs from './pages/User/ContactUs';
+import VenueForm from './pages/Org&Ad/VenueForm';
 
 function App () {
         
@@ -16,11 +17,12 @@ function App () {
             <Route path="/" element={<UserHome />} /> 
             <Route path='/loginuser' element={<UserLogin/>}/>
             <Route path='/signupuser' element={<UserSignup/>}/>
-            <Route path='/Loginorg' element={<Login/>}/>
-            <Route path='/Signuporg' element={<Signup/>}/>
+            <Route path='/loginorg' element={<Login/>}/>
+            <Route path='/signuporg' element={<Signup/>}/>
             <Route path='/aboutus' element={<AboutUs/>}/>
             <Route path='/contactus' element={<ContactUs/>}/>
             <Route path='/wedding' element={<WeddingPlanners/>}/>
+            <Route path='/form' element={<VenueForm/>}/>
         </Routes>
     );
 };

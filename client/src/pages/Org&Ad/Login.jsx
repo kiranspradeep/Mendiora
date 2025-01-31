@@ -15,7 +15,7 @@ function Login() {
     e.preventDefault();
     try {
       const response = await axios.post(
-        'http://localhost:3000/loginUser', // Adjusted endpoint
+        'http://localhost:3000/loginAdminOrg', // Adjusted endpoint
         { email, password }
       );
       setMessage(response.data.message || "Login successful");
