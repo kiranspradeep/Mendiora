@@ -34,7 +34,7 @@ async function signupUser(req, res) {
 
     // Generate JWT token
     const token = jwt.sign(
-      { userId: userData._id, email: userData.email },
+      { userId: userData._id, email: userData.email,role:user.role },
       process.env.JWT_SECRETKEY,
       { expiresIn: "1d" }
     );
@@ -66,7 +66,7 @@ async function loginUser(req, res) {
       return res.status(400).json({ message: "Invalid  password" });
     }
     const token = jwt.sign(
-      { userId: user._id, email: user.email },
+      { userId: user._id, email: user.email ,role:user.role},
       process.env.JWT_SECRETKEY,
       { expiresIn: "1d" }
     );
@@ -75,6 +75,10 @@ async function loginUser(req, res) {
     res.status(500).json({ message: error.message });
   }
 }
+
+
+
+//update user
 const updateUser = async (req, res) => {
   try {
     const { userId } = req.user; // Assuming `req.user` contains the authenticated user's details
@@ -117,6 +121,8 @@ const updateUser = async (req, res) => {
     res.status(500).json({ message: "Server error: " + error.message });
   }
 };
+
+
 
 //   code to delete users
 const deleteUser = async (req, res) => {
