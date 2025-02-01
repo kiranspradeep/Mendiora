@@ -5,9 +5,14 @@ import { FaPhoneAlt, FaWhatsapp } from "react-icons/fa";
 
 const Navbar = () => {
   const [menuActive, setMenuActive] = useState(false);
+  const [dropdownActive, setDropdownActive] = useState(false);
 
   const toggleMenu = () => {
     setMenuActive(!menuActive);
+  };
+
+  const toggleDropdown = () => {
+    setDropdownActive(!dropdownActive);
   };
 
   return (
@@ -21,7 +26,18 @@ const Navbar = () => {
         <a href="/aboutus">About Us</a>
         <a href="/#service">Services</a>
         <a href="#venues">Venues</a>
-        <a href="/signupuser">Signup</a>
+        
+        {/* Dropdown for Signup */}
+        <div className="signup-dropdown" onClick={toggleDropdown}>
+          <a href="#">Signup</a>
+          {dropdownActive && (
+            <div className="dropdown-menu">
+              <a href="/signupuser">Signup as User</a>
+              <a href="/signuporg">Signup as Organizer</a> {/* Updated link */}
+            </div>
+          )}
+        </div>
+
         <a href="/contactus">Contact Us</a>
       </nav>
       <div className="navbar-contact">
@@ -42,13 +58,22 @@ const Navbar = () => {
         <a href="aboutus">About Us</a>
         <a href="#services">Services</a>
         <a href="#venues">Venues</a>
-        <a href="/signupuser">Signup</a>
+
+        {/* Dropdown for Signup in mobile menu */}
+        <div className="signup-dropdown" onClick={toggleDropdown}>
+          <a href="#">Signup</a>
+          {dropdownActive && (
+            <div className="dropdown-menu">
+              <a href="/signupuser">Signup as User</a>
+              <a href="/signuporg">Signup as Organizer</a> {/* Updated link */}
+            </div>
+          )}
+        </div>
+
         <a href="/contactus">Contact Us</a>
       </div>
     </header>
   );
 };
-// ggggggggg 
-// gfdgdhd
 
 export default Navbar;

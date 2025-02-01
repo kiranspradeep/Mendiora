@@ -43,6 +43,44 @@
   color: #ff5733; /* Highlight color */
 }
 
+/* Dropdown menu styling */
+.navbar-links .signup-dropdown {
+  position: relative;
+}
+
+.navbar-links .dropdown-menu {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  background-color: #fff;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+  z-index: 1;
+  display: none;
+  flex-direction: column;
+  min-width: 160px; /* Set a minimum width for the dropdown */
+  border-radius: 5px;
+}
+
+.navbar-links .signup-dropdown:hover .dropdown-menu,
+.navbar-links .signup-dropdown.active .dropdown-menu {
+  display: flex;
+}
+
+.dropdown-menu a {
+  display: block;
+  padding: 12px 20px;
+  text-decoration: none;
+  color: #333333;
+  font-size: 1rem;
+  transition: background-color 0.3s ease;
+}
+
+.dropdown-menu a:hover {
+  background-color: #f1f1f1;
+  border-radius: 5px;
+}
+
+/* Navbar contact styling */
 .navbar-contact {
   display: flex;
   align-items: center;
@@ -123,5 +161,20 @@
 
   .navbar-contact {
       display: none; /* Hide contact info on small screens */
+  }
+  
+  /* Mobile dropdown menu styling */
+  .navbar-links .dropdown-menu {
+    position: static;
+    display: none;
+    background-color: #fff;
+    box-shadow: none;
+    flex-direction: column;
+    width: 100%; /* Full width on mobile */
+    border-radius: 0;
+  }
+
+  .navbar-links .signup-dropdown.active .dropdown-menu {
+    display: flex;
   }
 }

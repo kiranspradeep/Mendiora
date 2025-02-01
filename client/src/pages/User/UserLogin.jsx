@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
+import Footer from '../../components/Footer';
 
 function UserLogin() {
   const [email, setEmail] = useState("");
@@ -24,6 +25,7 @@ function UserLogin() {
   };
 
   return (
+    <>
     <div className="login-container"> {/* Updated class name */}
       <form action="#" autoComplete="off" className='form1' onSubmit={handleSubmit}>
         <h2>User Login</h2>
@@ -43,6 +45,8 @@ function UserLogin() {
         {message && <p>{message}</p>}
       </form>
     </div>
+    <Footer/>
+    </>
   );
 }
 
