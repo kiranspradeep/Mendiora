@@ -26,13 +26,6 @@ const VenueSchema = new mongoose.Schema({
     required: true,
   },
   owner: { type: mongoose.Schema.Types.ObjectId, ref: "OrganizerAdmin", required: true },
-  reviews: [
-    {
-      user: { type: mongoose.Schema.Types.ObjectId, ref: "User" },
-      rating: { type: Number, required: true, min: 1, max: 5 },
-      comment: { type: String },
-    },
-  ],
   unavailableDates: [{ type: Date }],
   createdAt: { type: Date, default: Date.now },
   isapproved:{
