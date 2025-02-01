@@ -1,20 +1,23 @@
-/* Wedding Planners Section */
-.wedding-planners-section {
+/* Venues Section */
+.venues-section {
     padding: 50px 20px;
-    text-align: center;
-    background-color: #f7f7f7;
+    background-color: #e9ecef;
   }
   
-  .wedding-planners-section h2 {
+  .venues-section h2 {
     font-size: 2.5rem;
     margin-bottom: 20px;
     color: #333;
+    text-align: center; /* Center the heading */
   }
   
-  .wedding-planners-section p {
-    font-size: 1.2rem;
-    color: #555;
-    line-height: 1.6;
+  /* Container for the venue cards */
+  .venues-container {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    flex-wrap: wrap; /* Ensure it wraps to the next line if screen is too small */
+    margin-top: 20px;
   }
   /* Responsive Design */
 @media (max-width: 768px) {
