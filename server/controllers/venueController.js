@@ -3,11 +3,20 @@ const Venue = require("../models/venueModels");
 // Create a new venue
 const createVenue = async (req, res) => {
   try {
-    const { name, description, location, capacity, minPrice, maxPrice, categories,unavailableDates } = req.body;
+    const {
+      name,
+      description,
+      location,
+      capacity,
+      minPrice,
+      maxPrice,
+      categories,
+      unavailableDates,
+    } = req.body;
 
     // Extract secure URLs from uploaded files
-    const images = req.files.map(file => file.path);
-
+    const images = req.files.map((file) => file.path);
+    
     const venueData = {
       name,
       description,
@@ -15,10 +24,10 @@ const createVenue = async (req, res) => {
       capacity,
       minPrice,
       maxPrice,
-      categories,
-      owner: req.user._id,
+      categories: categories.split(",").map((category) => category.trim()),
+      owner: req.user.userId,
       images,
-      unavailableDates
+      unavailableDates: unavailableDates ? JSON.parse(unavailableDates).map(date => new Date(date)) : [],
     };
 
     // Check for duplicate venue
@@ -29,7 +38,9 @@ const createVenue = async (req, res) => {
     });
 
     if (existingVenue) {
-      return res.status(400).json({ message: "Venue with the same name and address already exists for this owner" });
+      return res.status(400).json({
+        message: "Venue with the same name and address already exists for this owner",
+      });
     }
 
     const venue = new Venue(venueData);
@@ -42,6 +53,10 @@ const createVenue = async (req, res) => {
     }
     res.status(500).json({ message: "Server error", error: error.message });
   }
+};
+
+module.exports = {
+  createVenue,
 };
 
   

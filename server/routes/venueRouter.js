@@ -8,11 +8,7 @@ const Role = require("../middlewares/roleMiddleware");
 const Auth = require("../middlewares/authMiddleware"); // Import role middleware
 
 // private routes
-router.post(
-    "/createVenue",
-    Auth,
-    Role(["admin", "organizer"]),
-    upload.array("images", 5), // Upload up to 5 images
+router.post("/createVenue",Auth,Role(["admin", "organizer"]),upload.array("images", 5), // Upload up to 5 images
     venueController.createVenue
   );
 router.put("/:id",Auth, Role(["admin", "organizer"]), venueController.updateVenue); // Update a venue (admin or organizer only)
