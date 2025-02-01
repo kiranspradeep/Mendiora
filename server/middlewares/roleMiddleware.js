@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 const jwt = require('jsonwebtoken');
 const OrganizerAdmin = require('../models/OrganizerAdminModel');
 
@@ -18,6 +19,18 @@ const roleMiddleware = (roles) => async (req, res, next) => {
     console.error(error);
     res.status(500).json({ message: error.message || 'Server error' });
   }
+=======
+const roleMiddleware = (allowedRoles) => (req, res, next) => {
+  const userRole = req.user?.role;
+  // console.log(req.user);
+  
+
+  if (!userRole || !allowedRoles.includes(userRole)) {
+    return res.status(403).json({ message: "Access denied" });
+  }
+
+  next();
+>>>>>>> main
 };
 
 module.exports = roleMiddleware;
