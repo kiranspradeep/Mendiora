@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import "./ViewOrganizer.css"
+import AdminNavbar from "../../components/Admin/AdminNavbar";
 
 const ViewOrganizer = () => {
   const [organizers, setOrganizers] = useState([]);
@@ -55,6 +56,8 @@ const ViewOrganizer = () => {
   };
 
   return (
+    <>
+    <AdminNavbar/>
     <div className="organizer-table-container">
       <h2>View Unapproved Organizers</h2>
       {organizers.length > 0 ? (
@@ -71,7 +74,7 @@ const ViewOrganizer = () => {
             {organizers.map((organizer) => (
               <tr key={organizer._id}>
                 <td>{organizer.username}</td>
-                <td>{organizer.name}</td>
+                <td>{organizer.Name}</td>
                 <td>{organizer.email}</td>
                 <td>
                   <button className="approve-btn" onClick={() => handleApprove(organizer._id)}>
@@ -89,6 +92,7 @@ const ViewOrganizer = () => {
         <p>No unapproved organizers available.</p>
       )}
     </div>
+    </>
   );
 };
 
