@@ -17,7 +17,7 @@ function UserSignup() {
     try {
       const response = await axios.post(
         'http://localhost:3000/user/signupUser', // Adjusted endpoint
-        { username, email, password, firstName, lastName } // Include new fields
+        { username, email, password, Name } // Include new fields
       );
       setMessage(response.data.message || "Signup successful");
       navigate('/loginuser'); // Redirect to login after successful signup
