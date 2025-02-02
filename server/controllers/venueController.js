@@ -1,38 +1,52 @@
 const Venue = require("../models/venueModels");
 
 // Create a new venue
+const cloudinary = require('../config/cloudinaryConfig')
+// Ensure your Venue model is imported
+
+
 const createVenue = async (req, res) => {
   try {
     const {
       name,
       description,
-      location,
+      address,
+      city,
+      state,
+      country,
       capacity,
       minPrice,
       maxPrice,
       categories,
       unavailableDates,
-      isApproved,  // Added isApproved to accept value
+      isApproved,
     } = req.body;
 
-    // Extract secure URLs from uploaded files
-    const images = req.files.map((file) => file.path);
+    // Upload images to Cloudinary
+    const imageUploads = await Promise.all(
+      req.files.map((file) =>
+        cloudinary.uploader.upload(file.path, {
+          folder: 'venues', // Optional: Store images in a "venues" folder
+        })
+      )
+    );
 
-    // Default isApproved to 'pending' if not provided
+    // Extract secure URLs from uploaded files
+    const images = imageUploads.map((upload) => upload.secure_url);
+
+    // Prepare venue data
     const venueData = {
       name,
       description,
-      location: JSON.parse(location),
+      location: { address, city, state, country },
       capacity,
       minPrice,
       maxPrice,
       categories: categories.split(",").map((category) => category.trim()),
       owner: req.user.userId,
       images,
-      unavailableDates: unavailableDates
-        ? JSON.parse(unavailableDates).map((date) => new Date(date))
-        : [],
-      isApproved: isApproved || 'pending',  // Default to 'pending' if not provided
+      unavailableDates,
+      isApproved: isApproved || 'pending',
     };
 
     // Check for duplicate venue
@@ -53,12 +67,14 @@ const createVenue = async (req, res) => {
 
     res.status(201).json({ message: "Venue created successfully", venue });
   } catch (error) {
+    console.log(error);
     if (error.code === 11000) {
       return res.status(400).json({ message: "Duplicate venue entry detected." });
     }
     res.status(500).json({ message: "Server error", error: error.message });
   }
 };
+
 
   
 

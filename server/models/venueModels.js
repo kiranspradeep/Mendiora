@@ -22,7 +22,7 @@ const VenueSchema = new mongoose.Schema({
       comment: { type: String },
     },
   ],
-  unavailableDates: [{ type: Date }],
+  unavailableDates: { type: [Date], default: [] },
   createdAt: { type: Date, default: Date.now },
   isApproved: {
     type: String,

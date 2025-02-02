@@ -3,7 +3,7 @@ const venueRouter = express.Router();
 const venueController = require("../controllers/venueController");
 const multer = require("multer");
 const { storage } = require("../config/cloudinaryConfig");
-const upload = multer({ storage });
+const upload = multer({ storage:storage });
 const Role = require("../middlewares/roleMiddleware");
 const Auth = require("../middlewares/authMiddleware"); // Import role middleware
 
