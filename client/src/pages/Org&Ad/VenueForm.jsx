@@ -6,7 +6,11 @@ const VenueForm = () => {
   const [formData, setFormData] = useState({
     name: '',
     description: '',
-    location: '',
+    // location: '',
+    address: '',
+    city:"",
+    state:"",
+    country:"",
     capacity: '',
     minPrice: '',
     maxPrice: '',
@@ -46,17 +50,69 @@ const VenueForm = () => {
 
   return (
     <form className="venue-form" onSubmit={handleSubmit}>
-      <input type="text" name="name" placeholder="Venue Name" onChange={handleChange} required />
-      <textarea name="description" placeholder="Description" onChange={handleChange} required />
-      <input type="text" name="location" placeholder="Location" onChange={handleChange} required />
-      <input type="number" name="capacity" placeholder="Capacity" onChange={handleChange} required />
-      <input type="number" name="minPrice" placeholder="Minimum Price" onChange={handleChange} required />
-      <input type="number" name="maxPrice" placeholder="Maximum Price" onChange={handleChange} required />
-      <input type="text" name="categories" placeholder="Categories (comma separated)" onChange={handleChange} required />
-      <input type="text" name="unavailableDates" placeholder="Unavailable Dates (JSON format)" onChange={handleChange} />
+    <label>
+      Venue Name:
+      <input type="text" name="name" placeholder='VENUE-NAME' onChange={handleChange} required />
+    </label>
+  
+    <label>
+      Description:
+      <textarea name="description" placeholder='DESCRIPTION' onChange={handleChange} required />
+    </label>
+  
+    <label>
+      Address:
+      <input type="text" name="address" placeholder='ADDRESS' onChange={handleChange} required />
+    </label>
+  
+    <label>
+      City:
+      <input type="text" name="city" placeholder='CITY' onChange={handleChange} required />
+    </label>
+  
+    <label>
+      State:
+      <input type="text" name="state" placeholder='STATE' onChange={handleChange} required />
+    </label>
+  
+    <label>
+      Country:
+      <input type="text" name="country" placeholder='COUNTRY' onChange={handleChange} required />
+    </label>
+  
+    <label>
+      Capacity:
+      <input type="number" name="capacity" placeholder='CAPACITY' onChange={handleChange} required />
+    </label>
+  
+    <label>
+      Minimum Price:
+      <input type="number" name="minPrice" placeholder='MIN-PRICE' onChange={handleChange} required />
+    </label>
+  
+    <label>
+      Maximum Price:
+      <input type="number" name="maxPrice" placeholder='MAX-PRICE' onChange={handleChange} required />
+    </label>
+  
+    <label>
+      Categories (comma separated):
+      <input type="text" name="categories" placeholder='CATEGORIES' onChange={handleChange} required />
+    </label>
+  
+    <label>
+      Unavailable Dates (yy-mm-dd format):
+      <input type="text" name="unavailableDates" placeholder='YY-MM-DD' onChange={handleChange} />
+    </label>
+  
+    <label>
+      Images (Upload Multiple):
       <input type="file" name="images" multiple onChange={handleFileChange} required />
-      <button type="submit">Create Venue</button>
-    </form>
+    </label>
+  
+    <button type="submit">Create Venue</button>
+  </form>
+  
   );
 };
 

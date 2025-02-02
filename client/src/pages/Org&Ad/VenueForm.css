@@ -1,27 +1,134 @@
+/* General form styles */
 .venue-form {
-  display: flex;
-  flex-direction: column;
-  max-width: 400px;
-  margin: auto;
+  width: 80%;
+  max-width: 600px;
+  margin: 0 auto;
+  padding: 20px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  background-color: #f9f9f9;
 }
 
-.venue-form input,
+.venue-form label {
+  display: block;
+  margin: 10px 0 5px;
+  font-weight: bold;
+}
+
+.venue-form input[type="text"],
+.venue-form input[type="number"],
 .venue-form textarea {
-  margin: 10px 0;
+  width: 100%;
   padding: 10px;
+  margin-bottom: 10px;
   border: 1px solid #ccc;
   border-radius: 4px;
 }
 
+.venue-form input[type="file"] {
+  margin-top: 10px;
+}
+
+.venue-form textarea {
+  height: 120px;
+  resize: vertical;
+}
+
+.venue-form input[type="checkbox"] {
+  margin-right: 10px;
+}
+
+.venue-form .checkbox-group {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 15px;
+}
+
+.venue-form .checkbox-group label {
+  display: inline-block;
+  margin-right: 15px;
+}
+
 .venue-form button {
-  padding: 10px;
-  background-color: #28a745;
+  background-color: #4CAF50;
   color: white;
+  padding: 10px 20px;
   border: none;
-  border-radius: 4px;
+  border-radius: 5px;
   cursor: pointer;
+  width: 100%;
 }
 
 .venue-form button:hover {
-  background-color: #218838;
+  background-color: #45a049;
 }
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .venue-form {
+    width: 90%;
+    padding: 15px;
+  }
+
+  .venue-form label {
+    font-size: 14px;
+  }
+
+  .venue-form input[type="text"],
+  .venue-form input[type="number"],
+  .venue-form textarea {
+    padding: 8px;
+  }
+
+  .venue-form button {
+    padding: 12px;
+  }
+}
+
+@media (max-width: 480px) {
+  .venue-form {
+    width: 95%;
+  }
+
+  .venue-form label {
+    font-size: 13px;
+  }
+
+  .venue-form input[type="text"],
+  .venue-form input[type="number"],
+  .venue-form textarea {
+    padding: 6px;
+  }
+
+  .venue-form button {
+    padding: 15px;
+  }
+}
+
+
+.venue-form input[type="number"] {
+  -webkit-appearance: textfield; /* For WebKit browsers (Chrome, Safari) */
+  -moz-appearance: textfield; /* For Firefox */
+  appearance: textfield; /* Standard property */
+}
+
+.venue-form input[type="number"]::-webkit-inner-spin-button,
+.venue-form input[type="number"]::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+/* Optional: If you also want to remove the up/down arrows in Firefox */
+.venue-form input[type="number"] {
+  appearance: textfield; /* needed for Firefox */
+}
+.venue-form input[type="number"]::-webkit-inner-spin-button,
+.venue-form input[type="number"]::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+.venue-form input[type=number]::-moz-spin-button {
+    -moz-appearance: none;
+}
+
+/* ... rest of your CSS ... */
