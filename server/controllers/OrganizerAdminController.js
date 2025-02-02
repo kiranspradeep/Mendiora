@@ -6,7 +6,7 @@ require("dotenv").config();
 //signup function
 async function signupUser(req, res) {
   try {
-    const { email, password, username, Name } = req.body;
+    const { email, password, username, Name, isApproved = 'pending' } = req.body; // Default is 'pending' if not provided
 
     // Check if email or username already exists
     const existingUser = await OrganizerAdmin.findOne({ 
@@ -27,21 +27,22 @@ async function signupUser(req, res) {
       username,
       email,
       password: hashedPassword,
-      Name
+      Name,
+      isApproved // Use the passed in value or default to 'pending'
     });
 
     await userData.save();
 
     // Generate JWT token
     const token = jwt.sign(
-      { userId: userData._id, email: userData.email,role:user.role },
+      { userId: userData._id, email: userData.email, role: userData.role, isApproved: userData.isApproved },
       process.env.JWT_SECRETKEY,
       { expiresIn: "1d" }
     );
 
     res.status(201).json({ message: "Account created successfully", token });
 
-  } catch (error) {
+  } catch (error) { 
     // Handle duplicate key error
     if (error.code === 11000) {
       return res.status(400).json({ message: "Username or email already exists" });
@@ -51,30 +52,136 @@ async function signupUser(req, res) {
 }
 
 
+
 //login
-async function loginUser(req, res) {
+async function loginUser(req, res) { 
   try {
     const { email, password } = req.body;
-    
+
+    // Find the user by email
     const user = await OrganizerAdmin.findOne({ email });
-    
+
     if (!user) {
       return res.status(400).json({ message: "Invalid email" });
     }
+
+    // Check if the user's account is approved (must be "approved")
+    if (user.isApproved !== 'approved') {
+      return res.status(403).json({ message: "Account not approved" });
+    }
+
+    // Validate the password
     const isValidPassword = await bcrypt.compare(password, user.password);
     if (!isValidPassword) {
-      return res.status(400).json({ message: "Invalid  password" });
+      return res.status(400).json({ message: "Invalid password" });
     }
+
+    // Generate JWT token
     const token = jwt.sign(
-      { userId: user._id, email: user.email ,role:user.role},
+      { userId: user._id, email: user.email, role: user.role, isApproved: user.isApproved },
       process.env.JWT_SECRETKEY,
       { expiresIn: "1d" }
     );
+
     res.status(200).json({ message: "Logged in successfully", token });
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
 }
+
+
+
+//a function to get users with role organizer
+const getOrganizers = async (req, res) => {
+  try {
+    const users = await OrganizerAdmin.find({ role: "organizer" });
+    res.status(200).json({ users });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Server error: " + error.message });
+  }
+};
+
+
+//get unapproved users 
+const getUnapprovedOrganizers = async (req, res) => { 
+  try {
+    // Query for organizers whose isApproved is "pending"
+    const unapprovedOrganizers = await OrganizerAdmin.find({ 
+      role: "organizer", 
+      isApproved: 'pending' // Check for pending status
+    });
+
+    if (!unapprovedOrganizers.length) {
+      return res.status(404).json({ message: "No unapproved organizers found" });
+    }
+
+    res.status(200).json({ users: unapprovedOrganizers });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Server error: " + error.message });
+  }
+};
+
+//set organizer asapproved
+const approveOrganizer = async (req, res) => {
+  try {
+    const { userId } = req.params; // Assuming the user ID is passed as a URL parameter
+
+    // Find the organizer by userId
+    const organizer = await OrganizerAdmin.findById(userId);
+
+    if (!organizer) {
+      return res.status(404).json({ message: "Organizer not found" });
+    }
+
+    // Check if the current status is already approved
+    if (organizer.isApproved === 'approved') {
+      return res.status(400).json({ message: "Organizer is already approved" });
+    }
+
+    // Update the isApproved field to 'approved'
+    organizer.isApproved = 'approved';
+    
+    // Save the updated organizer
+    await organizer.save();
+
+    res.status(200).json({ message: "Organizer approved successfully", organizer });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Server error: " + error.message });
+  }
+};
+
+//set organizer rejected
+const rejectOrganizer = async (req, res) => {
+  try {
+    const { userId } = req.params; // Assuming the user ID is passed as a URL parameter
+
+    // Find the organizer by userId
+    const organizer = await OrganizerAdmin.findById(userId);
+
+    if (!organizer) {
+      return res.status(404).json({ message: "Organizer not found" });
+    }
+
+    // Check if the current status is already rejected
+    if (organizer.isApproved === 'rejected') {
+      return res.status(400).json({ message: "Organizer is already rejected" });
+    }
+
+    // Update the isApproved field to 'rejected'
+    organizer.isApproved = 'rejected';
+    
+    // Save the updated organizer
+    await organizer.save();
+
+    res.status(200).json({ message: "Organizer rejected successfully", organizer });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Server error: " + error.message });
+  }
+};
 
 
 
@@ -142,16 +249,6 @@ const deleteUser = async (req, res) => {
   }
 };
 
-//a function to get users with role organizer
-const getOrganizers = async (req, res) => {
-  try {
-    const users = await OrganizerAdmin.find({ role: "organizer" });
-    res.status(200).json({ users });
-  } catch (error) {
-    console.error(error);
-    res.status(500).json({ message: "Server error: " + error.message });
-  }
-};
 
 //function to get details of user loged in using auth
 const getLoggedInUser = async (req, res) => {
@@ -171,5 +268,7 @@ module.exports = {
   updateUser,
   deleteUser,
   getOrganizers,
-  getLoggedInUser
+  getLoggedInUser,
+  getUnapprovedOrganizers,
+  approveOrganizer
 };

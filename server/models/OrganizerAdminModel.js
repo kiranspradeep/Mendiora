@@ -31,7 +31,13 @@ const OrganizerAdminSchema = new mongoose.Schema({
     updatedAt: {
         type: Date,
         default: Date.now
-    }
+    },
+    isApproved: {
+        type: String,
+        enum: ['pending', 'approved', 'rejected'],
+        default: 'pending' // default to "pending"
+      }
+      
 });
 
 const OrganizerAdmin = mongoose.model('OrganizerAdmin',OrganizerAdminSchema)
