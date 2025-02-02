@@ -10,6 +10,8 @@ organizerAdminRouter.get('/getOrganizers',Auth,Role([ 'admin']),OrganizerAdminCo
 organizerAdminRouter.get('/getunapprovedOrg',Auth,Role([ 'admin']),OrganizerAdminController.getUnapprovedOrganizers)
 organizerAdminRouter.get('/getLoggedInAdminOrg',Auth,OrganizerAdminController.getLoggedInUser)
 organizerAdminRouter.put('/updateAdminOrg',Auth,OrganizerAdminController.updateUser)
+organizerAdminRouter.put('/approveOrg',Auth,Role([ 'admin']),OrganizerAdminController.approveOrganizer)
+organizerAdminRouter.put('/rejectOrg',Auth,Role([ 'admin']),OrganizerAdminController.rejectOrganizer)
 organizerAdminRouter.delete('/deleteAdminOrg',Auth,OrganizerAdminController.deleteUser)
 
 module.exports=organizerAdminRouter

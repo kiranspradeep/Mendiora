@@ -270,5 +270,6 @@ module.exports = {
   getOrganizers,
   getLoggedInUser,
   getUnapprovedOrganizers,
-  approveOrganizer
+  approveOrganizer,
+  rejectOrganizer
 };
