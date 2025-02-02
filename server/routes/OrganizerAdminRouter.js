@@ -10,8 +10,12 @@ organizerAdminRouter.get('/getOrganizers',Auth,Role([ 'admin']),OrganizerAdminCo
 organizerAdminRouter.get('/getunapprovedOrg',Auth,Role([ 'admin']),OrganizerAdminController.getUnapprovedOrganizers)
 organizerAdminRouter.get('/getLoggedInAdminOrg',Auth,OrganizerAdminController.getLoggedInUser)
 organizerAdminRouter.put('/updateAdminOrg',Auth,OrganizerAdminController.updateUser)
-organizerAdminRouter.put('/approveOrg',Auth,Role([ 'admin']),OrganizerAdminController.approveOrganizer)
-organizerAdminRouter.put('/rejectOrg',Auth,Role([ 'admin']),OrganizerAdminController.rejectOrganizer)
+// Backend Route for approving an organizer
+organizerAdminRouter.put('/approveOrg/:userId', Auth, Role(['admin']), OrganizerAdminController.approveOrganizer);
+
+// Backend Route for rejecting an organizer
+organizerAdminRouter.put('/rejectOrg/:userId', Auth, Role(['admin']), OrganizerAdminController.rejectOrganizer);
+
 organizerAdminRouter.delete('/deleteAdminOrg',Auth,OrganizerAdminController.deleteUser)
 
 module.exports=organizerAdminRouter

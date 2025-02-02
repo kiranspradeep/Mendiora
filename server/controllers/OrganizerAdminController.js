@@ -123,27 +123,21 @@ const getUnapprovedOrganizers = async (req, res) => {
   }
 };
 
-//set organizer asapproved
+// Approve Organizer
 const approveOrganizer = async (req, res) => {
   try {
-    const { userId } = req.params; // Assuming the user ID is passed as a URL parameter
+    const { userId } = req.params;
 
-    // Find the organizer by userId
     const organizer = await OrganizerAdmin.findById(userId);
-
     if (!organizer) {
       return res.status(404).json({ message: "Organizer not found" });
     }
 
-    // Check if the current status is already approved
     if (organizer.isApproved === 'approved') {
       return res.status(400).json({ message: "Organizer is already approved" });
     }
 
-    // Update the isApproved field to 'approved'
     organizer.isApproved = 'approved';
-    
-    // Save the updated organizer
     await organizer.save();
 
     res.status(200).json({ message: "Organizer approved successfully", organizer });
@@ -153,27 +147,21 @@ const approveOrganizer = async (req, res) => {
   }
 };
 
-//set organizer rejected
+// Reject Organizer
 const rejectOrganizer = async (req, res) => {
   try {
-    const { userId } = req.params; // Assuming the user ID is passed as a URL parameter
+    const { userId } = req.params;
 
-    // Find the organizer by userId
     const organizer = await OrganizerAdmin.findById(userId);
-
     if (!organizer) {
       return res.status(404).json({ message: "Organizer not found" });
     }
 
-    // Check if the current status is already rejected
     if (organizer.isApproved === 'rejected') {
       return res.status(400).json({ message: "Organizer is already rejected" });
     }
 
-    // Update the isApproved field to 'rejected'
     organizer.isApproved = 'rejected';
-    
-    // Save the updated organizer
     await organizer.save();
 
     res.status(200).json({ message: "Organizer rejected successfully", organizer });

@@ -1,49 +1,53 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
+import "./ViewOrganizer.css"
 
 const ViewOrganizers = () => {
   const [organizers, setOrganizers] = useState([]);
 
-  
+  // Fetch unapproved organizers
   useEffect(() => {
     const fetchOrganizers = async () => {
       try {
         const token = localStorage.getItem("token"); // Get auth token
-        const response = await axios.get("http://localhost:3000/getOrganizers", {
+        const response = await axios.get("http://localhost:3000/getunapprovedOrg", {
           headers: { Authorization: `Bearer ${token}` },
         });
-        setOrganizers(response.data || []);
+        setOrganizers(response.data.users || []); // Set the unapproved organizers
       } catch (error) {
-        console.error("Error fetching organizers:", error.response?.data || error.message);
+        console.error("Error fetching unapproved organizers:", error.response?.data || error.message);
       }
     };
 
     fetchOrganizers();
   }, []);
 
-
   const handleApprove = async (id) => {
     try {
       const token = localStorage.getItem("token");
-      await axios.put(
-        "http://localhost:3000/approveOrg",
-        { id }, // Sending ID in request body
+      // Send PUT request to approve organizer
+      const response = await axios.put(
+        `http://localhost:3000/approveOrg/${id}`, // Use the ID of the organizer in the URL
+        {},
         { headers: { Authorization: `Bearer ${token}` } }
       );
+      alert(response.data.message); // Show success message from backend
       setOrganizers(organizers.filter((org) => org._id !== id)); // Remove from list after approval
     } catch (error) {
       console.error("Error approving organizer:", error.response?.data || error.message);
     }
   };
-  
+
   const handleReject = async (id) => {
     try {
       const token = localStorage.getItem("token");
-      await axios.put(
-        "http://localhost:3000/rejectOrg",
-        { id }, // Sending ID in request body
+      // Send PUT request to reject organizer
+      const response = await axios.put(
+        `http://localhost:3000/rejectOrg/${id}`, // Use the ID of the organizer in the URL
+        {},
         { headers: { Authorization: `Bearer ${token}` } }
       );
+      alert(response.data.message); // Show success message from backend
       setOrganizers(organizers.filter((org) => org._id !== id)); // Remove from list after rejection
     } catch (error) {
       console.error("Error rejecting organizer:", error.response?.data || error.message);
@@ -52,7 +56,7 @@ const ViewOrganizers = () => {
 
   return (
     <div className="organizer-table-container">
-      <h2>View Organizers</h2>
+      <h2>View Unapproved Organizers</h2>
       {organizers.length > 0 ? (
         <table className="organizer-table">
           <thead>
@@ -82,7 +86,7 @@ const ViewOrganizers = () => {
           </tbody>
         </table>
       ) : (
-        <p>No organizers available.</p>
+        <p>No unapproved organizers available.</p>
       )}
     </div>
   );
