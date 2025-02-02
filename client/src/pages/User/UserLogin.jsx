@@ -17,6 +17,8 @@ function UserLogin() {
         'http://localhost:3000/user/loginUser', // Adjusted endpoint
         { email, password }
       );
+      console.log(response.data)
+      localStorage.setItem("token",response.data.token)
       setMessage(response.data.message || "Login successful");
       navigate('/'); // Redirect to home after successful login
     } catch (error) {
