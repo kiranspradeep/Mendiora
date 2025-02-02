@@ -1,0 +1,147 @@
+/* Profile Update Container */
+.profile-update-container {
+  width: 100%;
+  max-width: 600px;
+  margin: 50px auto;
+  padding: 24px;
+  background-color: #f9f9f9;
+  border-radius: 12px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15);
+}
+
+/* Title */
+.profile-update-title {
+  font-size: 30px;
+  font-weight: 700;
+  color: #2c3e50;
+  margin-bottom: 32px;
+  text-align: center;
+  letter-spacing: 1px;
+}
+
+/* Form Styles */
+.profile-update-form {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.form-label {
+  font-size: 16px;
+  font-weight: 600;
+  color: #34495e;
+}
+
+.form-input {
+  width: 100%;
+  padding: 14px;
+  margin-top: 6px;
+  border: 1px solid #ddd;
+  border-radius: 10px;
+  font-size: 16px;
+  color: #333;
+  background-color: #fff;
+  transition: border-color 0.3s;
+}
+
+.form-input:focus {
+  border-color: #3498db;
+  outline: none;
+  background-color: #eef9ff;
+}
+
+.form-label--password {
+  margin-bottom: 16px;
+}
+
+.profile-update-button {
+  padding: 14px;
+  background-color: #3498db;
+  color: white;
+  border: none;
+  border-radius: 10px;
+  font-size: 17px;
+  cursor: pointer;
+  font-weight: bold;
+  transition: all 0.3s ease;
+}
+
+.profile-update-button:hover {
+  background-color: #2980b9;
+  transform: translateY(-2px);
+}
+
+.profile-update-button:active {
+  transform: translateY(0px);
+}
+
+.delete-account-button {
+  background-color: #e74c3c;
+  color: white;
+  font-size: 16px;
+  padding: 12px 20px;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  margin-top: 16px;
+  width: 100%;
+  transition: background-color 0.3s, transform 0.1s;
+}
+
+.delete-account-button:hover {
+  background-color: #c0392b;
+}
+
+.delete-account-button:active {
+  transform: scale(0.98);
+}
+
+.form-message {
+  margin-top: 20px;
+  font-size: 15px;
+  color: #e74c3c;
+  text-align: center;
+  font-weight: bold;
+}
+
+/* Responsive Styles */
+@media (max-width: 768px) {
+  .profile-update-container {
+    padding: 16px;
+  }
+
+  .profile-update-title {
+    font-size: 24px;
+  }
+
+  .form-input {
+    font-size: 14px;
+  }
+
+  .profile-update-button,
+  .delete-account-button {
+    font-size: 15px;
+    padding: 10px;
+  }
+}
+
+@media (max-width: 480px) {
+  .profile-update-container {
+    margin: 20px;
+  }
+
+  .profile-update-title {
+    font-size: 22px;
+  }
+
+  .form-input {
+    font-size: 14px;
+    padding: 10px;
+  }
+
+  .profile-update-button,
+  .delete-account-button {
+    font-size: 14px;
+    padding: 10px;
+  }
+}

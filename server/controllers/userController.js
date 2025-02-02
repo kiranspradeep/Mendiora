@@ -17,10 +17,11 @@ async function signupAttendee(req, res) {
     // Check if username or email already exists
     const existingUser = await User.findOne({ $or: [{ email }, { username }] });
     if (existingUser) {
-      return res.status(400).json({ 
-        message: existingUser.email === email 
-          ? "Email already exists" 
-          : "Username already exists" 
+      return res.status(400).json({
+        message:
+          existingUser.email === email
+            ? "Email already exists"
+            : "Username already exists",
       });
     }
 
@@ -31,7 +32,7 @@ async function signupAttendee(req, res) {
       email,
       password: hashedPassword,
       Name,
-      role: "attendee"
+      role: "attendee",
     });
 
     await userData.save();
@@ -44,22 +45,23 @@ async function signupAttendee(req, res) {
     );
 
     res.status(201).json({ message: "Account created successfully", token });
-
   } catch (error) {
     // Handle duplicate key error
     if (error.code === 11000) {
-      return res.status(400).json({ message: "Username or email already exists" });
+      return res
+        .status(400)
+        .json({ message: "Username or email already exists" });
     }
     res.status(500).json({ message: "Server error", error: error.message });
   }
 }
 
-
-//login
+//login function
 async function loginAttendee(req, res) {
   try {
     const { email, password } = req.body;
     const user = await User.findOne({ email });
+
     if (!user) {
       return res.status(400).json({ message: "Invalid email" });
     }
@@ -77,107 +79,123 @@ async function loginAttendee(req, res) {
     res.status(500).json({ message: error.message });
   }
 }
+
+//update function
 const updateAttendee = async (req, res) => {
   try {
-    const { userId } = req.user; // Assuming `req.user` contains the authenticated user's details
-    const updates = req.body; // Extract fields to update from the request body
+    const { userId } = req.user;
+    const updates = req.body;
 
-    // Handle password hashing if provided in the updates
-    if (updates.password) {
-      updates.password = await bcrypt.hash(updates.password, 10);
+    // Define allowed fields for updates
+    const allowedFields = ["username", "email", "password", "name"];
+    const filteredUpdates = Object.fromEntries(
+      Object.entries(updates).filter(([key]) => allowedFields.includes(key))
+    );
+
+    // Fetch current user from the database
+    const currentUser = await User.findById(userId);
+    if (!currentUser) {
+      return res.status(404).json({ message: "User not found" });
     }
 
-    // Ensure only the allowed fields are updated
-    const allowedFields = ['username', 'email', 'password', 'Name'];
-    const filteredUpdates = {};
-    for (const field of allowedFields) {
-      if (updates[field] !== undefined) {
-        filteredUpdates[field] = updates[field];
+    // Hash the password if it's being updated
+    if (filteredUpdates.password) {
+      filteredUpdates.password = await bcrypt.hash(filteredUpdates.password, 10);
+    }
+
+    // Check for actual changes, including special handling for password
+    const hasChanges = Object.entries(filteredUpdates).some(([key, value]) => {
+      if (key === "password") return true; // Password always treated as changed
+      return value !== currentUser[key];
+    });
+
+    if (!hasChanges) {
+      return res.status(400).json({
+        message: "No changes detected. Please update at least one field."
+      });
+    }
+
+    // Handle unique email validation
+    if (filteredUpdates.email && filteredUpdates.email !== currentUser.email) {
+      const existingUser = await User.findOne({ email: filteredUpdates.email });
+      if (existingUser) {
+        return res.status(400).json({ message: "Email is already taken" });
       }
     }
 
-    // Fetch the current user from the database
-    const currentUser = await User.findById(userId);
-    if (!currentUser) {
-      return res.status(404).json({ message: 'User not found' });
-    }
-
-    // Check if there are any actual changes
-    const isIdentical = Object.keys(filteredUpdates).every(
-      (key) => 
-        key === 'password'
-          ? false // Always treat password as different for security purposes
-          : filteredUpdates[key] === currentUser[key]
-    );
-
-    if (isIdentical) {
-      return res.status(400).json({ message: 'Nothing to update. All values are the same.' });
-    }
-
-    // Proceed with the update
+    // Update the user in the database
     const updatedUser = await User.findByIdAndUpdate(
       userId,
       { $set: filteredUpdates },
-      { new: true, runValidators: true } // Return the updated document and validate against schema
+      { new: true, runValidators: true }
     );
 
-    res.status(200).json({ message: 'User updated successfully', user: updatedUser });
+    return res.status(200).json({
+      message: "User updated successfully",
+      user: updatedUser
+    });
+
   } catch (error) {
-    console.error(error);
-    res.status(500).json({ message: 'Server error: ' + error.message });
+    console.error("Error updating user:", error);
+    return res.status(500).json({ message: "Server error: " + error.message });
   }
 };
 
-  
-  
-//   code to delete users
-  const deleteAttendee = async (req, res) => {
-    try {
-      const { userId } = req.user;
-  
-      const deletedUser = await User.findByIdAndDelete(userId);
-  
-      if (!deletedUser) {
-        return res.status(404).json({ message: 'User not found' });
-      }
-  
-      res.status(200).json({ message: 'User deleted successfully' });
-    } catch (error) {
-      console.error(error);
-      res.status(500).json({ message: 'Server error: ' + error.message });
-    }
-  };
 
-  const getAllAttendee = async (req, res) => {
-    try {
-      const users = await User.find(); // Fetch all users
-      console.log(users);
-  
-      res.status(200).json({ users });
-    } catch (error) {
-      console.error(error);
-      res.status(500).json({ message: "Server error: " + error.message });
-    }
-  };
 
-  const getSingleattendee = async (req, res) => {
-    try {
-      const { userId } = req.user; // Assuming `req.user` contains authenticated user's details
-  
-      // Fetch the user by their ID
-      const user = await User.findById(userId);
-  
-      if (!user) {
-        return res.status(404).json({ message: "User not found" });
-      }
-  
-      res.status(200).json({ user });
-    } catch (error) {
-      console.error(error);
-      res.status(500).json({ message: "Server error: " + error.message });
+//delete function
+const deleteAttendee = async (req, res) => {
+  try {
+    const { userId } = req.user;
+    const { password } = req.body;
+
+    const user = await User.findById(userId);
+
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
     }
-  };
-  
+
+    const isMatch = await bcrypt.compare(password, user.password);
+    if (!isMatch) {
+      return res.status(401).json({ message: "Incorrect password" });
+    }
+
+    await User.findByIdAndDelete(userId);
+    res.status(200).json({ message: "User deleted successfully" });
+
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Server error: " + error.message });
+  }
+};
+
+
+//get all
+const getAllAttendee = async (req, res) => {
+  try {
+    const users = await User.find(); // Fetch all users
+    console.log(users);
+
+    res.status(200).json({ users });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Server error: " + error.message });
+  }
+};
+
+
+//get single user 
+const getSingleattendee = async (req, res) => {
+  try { 
+    const user = await User.findById(req.user.userId).select("-password");
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+    res.status(200).json(user);
+  } catch (error) {
+    res.status(500).json({ message: "Server error" });
+  }
+};
 
 module.exports = {
   signupAttendee,
@@ -185,5 +203,5 @@ module.exports = {
   updateAttendee,
   deleteAttendee,
   getAllAttendee,
-  getSingleattendee
+  getSingleattendee,
 };
