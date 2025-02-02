@@ -11,6 +11,7 @@ import WeddingPlanners from './pages/User/WeddingPlanners'; // Importing the Wed
 import ContactUs from './pages/User/ContactUs';
 import VenueForm from './pages/Org&Ad/VenueForm';
 import AdminNavbar from './components/Admin/AdminNavbar';
+import ViewOrganizers from './pages/Admin/ViewOrganizer';
 
 function App () {
         
@@ -27,6 +28,7 @@ function App () {
             <Route path='/wedding' element={<WeddingPlanners/>}/>
             <Route path='/form' element={<VenueForm/>}/>
             <Route path='/adminnavbar'element={<AdminNavbar/>}/>
+            <Route path='/organizer' element={<ViewOrganizers/>}/>
         </Routes>
     );
 };
