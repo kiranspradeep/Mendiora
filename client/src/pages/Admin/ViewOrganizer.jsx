@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import "./ViewOrganizer.css"
 
-const ViewOrganizers = () => {
+const ViewOrganizer = () => {
   const [organizers, setOrganizers] = useState([]);
 
   // Fetch unapproved organizers
@@ -92,4 +92,4 @@ const ViewOrganizers = () => {
   );
 };
 
-export default ViewOrganizers;
+export default ViewOrganizer;

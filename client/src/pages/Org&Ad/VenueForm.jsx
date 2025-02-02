@@ -32,7 +32,7 @@ const VenueForm = () => {
     }
     try {
       const token = localStorage.getItem('token'); // Retrieve the token from local storage
-      const response = await axios.post('http://localhost:3000/venue/createVenue', formDataToSend, {
+      const response = await axios.post('http://localhost:3000/venue', formDataToSend, {
         headers: {
           'Content-Type': 'multipart/form-data',
           'Authorization': `Bearer ${token}`, // Include the token in the headers
