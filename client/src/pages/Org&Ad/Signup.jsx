@@ -9,7 +9,7 @@ function Signup() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [Name, setName] = useState(""); // New field
- 
+
   const [message, setMessage] = useState("");
 
   const navigate = useNavigate();
@@ -21,8 +21,13 @@ function Signup() {
         'http://localhost:3000/signupAdminOrg', // Adjusted endpoint
         { username, email, password, Name } // Include new fields
       );
+
       setMessage(response.data.message || "Signup successful");
       navigate('/loginorg'); // Redirect to login after successful signup
+      setEmail("")
+      setName("")
+      setPassword("");
+      setUsername("")
     } catch (error) {
       setMessage(error.response?.data.message || "Something went wrong");
     }
@@ -53,7 +58,7 @@ function Signup() {
         </form>
       </div>
       <br></br>
-      <Footer/>
+      <Footer />
     </>
   );
 }

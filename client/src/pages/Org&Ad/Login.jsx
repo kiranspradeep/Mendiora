@@ -99,7 +99,7 @@ function Login() {
             <a href="#">Forgot Password?</a>
           </div>
           <div className="link-container">
-            <a href="/signup">Signup</a>
+            <a href="/signuporg">Signup</a>
           </div>
           {message && <p>{message}</p>} {/* Error message styling */}
         </form>
