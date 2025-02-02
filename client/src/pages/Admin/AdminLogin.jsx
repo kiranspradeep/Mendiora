@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
-import './Login.css'; // Importing the updated CSS file
+import '../Org&Ad/Login'; // Importing the updated CSS file
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import Footer from '../../components/Footer';
 
-function Login() {
+function AdminLogin() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [message, setMessage] = useState('');
@@ -26,7 +26,7 @@ function Login() {
       if (response.data.token) {
         localStorage.setItem('token', response.data.token);
         setMessage(response.data.message || 'Login successful');
-        navigate('/'); // Redirect to home after successful login
+        navigate('/adminnavbar'); // Redirect to home after successful login
       } else {
         setMessage(response.data.message || 'Login Failed');
       }
@@ -65,7 +65,7 @@ function Login() {
     <>
       <div className="login-container"> {/* Keeping original class name */}
         <form action="#" autoComplete="off" className="form1" onSubmit={handleSubmit}>
-          <h2>Organizer or Admin Login</h2>
+          <h2>Admin Login</h2>
           <div className="inputBox">
             <input
               type="email"
@@ -99,7 +99,7 @@ function Login() {
             <a href="#">Forgot Password?</a>
           </div>
           <div className="link-container">
-            <a href="/signuporg">Signup</a>
+            <a href="#signup">Signup</a>
           </div>
           {message && <p>{message}</p>} {/* Error message styling */}
         </form>
@@ -110,4 +110,4 @@ function Login() {
   );
 }
 
-export default Login;
+export default AdminLogin;

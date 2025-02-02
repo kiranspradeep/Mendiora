@@ -12,6 +12,7 @@ import ContactUs from './pages/User/ContactUs';
 import VenueForm from './pages/Org&Ad/VenueForm';
 import AdminNavbar from './components/Admin/AdminNavbar';
 import ViewOrganizers from './pages/Admin/ViewOrganizer';
+import AdminLogin from './pages/Admin/AdminLogin';
 import ViewVenues from './pages/Admin/ViewVenues';
 
 function App () {
@@ -29,6 +30,7 @@ function App () {
             <Route path='/wedding' element={<WeddingPlanners/>}/>
             <Route path='/form' element={<VenueForm/>}/>
             <Route path='/adminnavbar'element={<AdminNavbar/>}/>
+            <Route path='/adminlogin' element={<AdminLogin/>}/>
             <Route path='/organizer' element={<ViewOrganizers/>}/>
             <Route path='/venue' element={<ViewVenues/>}/>
         </Routes>

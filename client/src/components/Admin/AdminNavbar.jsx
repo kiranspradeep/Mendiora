@@ -23,8 +23,8 @@ const AdminNavbar = () => {
         <span>Medioraa</span>
       </div>
       <nav className={`admin-navbar-links ${menuActive ? "active" : ""}`}>
-        <Link to="#Organizer">Organizer</Link>
-        <Link to="#venues">Venues</Link>
+        <Link to="/organizer">Organizer</Link>
+        <Link to="/venue">Venues</Link>
       </nav>
       <div className="hamburger" onClick={toggleMenu}>
         <div></div>
