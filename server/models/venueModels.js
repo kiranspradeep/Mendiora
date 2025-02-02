@@ -24,7 +24,11 @@ const VenueSchema = new mongoose.Schema({
   ],
   unavailableDates: [{ type: Date }],
   createdAt: { type: Date, default: Date.now },
-  isApproved: { type: Boolean, default: false },
+  isApproved: {
+    type: String,
+    enum: ['pending', 'approved', 'rejected'],
+    default: 'pending' // default to "pending"
+  }
 });
 
 // Unique index to prevent the same owner from posting the same venue name at the same address

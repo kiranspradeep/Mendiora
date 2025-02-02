@@ -3,7 +3,6 @@ const Venue = require("../models/venueModels");
 // Create a new venue
 const createVenue = async (req, res) => {
   try {
-    
     const {
       name,
       description,
@@ -13,11 +12,13 @@ const createVenue = async (req, res) => {
       maxPrice,
       categories,
       unavailableDates,
+      isApproved,  // Added isApproved to accept value
     } = req.body;
 
     // Extract secure URLs from uploaded files
     const images = req.files.map((file) => file.path);
-    
+
+    // Default isApproved to 'pending' if not provided
     const venueData = {
       name,
       description,
@@ -28,7 +29,10 @@ const createVenue = async (req, res) => {
       categories: categories.split(",").map((category) => category.trim()),
       owner: req.user.userId,
       images,
-      unavailableDates: unavailableDates ? JSON.parse(unavailableDates).map(date => new Date(date)) : [],
+      unavailableDates: unavailableDates
+        ? JSON.parse(unavailableDates).map((date) => new Date(date))
+        : [],
+      isApproved: isApproved || 'pending',  // Default to 'pending' if not provided
     };
 
     // Check for duplicate venue
@@ -55,6 +59,7 @@ const createVenue = async (req, res) => {
     res.status(500).json({ message: "Server error", error: error.message });
   }
 };
+
   
 
 // Get all venues
@@ -62,6 +67,50 @@ const getAllVenues = async (req, res) => {
   try {
     const venues = await Venue.find().sort({ createdAt: -1 }).populate("owner", "name email");
     res.status(200).json({ venues });
+  } catch (error) {
+    res.status(500).json({ message: "Server error", error: error.message });
+  }
+};
+
+// Approve a venue
+const approveVenue = async (req, res) => {
+  try {
+    const venueId = req.params.id;
+
+    // Find the venue by ID and update the 'isApproved' field to 'approved'
+    const venue = await Venue.findByIdAndUpdate(
+      venueId,
+      { isApproved: 'approved' },
+      { new: true } // Return the updated venue
+    );
+
+    if (!venue) {
+      return res.status(404).json({ message: "Venue not found" });
+    }
+
+    res.status(200).json({ message: "Venue approved successfully", venue });
+  } catch (error) {
+    res.status(500).json({ message: "Server error", error: error.message });
+  }
+};
+
+// Reject a venue
+const rejectVenue = async (req, res) => {
+  try {
+    const venueId = req.params.id;
+
+    // Find the venue by ID and update the 'isApproved' field to 'rejected'
+    const venue = await Venue.findByIdAndUpdate(
+      venueId,
+      { isApproved: 'rejected' },
+      { new: true } // Return the updated venue
+    );
+
+    if (!venue) {
+      return res.status(404).json({ message: "Venue not found" });
+    }
+
+    res.status(200).json({ message: "Venue rejected successfully", venue });
   } catch (error) {
     res.status(500).json({ message: "Server error", error: error.message });
   }
@@ -81,14 +130,22 @@ const getVenueDetails = async (req, res) => {
 };
 
 // Update a venue
-const updateVenue = async (req, res) => { 
+const updateVenue = async (req, res) => {
   try {
-    const id  = req.params.id;
-        
+    const id = req.params.id;
+    const { isApproved } = req.body; // Extract isApproved from the request body if available
+
+    // Ensure the isApproved field, if provided, is a valid value
+    if (isApproved && !['pending', 'approved', 'rejected'].includes(isApproved)) {
+      return res.status(400).json({ message: "Invalid approval status" });
+    }
+
+    // Update the venue with the new data
     const updatedVenue = await Venue.findByIdAndUpdate(id, req.body, { new: true, runValidators: true });
     if (!updatedVenue) {
       return res.status(404).json({ message: "Venue not found" });
     }
+
     res.status(200).json({ message: "Venue updated successfully", venue: updatedVenue });
   } catch (error) {
     res.status(500).json({ message: "Server error", error: error.message });
@@ -115,4 +172,7 @@ module.exports = {
   getVenueDetails,
   updateVenue,
   deleteVenue,
+  approveVenue,
+  rejectVenue
 };
+
