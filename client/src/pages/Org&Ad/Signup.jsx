@@ -37,7 +37,7 @@ function Signup() {
     <>
       <div className="signup-container"> {/* Updated class name */}
         <form action="#" autoComplete="off" className='form1' onSubmit={handleSubmit}>
-          <h2>Organizer or Admin Signup</h2>
+          <h2>Organizer Signup</h2>
           <div className="inputBox">
             <input type="text" id="username" placeholder="Username" required onChange={(e) => setUsername(e.target.value)} value={username} />
           </div>

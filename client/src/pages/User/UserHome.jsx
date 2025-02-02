@@ -12,6 +12,7 @@ import party3 from '../../assets/party3.jpg';
 import event from '../../assets/event.avif';
 import co from '../../assets/co1.jpg'
 import birthday from '../../assets/birthday1.jpg'
+import { Link } from 'react-router-dom';
 
 function UserHome() {
   const [currentIndex, setCurrentIndex] = useState(0);

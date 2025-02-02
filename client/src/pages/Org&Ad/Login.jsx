@@ -65,7 +65,7 @@ function Login() {
     <>
       <div className="login-container"> {/* Keeping original class name */}
         <form action="#" autoComplete="off" className="form1" onSubmit={handleSubmit}>
-          <h2>Organizer or Admin Login</h2>
+          <h2>Organizer Login</h2>
           <div className="inputBox">
             <input
               type="email"
