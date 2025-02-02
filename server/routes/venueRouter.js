@@ -11,8 +11,8 @@ const Auth = require("../middlewares/authMiddleware"); // Import role middleware
 venueRouter.post("/createVenue",Auth,Role(["admin", "organizer"]),upload.array("images", 5), // Upload up to 5 images
     venueController.createVenue
   );
-venueRouter.put('/approveVenue',Auth,Role(["admin"]), venueController.approveVenue);  
-venueRouter.put('/rejectVenue',Auth,Role(["admin"]), venueController.rejectVenue);  
+venueRouter.put('/approveVenue/:id',Auth,Role(["admin"]), venueController.approveVenue);  
+venueRouter.put('/rejectVenue/:id',Auth,Role(["admin"]), venueController.rejectVenue);  
 venueRouter.put("/:id",Auth, Role(["admin", "organizer"]), venueController.updateVenue); // Update a venue (admin or organizer only)
 venueRouter.delete("/:id",Auth, Role(["admin", "organizer"]), venueController.deleteVenue); // Delete a venue (admin or organizer only)
 

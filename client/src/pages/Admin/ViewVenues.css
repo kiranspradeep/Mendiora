@@ -1,52 +1,63 @@
+/* Global container for the venue table */
 .venue-table-container {
   padding: 20px;
-  max-width: 90%;
+  background-color: #f9f9f9;
+  max-width: 1200px;
   margin: auto;
-  font-family: "Poppins", sans-serif;
+  border-radius: 10px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
 }
 
 h2 {
   text-align: center;
-  margin-bottom: 20px;
+  font-size: 2rem;
   color: #333;
 }
 
 .venue-table {
   width: 100%;
   border-collapse: collapse;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  border-radius: 10px;
-  overflow: hidden;
+  margin-top: 20px;
 }
 
 .venue-table th,
 .venue-table td {
   padding: 15px;
   text-align: left;
+  border-bottom: 1px solid #ddd;
 }
 
-.venue-table thead {
+.venue-table th {
   background-color: #007bff;
   color: white;
 }
 
-.venue-table tbody tr {
-  border-bottom: 1px solid #ddd;
-  transition: background 0.3s ease;
+.venue-table tr:nth-child(even) {
+  background-color: #f2f2f2;
 }
 
-.venue-table tbody tr:hover {
-  background: rgba(0, 123, 255, 0.1);
+.venue-table tr:hover {
+  background-color: #e9f7fe;
+}
+
+.venue-table td div {
+  margin-bottom: 5px;
 }
 
 .approve-btn,
 .reject-btn {
-  padding: 8px 15px;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
+  display: inline-block;
+  padding: 10px 16px;
+  font-size: 14px;
   font-weight: bold;
-  transition: 0.3s ease;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  text-align: center;
+  min-width: 120px;
+  margin: 5px 10px 5px 0;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.15);
 }
 
 .approve-btn {
@@ -54,36 +65,90 @@ h2 {
   color: white;
 }
 
-.approve-btn:hover {
-  background-color: #218838;
-}
-
 .reject-btn {
   background-color: #dc3545;
   color: white;
-  margin-left: 8px;
+}
+
+.approve-btn:hover {
+  background-color: #218838;
 }
 
 .reject-btn:hover {
   background-color: #c82333;
 }
 
+/* Flexbox for action buttons */
+td:nth-child(5) {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
 /* Responsive Design */
 @media (max-width: 768px) {
   .venue-table-container {
-    max-width: 100%;
-    overflow-x: auto;
+    padding: 10px;
   }
 
-  .venue-table th,
-  .venue-table td {
+  .venue-table {
+    width: 100%;
+  }
+
+  /* Stack table rows for small screens */
+  .venue-table thead {
+    display: none;
+  }
+
+  .venue-table tr {
+    display: block;
+    margin-bottom: 10px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
     padding: 10px;
-    font-size: 14px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  }
+
+  .venue-table td {
+    display: flex;
+    justify-content: space-between;
+    padding: 10px;
+    border: none;
+  }
+
+  .venue-table td::before {
+    content: attr(data-label);
+    font-weight: bold;
+    color: #555;
+  }
+
+  /* Action buttons stacking */
+  td:nth-child(5) {
+    flex-direction: column;
+    gap: 10px;
   }
 
   .approve-btn,
   .reject-btn {
-    padding: 6px 12px;
+    width: 100%;
+  }
+}
+
+@media (max-width: 480px) {
+  h2 {
+    font-size: 1.5rem;
+  }
+
+  .venue-table-container {
+    padding: 5px;
+  }
+
+  .venue-table td {
+    padding: 8px;
+  }
+
+  .approve-btn,
+  .reject-btn {
     font-size: 12px;
   }
 }
