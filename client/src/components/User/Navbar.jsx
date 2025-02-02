@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import "./Navbar.css";
 import logo from "../../assets/logo.webp";
 import { FaPhoneAlt, FaWhatsapp } from "react-icons/fa";
+import { Link } from "react-router-dom";
 
 const Navbar = () => {
   const [menuActive, setMenuActive] = useState(false);
@@ -22,23 +23,22 @@ const Navbar = () => {
         <span>Medioraa</span>
       </div>
       <nav className={`navbar-links ${menuActive ? "active" : ""}`}>
-        <a href="/">Home</a>
-        <a href="/aboutus">About Us</a>
-        <a href="/#service">Services</a>
-        <a href="#venues">Venues</a>
+        <Link to="/">Home</Link>
+        <Link to="/aboutus">About Us</Link>
+        <Link to="/#service">Service</Link>
+        <Link to="#venues">Venues</Link>
         
         {/* Dropdown for Signup */}
         <div className="signup-dropdown" onClick={toggleDropdown}>
           <a href="#">Signup</a>
           {dropdownActive && (
             <div className="dropdown-menu">
-              <a href="/signupuser">Signup as User</a>
-              <a href="/signuporg">Signup as Organizer</a> {/* Updated link */}
+              <Link to="/signupuser">Signup as User</Link>
+              <Link to="/signuporg">Signup as Organizer</Link>
             </div>
           )}
         </div>
-
-        <a href="/contactus">Contact Us</a>
+          <Link to="/contactus">Contact Us</Link>
       </nav>
       <div className="navbar-contact">
         <a href="tel:+912000058886">
@@ -54,10 +54,10 @@ const Navbar = () => {
         <div></div>
       </div>
       <div className={`navbar-menu ${menuActive ? "active" : ""}`}>
-        <a href="/">Home</a>
-        <a href="aboutus">About Us</a>
-        <a href="#services">Services</a>
-        <a href="#venues">Venues</a>
+        <Link to="/">Home</Link>
+        <Link to="/aboutus">About Us</Link>
+        <Link to="/#service">Services</Link>
+        <Link to="/#venues">Venues</Link>
 
         {/* Dropdown for Signup in mobile menu */}
         <div className="signup-dropdown" onClick={toggleDropdown}>
@@ -69,8 +69,7 @@ const Navbar = () => {
             </div>
           )}
         </div>
-
-        <a href="/contactus">Contact Us</a>
+        <Link to="/contactus">Contact Us</Link>  
       </div>
     </header>
   );

@@ -10,6 +10,7 @@ import AboutUs from './pages/User/AboutUs';
 import WeddingPlanners from './pages/User/WeddingPlanners'; // Importing the Wedding Planners page
 import ContactUs from './pages/User/ContactUs';
 import VenueForm from './pages/Org&Ad/VenueForm';
+import AdminNavbar from './components/Admin/AdminNavbar';
 
 function App () {
         
@@ -25,6 +26,7 @@ function App () {
             <Route path='/contactus' element={<ContactUs/>}/>
             <Route path='/wedding' element={<WeddingPlanners/>}/>
             <Route path='/form' element={<VenueForm/>}/>
+            <Route path='/adminnavbar'element={<AdminNavbar/>}/>
         </Routes>
     );
 };
