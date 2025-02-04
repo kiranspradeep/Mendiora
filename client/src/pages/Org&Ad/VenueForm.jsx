@@ -2,6 +2,13 @@ import React, { useState, useRef } from 'react';
 import axios from 'axios';
 import './VenueForm.css'; // Import the CSS file
 
+const allowedCategories = [
+  "Corporate Event Management",
+  "Wedding Planners & Management",
+  "Entertainment & Show Management",
+  "Birthday Party & Venue Management"
+];
+
 const VenueForm = () => {
   const [formData, setFormData] = useState({
     name: '',
@@ -13,16 +20,26 @@ const VenueForm = () => {
     capacity: '',
     minPrice: '',
     maxPrice: '',
-    categories: '',
+    categories: [],
     unavailableDates: '',
     images: null,
   });
 
-  const fileInputRef = useRef(); // Reference for file input
+  const fileInputRef = useRef();
 
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
+  };
+
+  const handleCategoryChange = (e) => {
+    const { value, checked } = e.target;
+    setFormData((prevData) => ({
+      ...prevData,
+      categories: checked
+        ? [...prevData.categories, value]
+        : prevData.categories.filter((category) => category !== value),
+    }));
   };
 
   const handleFileChange = (e) => {
@@ -34,9 +51,11 @@ const VenueForm = () => {
     const formDataToSend = new FormData();
     for (const key in formData) {
       if (key === 'images') {
-        for (let i = 0; i < formData[key].length; i++) {
+        for (let i = 0; i < formData[key]?.length; i++) {
           formDataToSend.append('images', formData[key][i]);
         }
+      } else if (key === 'categories') {
+        formDataToSend.append(key, formData[key].join(','));
       } else {
         formDataToSend.append(key, formData[key]);
       }
@@ -60,23 +79,20 @@ const VenueForm = () => {
         capacity: '',
         minPrice: '',
         maxPrice: '',
-        categories: '',
+        categories: [],
         unavailableDates: '',
         images: null,
       });
 
-      // Clear the file input
       fileInputRef.current.value = '';
-
       alert(response.data.message);
     } catch (error) {
-      // console.error(error);
       alert(error.response?.data?.message || 'Error creating venue');
     }
   };
-
   return (
     <form className="venue-form" onSubmit={handleSubmit}>
+      <h2 className='venue-form-h2'>Venue Applicantion form</h2>
       <label>
         Venue Name:
         <input type="text" name="name" placeholder="VENUE-NAME" onChange={handleChange} value={formData.name} required />
@@ -122,10 +138,19 @@ const VenueForm = () => {
         <input type="number" name="maxPrice" placeholder="MAX-PRICE" onChange={handleChange} value={formData.maxPrice} required />
       </label>
 
-      <label>
-        Categories (comma separated):
-        <input type="text" name="categories" placeholder="CATEGORIES" onChange={handleChange} value={formData.categories} required />
-      </label>
+      <label>Categories (Select One or More):</label>
+      {allowedCategories.map((category) => (
+        <div key={category}>
+          <input
+            type="checkbox"
+            id={category}
+            value={category}
+            onChange={handleCategoryChange}
+            checked={formData.categories.includes(category)}
+          />
+          <label htmlFor={category}>{category}</label>
+        </div>
+      ))}
 
       <label>
         Unavailable Dates (yy-mm-dd format):

@@ -1,109 +1,82 @@
-/* General form styles */
-.venue-form {
-  width: 80%;
-  max-width: 600px;
-  margin: 0 auto;
-  padding: 20px;
-  border: 1px solid #ddd;
-  border-radius: 8px;
+/* VenueForm.css */
+
+body {
+  font-family: 'Arial', sans-serif;
   background-color: #f9f9f9;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  margin: 0;
+}
+
+.venue-form {
+  background-color: #ffffff;
+  padding: 2rem;
+  max-width: 600px;
+  width: 90%;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  display: grid;
+  gap: 1.5rem;
 }
 
 .venue-form label {
   display: block;
-  margin: 10px 0 5px;
-  font-weight: bold;
+  font-weight: 600;
+  color: #333;
+  margin-bottom: 0.5rem;
 }
 
 .venue-form input[type="text"],
 .venue-form input[type="number"],
+.venue-form input[type="file"],
 .venue-form textarea {
   width: 100%;
-  padding: 10px;
-  margin-bottom: 10px;
-  border: 1px solid #ccc;
-  border-radius: 4px;
-}
-
-.venue-form input[type="file"] {
-  margin-top: 10px;
+  padding: 0.8rem;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  font-size: 1rem;
 }
 
 .venue-form textarea {
-  height: 120px;
-  resize: vertical;
+  min-height: 100px;
+}
+
+.venue-form div {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-top: 0.5rem;
 }
 
 .venue-form input[type="checkbox"] {
-  margin-right: 10px;
+  transform: scale(1.2);
+  accent-color: #007bff;
 }
 
-.venue-form .checkbox-group {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 15px;
-}
-
-.venue-form .checkbox-group label {
-  display: inline-block;
-  margin-right: 15px;
-}
-
-.venue-form button {
-  background-color: #4CAF50;
+.venue-form button[type="submit"] {
+  background-color: #007bff;
   color: white;
-  padding: 10px 20px;
   border: none;
-  border-radius: 5px;
+  padding: 0.8rem 1.2rem;
+  font-size: 1rem;
+  border-radius: 8px;
   cursor: pointer;
-  width: 100%;
+  transition: background-color 0.3s;
 }
 
-.venue-form button:hover {
-  background-color: #45a049;
+.venue-form button[type="submit"]:hover {
+  background-color: #0056b3;
 }
 
 /* Responsive Design */
-@media (max-width: 768px) {
+@media (max-width: 600px) {
   .venue-form {
-    width: 90%;
-    padding: 15px;
-  }
-
-  .venue-form label {
-    font-size: 14px;
-  }
-
-  .venue-form input[type="text"],
-  .venue-form input[type="number"],
-  .venue-form textarea {
-    padding: 8px;
-  }
-
-  .venue-form button {
-    padding: 12px;
+    padding: 1.5rem;
   }
 }
 
-@media (max-width: 480px) {
-  .venue-form {
-    width: 95%;
-  }
-
-  .venue-form label {
-    font-size: 13px;
-  }
-
-  .venue-form input[type="text"],
-  .venue-form input[type="number"],
-  .venue-form textarea {
-    padding: 6px;
-  }
-
-  .venue-form button {
-    padding: 15px;
-  }
-}
 
 
 .venue-form input[type="number"] {

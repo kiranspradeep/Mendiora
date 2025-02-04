@@ -5,6 +5,13 @@ const {cloudinary} = require('../config/cloudinaryConfig')
 // Ensure your Venue model is imported
 
 
+const allowedCategories = [
+  "Corporate Event Management",
+  "Wedding Planners & Management",
+  "Entertainment & Show Management",
+  "Birthday Party & Venue Management"
+];
+
 const createVenue = async (req, res) => {
   try {
     const {
@@ -21,21 +28,28 @@ const createVenue = async (req, res) => {
       unavailableDates,
       isApproved,
     } = req.body;
-// console.log(req.files)
-// // console.log(req.file)
+
+    // Validate categories
+    const categoryList = categories.split(",").map((category) => category.trim());
+    const invalidCategories = categoryList.filter(category => !allowedCategories.includes(category));
+
+    if (invalidCategories.length > 0) {
+      return res.status(400).json({
+        message: `Invalid category values: ${invalidCategories.join(', ')}`,
+      });
+    }
+
     // Upload images to Cloudinary
     const imageUploads = await Promise.all(
       req.files.map((file) =>
         cloudinary.uploader.upload(file.path, {
-          folder: 'venues', // Optional: Store images in a "venues" folder
+          folder: 'venues',
         })
       )
     );
-// console.log("imageUploads",imageUploads)
-    // Extract secure URLs from uploaded files
+
     const images = imageUploads.map((upload) => upload.secure_url);
 
-    // Prepare venue data
     const venueData = {
       name,
       description,
@@ -43,14 +57,13 @@ const createVenue = async (req, res) => {
       capacity,
       minPrice,
       maxPrice,
-      categories: categories.split(",").map((category) => category.trim()),
+      categories: categoryList,
       owner: req.user.userId,
       images,
       unavailableDates,
       isApproved: isApproved || 'pending',
     };
 
-    // Check for duplicate venue
     const existingVenue = await Venue.findOne({
       name: venueData.name,
       "location.address": venueData.location.address,
@@ -75,6 +88,7 @@ const createVenue = async (req, res) => {
     res.status(500).json({ message: "Server error", error: error.message });
   }
 };
+
 
 
   
