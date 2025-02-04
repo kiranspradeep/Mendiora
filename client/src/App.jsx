@@ -9,6 +9,7 @@ import Signup from './pages/Org&Ad/Signup';
 import AboutUs from './pages/User/AboutUs';
 import WeddingPlanners from './pages/User/WeddingPlanners'; // Importing the Wedding Planners page
 import ContactUs from './pages/User/ContactUs';
+import VenuesSection from './pages/User/VenuesSection';
 import VenueForm from './pages/Org&Ad/VenueForm';
 import AdminNavbar from './components/Admin/AdminNavbar';
 import ViewOrganizers from './pages/Admin/ViewOrganizer';
@@ -33,6 +34,7 @@ function App () {
             <Route path='/adminlogin' element={<AdminLogin/>}/>
             <Route path='/organizer' element={<ViewOrganizers/>}/>
             <Route path='/venue' element={<ViewVenues/>}/>
+            <Route path='/venuesection' element={<VenuesSection/>}/>
         </Routes>
     );
 };

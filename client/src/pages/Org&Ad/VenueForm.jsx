@@ -1,6 +1,6 @@
 import React, { useState, useRef } from 'react';
 import axios from 'axios';
-import './VenueForm.css'; // Import the CSS file
+import './VenueForm.css';
 
 const allowedCategories = [
   "Corporate Event Management",
@@ -21,10 +21,11 @@ const VenueForm = () => {
     minPrice: '',
     maxPrice: '',
     categories: [],
-    unavailableDates: '',
+    unavailableDates: [],
     images: null,
   });
 
+  const [newDate, setNewDate] = useState('');
   const fileInputRef = useRef();
 
   const handleChange = (e) => {
@@ -46,8 +47,44 @@ const VenueForm = () => {
     setFormData({ ...formData, images: e.target.files });
   };
 
+  const handleAddDate = () => {
+    const dateRegex = /^\d{4}-\d{2}-\d{2}$/; // Format YYYY-MM-DD
+    if (!dateRegex.test(newDate)) {
+      alert('Invalid date format. Please use YYYY-MM-DD.');
+      return;
+    }
+
+    const selectedDate = new Date(newDate);
+    const currentDate = new Date();
+    currentDate.setHours(0, 0, 0, 0); // Ignore time part for accurate comparison
+
+    if (selectedDate <= currentDate) {
+      alert('Date must be greater than the current date.');
+      return;
+    }
+
+    if (formData.unavailableDates.includes(newDate)) {
+      alert('Date already added.');
+      return;
+    }
+
+    setFormData((prevData) => ({
+      ...prevData,
+      unavailableDates: [...prevData.unavailableDates, newDate],
+    }));
+    setNewDate('');
+  };
+
+  const handleRemoveDate = (date) => {
+    setFormData((prevData) => ({
+      ...prevData,
+      unavailableDates: prevData.unavailableDates.filter((d) => d !== date),
+    }));
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
+  
     const formDataToSend = new FormData();
     for (const key in formData) {
       if (key === 'images') {
@@ -55,11 +92,14 @@ const VenueForm = () => {
           formDataToSend.append('images', formData[key][i]);
         }
       } else if (key === 'categories') {
-        formDataToSend.append(key, formData[key].join(','));
+        formDataToSend.append(key, formData[key].join(',')); 
+      } else if (key === 'unavailableDates') {
+        formData[key].forEach((date) => formDataToSend.append('unavailableDates', date)); 
       } else {
         formDataToSend.append(key, formData[key]);
       }
     }
+  
     try {
       const token = localStorage.getItem('token');
       const response = await axios.post('http://localhost:3000/venue/createVenue', formDataToSend, {
@@ -68,7 +108,7 @@ const VenueForm = () => {
           'Authorization': `Bearer ${token}`,
         },
       });
-
+  
       setFormData({
         name: '',
         description: '',
@@ -80,19 +120,21 @@ const VenueForm = () => {
         minPrice: '',
         maxPrice: '',
         categories: [],
-        unavailableDates: '',
+        unavailableDates: [],
         images: null,
       });
-
+  
       fileInputRef.current.value = '';
       alert(response.data.message);
     } catch (error) {
       alert(error.response?.data?.message || 'Error creating venue');
     }
   };
+  
+
   return (
     <form className="venue-form" onSubmit={handleSubmit}>
-      <h2 className='venue-form-h2'>Venue Applicantion form</h2>
+      <h2 className='venue-form-h2'>Venue Application Form</h2>
       <label>
         Venue Name:
         <input type="text" name="name" placeholder="VENUE-NAME" onChange={handleChange} value={formData.name} required />
@@ -153,9 +195,21 @@ const VenueForm = () => {
       ))}
 
       <label>
-        Unavailable Dates (yy-mm-dd format):
-        <input type="text" name="unavailableDates" placeholder="YY-MM-DD" onChange={handleChange} value={formData.unavailableDates} />
+        Add Unavailable Date (YYYY-MM-DD format):
+        <input type="text" value={newDate} onChange={(e) => setNewDate(e.target.value)} />
+        <button type="button" onClick={handleAddDate}>Add Date</button>
       </label>
+
+      <ul>
+        {formData.unavailableDates.map((date, index) => (
+          <li key={index}>
+            {date}
+            <button type="button" onClick={() => handleRemoveDate(date)}>
+              Remove
+            </button>
+          </li>
+        ))}
+      </ul>
 
       <label>
         Images (Upload Multiple):

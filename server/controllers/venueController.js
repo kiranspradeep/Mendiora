@@ -90,6 +90,46 @@ const createVenue = async (req, res) => {
 };
 
 
+//get venues based on categories
+const getVenueCategory = async (req, res) => { 
+  const { category } = req.query; // Get the category from the query string
+
+  try {
+    // Build the filter dynamically if category is provided and check for approved venues
+    const filter = {
+      ...(category ? { categories: category } : {}),
+      isApproved: "approved", // Ensure only approved venues are fetched
+    };
+
+    const venues = await Venue.find(filter)
+      .sort({ createdAt: -1 })
+      .populate("owner", "name email");
+
+    const detailedVenues = venues.map(venue => ({
+      id: venue._id,
+      name: venue.name,
+      description: venue.description,
+      location: {
+        address: venue.location.address,
+        city: venue.location.city,
+        state: venue.location.state,
+        country: venue.location.country,
+      },
+      capacity: venue.capacity,
+      priceRange: {
+        minPrice: venue.minPrice,
+        maxPrice: venue.maxPrice,
+      },
+      images: venue.images,
+      categories: venue.categories,
+      owner: venue.owner,
+    }));
+
+    res.status(200).json({ venues: detailedVenues });
+  } catch (error) {
+    res.status(500).json({ message: "Server error", error: error.message });
+  }
+};
 
   
 
@@ -197,6 +237,8 @@ const deleteVenue = async (req, res) => {
   }
 };
 
+
+
 module.exports = {
   createVenue,
   getAllVenues,
@@ -204,6 +246,7 @@ module.exports = {
   updateVenue,
   deleteVenue,
   approveVenue,
-  rejectVenue
+  rejectVenue,
+  getVenueCategory
 };
 

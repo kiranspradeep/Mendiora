@@ -18,6 +18,7 @@ venueRouter.delete("/:id",Auth, Role(["admin", "organizer"]), venueController.de
 
 //public routes
 venueRouter.get("/", venueController.getAllVenues); // Get all venues (no auth required)
+venueRouter.get("/venueCategory", venueController.getVenueCategory); // Get all venues (no auth required)
 venueRouter.get("/:id", venueController.getVenueDetails); // Get a specific venue (no auth required)
 
 module.exports = venueRouter;

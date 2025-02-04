@@ -1,17 +1,24 @@
-// VenuesSection.js
 import React from 'react';
-import VenueCard from '../../components/VenueCard'; // Import the VenueCard component
+import { useLocation } from 'react-router-dom';
+import VenueCard from '../../components/VenueCard';
 import './VenuesSection.css';
 
-const VenuesSection = ({ venues }) => {
+const VenuesSection = () => {
+  const { state } = useLocation();
+  const venues = state?.venues || []; // Access the venues from the state
+
   return (
     <div className="venues-section">
       <h2>Venues</h2>
-      <div className="venues-container">
-        {venues.map((venue) => (
-          <VenueCard key={venue.id} venue={venue} />
-        ))}
-      </div>
+      {venues.length > 0 ? (
+        <div className="venues-container">
+          {venues.map((venue) => (
+            <VenueCard key={venue.id} venue={venue} />
+          ))}
+        </div>
+      ) : (
+        <p>No venues found for this category.</p>
+      )}
     </div>
   );
 };
