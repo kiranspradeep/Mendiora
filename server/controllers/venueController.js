@@ -1,7 +1,7 @@
 const Venue = require("../models/venueModels");
 
 // Create a new venue
-const cloudinary = require('../config/cloudinaryConfig')
+const {cloudinary} = require('../config/cloudinaryConfig')
 // Ensure your Venue model is imported
 
 
@@ -21,7 +21,8 @@ const createVenue = async (req, res) => {
       unavailableDates,
       isApproved,
     } = req.body;
-
+// console.log(req.files)
+// // console.log(req.file)
     // Upload images to Cloudinary
     const imageUploads = await Promise.all(
       req.files.map((file) =>
@@ -30,7 +31,7 @@ const createVenue = async (req, res) => {
         })
       )
     );
-
+// console.log("imageUploads",imageUploads)
     // Extract secure URLs from uploaded files
     const images = imageUploads.map((upload) => upload.secure_url);
 
