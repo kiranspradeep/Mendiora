@@ -1,6 +1,7 @@
 const express = require('express')
 const cors = require('cors')
 const mongoose =require('mongoose')
+const Razorpay =require('razorpay')
 const app = express()
 const organizerAdminRouter=require("./routes/OrganizerAdminRouter")
 const userRouter=require("./routes/userRouter")
@@ -24,6 +25,7 @@ app.use('/',organizerAdminRouter)
 app.use('/user',userRouter)
 app.use('/event',eventRouter)
 app.use('/venue',venueRouter)
+
 
 app.listen(process.env.PORT,()=>{
     console.log(`server is running on port 3000`);

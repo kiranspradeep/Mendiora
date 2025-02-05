@@ -133,6 +133,8 @@ const VenueForm = () => {
   
 
   return (
+    <>
+    <div className="form-container">
     <form className="venue-form" onSubmit={handleSubmit}>
       <h2 className='venue-form-h2'>Venue Application Form</h2>
       <label>
@@ -218,6 +220,8 @@ const VenueForm = () => {
 
       <button type="submit">Create Venue</button>
     </form>
+    </div>
+    </>
   );
 };
 
