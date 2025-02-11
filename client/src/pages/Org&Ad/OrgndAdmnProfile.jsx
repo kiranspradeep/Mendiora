@@ -57,13 +57,9 @@ const ProfilePage = () => {
     if (!password) return;
   
     try {
-      const dataToUpdate = { ...formData, password }; // Include password in the update request
+      const dataToUpdate = { ...formData, password }; // Include password in the request
   
-      if (!dataToUpdate.password.trim()) {
-        delete dataToUpdate.password; // Only send password if it's not empty
-      }
-  
-      const response = await axios.put('http://localhost:3000/updateAdminOrg', dataToUpdate, {
+      const response = await axios.put('http://localhost:3000/user/updateUser', dataToUpdate, {
         headers: { Authorization: `Bearer ${token}` },
       });
   
@@ -72,7 +68,7 @@ const ProfilePage = () => {
       }
     } catch (error) {
       console.error(error);
-      setMessage('Error updating profile. Ensure the password is correct.');
+      setMessage(error.response?.data?.message || 'Error updating profile. Ensure the password is correct.');
     }
   };
   

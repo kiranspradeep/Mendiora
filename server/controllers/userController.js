@@ -81,66 +81,42 @@ async function loginAttendee(req, res) {
 }
 
 //update function
-const updateAttendee = async (req, res) => {
+const updateAttendee = async (req, res) =>  {
+  const { username, email, name, password, newPassword } = req.body;
+  const userId = req.user.userId; // Assuming you're extracting user from the token
+
+  
   try {
-    const { userId } = req.user;
-    const updates = req.body;
+    const user = await User.findById(userId);
 
-    // Define allowed fields for updates
-    const allowedFields = ["username", "email", "password", "name"];
-    const filteredUpdates = Object.fromEntries(
-      Object.entries(updates).filter(([key]) => allowedFields.includes(key))
-    );
-
-    // Fetch current user from the database
-    const currentUser = await User.findById(userId);
-    if (!currentUser) {
-      return res.status(404).json({ message: "User not found" });
+    if (!user) {
+      return res.status(404).json({ message: 'User not found' });
     }
 
-    // Hash the password if it's being updated
-    if (filteredUpdates.password) {
-      filteredUpdates.password = await bcrypt.hash(filteredUpdates.password, 10);
+    // Verify the current password
+    const isPasswordCorrect = await bcrypt.compare(password, user.password);
+   
+    
+    if (!isPasswordCorrect) {
+      return res.status(401).json({ message: 'Incorrect password' });
     }
 
-    // Check for actual changes, including special handling for password
-    const hasChanges = Object.entries(filteredUpdates).some(([key, value]) => {
-      if (key === "password") return true; // Password always treated as changed
-      return value !== currentUser[key];
-    });
+    // Update user fields
+    if (username) user.username = username;
+    if (email) user.email = email;
+    if (name) user.Name = name;
 
-    if (!hasChanges) {
-      return res.status(400).json({
-        message: "No changes detected. Please update at least one field."
-      });
+    // Update the password if a new one is provided
+    if (newPassword) {
+      user.password = await bcrypt.hash(newPassword, 10);
     }
 
-    // Handle unique email validation
-    if (filteredUpdates.email && filteredUpdates.email !== currentUser.email) {
-      const existingUser = await User.findOne({ email: filteredUpdates.email });
-      if (existingUser) {
-        return res.status(400).json({ message: "Email is already taken" });
-      }
-    }
-
-    // Update the user in the database
-    const updatedUser = await User.findByIdAndUpdate(
-      userId,
-      { $set: filteredUpdates },
-      { new: true, runValidators: true }
-    );
-
-    return res.status(200).json({
-      message: "User updated successfully",
-      user: updatedUser
-    });
-
+    await user.save();
+    res.status(200).json({ message: 'Profile updated successfully' });
   } catch (error) {
-    console.error("Error updating user:", error);
-    return res.status(500).json({ message: "Server error: " + error.message });
+    res.status(500).json({ error: error.message });
   }
-};
-
+}
 
 
 //delete function

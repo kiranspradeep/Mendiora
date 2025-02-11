@@ -175,47 +175,41 @@ const rejectOrganizer = async (req, res) => {
 
 //update user
 const updateUser = async (req, res) => {
+  const { username, email, name, password, newPassword } = req.body;
+  const userId = req.user.userId; // Assuming you're extracting user from the token
+
+  
   try {
-    const { userId } = req.user; // Assuming `req.user` contains the authenticated user's details
-    const updates = req.body; // Extract fields to update from the request body
+    const user = await User.findById(userId);
 
-    // Handle password hashing if provided in the updates
-    if (updates.password) {
-      updates.password = await bcrypt.hash(updates.password, 10);
+    if (!user) {
+      return res.status(404).json({ message: 'User not found' });
     }
 
-    // Ensure only the allowed fields are updated
-    const allowedFields = [
-      "username",
-      "email",
-      "password",
-      "Name",
-    ];
-    const filteredUpdates = {};
-    for (const field of allowedFields) {
-      if (updates[field] !== undefined) {
-        filteredUpdates[field] = updates[field];
-      }
+    // Verify the current password
+    const isPasswordCorrect = await bcrypt.compare(password, user.password);
+   
+    
+    if (!isPasswordCorrect) {
+      return res.status(401).json({ message: 'Incorrect password' });
     }
 
-    const updatedUser = await OrganizerAdmin.findByIdAndUpdate(
-      userId,
-      { $set: filteredUpdates },
-      { new: true, runValidators: true } // Return the updated document and validate against schema
-    );
+    // Update user fields
+    if (username) user.username = username;
+    if (email) user.email = email;
+    if (name) user.Name = name;
 
-    if (!updatedUser) {
-      return res.status(404).json({ message: "User not found" });
+    // Update the password if a new one is provided
+    if (newPassword) {
+      user.password = await bcrypt.hash(newPassword, 10);
     }
 
-    res
-      .status(200)
-      .json({ message: "User updated successfully", user: updatedUser });
+    await user.save();
+    res.status(200).json({ message: 'Profile updated successfully' });
   } catch (error) {
-    console.error(error);
-    res.status(500).json({ message: "Server error: " + error.message });
+    res.status(500).json({ error: error.message });
   }
-};
+}
 
 
 
