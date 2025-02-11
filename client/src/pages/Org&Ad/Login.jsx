@@ -26,7 +26,7 @@ function Login() {
       if (response.data.token) {
         localStorage.setItem('token', response.data.token);
         setMessage(response.data.message || 'Login successful');
-        navigate('/'); // Redirect to home after successful login
+        navigate('/orgnavbar'); // Redirect to home after successful login
       } else {
         setMessage(response.data.message || 'Login Failed');
       }
