@@ -7,6 +7,7 @@ const organizerAdminRouter=require("./routes/OrganizerAdminRouter")
 const userRouter=require("./routes/userRouter")
 const eventRouter=require("./routes/eventRouter")
 const venueRouter=require("./routes/venueRouter")
+const orderRouter=require("./routes/orderRouter")
 require('dotenv').config()
 app.use(cors())
 app.use(express.json())
@@ -25,6 +26,7 @@ app.use('/',organizerAdminRouter)
 app.use('/user',userRouter)
 app.use('/event',eventRouter)
 app.use('/venue',venueRouter)
+app.use('/order',orderRouter)
 
 
 app.listen(process.env.PORT,()=>{
