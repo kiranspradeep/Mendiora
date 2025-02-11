@@ -16,6 +16,8 @@ const Navbar = () => {
     setDropdownActive(!dropdownActive);
   };
 
+  const isLoggedIn = !!localStorage.getItem('token'); // Check if user is logged in
+
   return (
     <header className="navbar">
       <div className="navbar-logo">
@@ -27,7 +29,7 @@ const Navbar = () => {
         <Link to="/aboutus">About Us</Link>
         <Link to="/#service">Service</Link>
         <Link to="#venues">Venues</Link>
-        <Link to="/profileuser">Profile</Link>
+        {isLoggedIn && <Link to="/profileuser">Profile</Link>} {/* Conditionally render profile link */}
         
         {/* Dropdown for Signup */}
         <div className="signup-dropdown" onClick={toggleDropdown}>
@@ -39,7 +41,7 @@ const Navbar = () => {
             </div>
           )}
         </div>
-          <Link to="/contactus">Contact Us</Link>
+        <Link to="/contactus">Contact Us</Link>
       </nav>
       <div className="navbar-contact">
         <a href="tel:+912000058886">
@@ -59,7 +61,7 @@ const Navbar = () => {
         <Link to="/aboutus">About Us</Link>
         <Link to="/#service">Services</Link>
         <Link to="/#venues">Venues</Link>
-        <Link to="/profileuser">Profile</Link>
+        {isLoggedIn && <Link to="/profileuser">Profile</Link>} {/* Conditionally render profile link */}
 
         {/* Dropdown for Signup in mobile menu */}
         <div className="signup-dropdown" onClick={toggleDropdown}>
