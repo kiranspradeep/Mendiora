@@ -27,6 +27,7 @@ const Navbar = () => {
         <Link to="/aboutus">About Us</Link>
         <Link to="/#service">Service</Link>
         <Link to="#venues">Venues</Link>
+        <Link to="/profileuser">Profile</Link>
         
         {/* Dropdown for Signup */}
         <div className="signup-dropdown" onClick={toggleDropdown}>
@@ -58,6 +59,7 @@ const Navbar = () => {
         <Link to="/aboutus">About Us</Link>
         <Link to="/#service">Services</Link>
         <Link to="/#venues">Venues</Link>
+        <Link to="/profileuser">Profile</Link>
 
         {/* Dropdown for Signup in mobile menu */}
         <div className="signup-dropdown" onClick={toggleDropdown}>
