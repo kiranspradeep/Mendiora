@@ -89,5 +89,13 @@ const getOrderById = async (req, res) => {
       res.status(500).json({ error: err.message });
     }
   };
+
+  module.exports={
+    createOrder,
+    getOrderById,
+    updateOrderStatus,
+    cancelOrder,
+    listOrders
+  }
   
   
