@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
-import "./userProfile.css";
+import "./AdmnNdOrg.css";
 
 const ProfilePage = () => {
   const [formData, setFormData] = useState({
@@ -22,7 +22,7 @@ const ProfilePage = () => {
     // Fetch user profile
     async function fetchProfile() {
       try {
-        const response = await axios.get('http://localhost:3000/user/getSingleUser', {
+        const response = await axios.get('http://localhost:3000/getLoggedInAdminOrg', {
           headers: {
             "Content-Type": "application/json",
             Authorization: `Bearer ${token}`,
@@ -63,7 +63,7 @@ const ProfilePage = () => {
         delete dataToUpdate.password; // Only send password if it's not empty
       }
   
-      const response = await axios.put('http://localhost:3000/user/updateUser', dataToUpdate, {
+      const response = await axios.put('http://localhost:3000/updateAdminOrg', dataToUpdate, {
         headers: { Authorization: `Bearer ${token}` },
       });
   
@@ -82,7 +82,7 @@ const ProfilePage = () => {
     if (!password) return;
 
     try {
-      const response = await axios.delete('http://localhost:3000/user/deleteUser', {
+      const response = await axios.delete('http://localhost:3000/deleteAdminOrg', {
         headers: { Authorization: `Bearer ${token}` },
         data: { password },
       });

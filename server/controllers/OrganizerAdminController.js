@@ -240,13 +240,15 @@ const deleteUser = async (req, res) => {
 
 //function to get details of user loged in using auth
 const getLoggedInUser = async (req, res) => {
-  try {
-    const user = await OrganizerAdmin.findById(req.user.userId);
-    res.status(200).json({ user });
-    } catch (error) {
-      console.error(error);
-      res.status(500).json({ message: "Server error: " + error.message });
-      }
+  try { 
+    const user = await OrganizerAdmin.findById(req.user.userId).select("-password");
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+    res.status(200).json(user);
+  } catch (error) {
+    res.status(500).json({ message: "Server error" });
+  }
       };
 
 
