@@ -1,7 +1,6 @@
 const express = require('express')
 const cors = require('cors')
 const mongoose =require('mongoose')
-const Razorpay =require('razorpay')
 const app = express()
 const organizerAdminRouter=require("./routes/OrganizerAdminRouter")
 const userRouter=require("./routes/userRouter")
