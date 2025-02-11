@@ -11,6 +11,7 @@ import WeddingPlanners from './pages/User/WeddingPlanners'; // Importing the Wed
 import ContactUs from './pages/User/ContactUs';
 import VenuesSection from './pages/User/VenuesSection';
 import VenueForm from './pages/Org&Ad/VenueForm';
+import AdmnNdOrg from './pages/Org&Ad/OrgndAdmnProfile';
 import AdminNavbar from './components/Admin/AdminNavbar';
 import ViewOrganizers from './pages/Admin/ViewOrganizer';
 import AdminLogin from './pages/Admin/AdminLogin';
@@ -25,6 +26,7 @@ function App () {
             <Route path='/loginuser' element={<UserLogin/>}/>
             <Route path='/signupuser' element={<UserSignup/>}/>
             <Route path='/profileuser' element={<UserProfile/>}/>
+            <Route path='/adminNdOrg' element={<AdmnNdOrg/>}/>
             <Route path='/loginorg' element={<Login/>}/>
             <Route path='/signuporg' element={<Signup/>}/>
             <Route path='/aboutus' element={<AboutUs/>}/>
