@@ -28,7 +28,6 @@ const Navbar = () => {
         <Link to="/">Home</Link>
         <Link to="/aboutus">About Us</Link>
         <Link to="/#service">Service</Link>
-        <Link to="#venues">Venues</Link>
         {isLoggedIn && <Link to="/profileuser">Profile</Link>} {/* Conditionally render profile link */}
         
         {/* Dropdown for Signup */}
@@ -60,7 +59,6 @@ const Navbar = () => {
         <Link to="/">Home</Link>
         <Link to="/aboutus">About Us</Link>
         <Link to="/#service">Services</Link>
-        <Link to="/#venues">Venues</Link>
         {isLoggedIn && <Link to="/profileuser">Profile</Link>} {/* Conditionally render profile link */}
 
         {/* Dropdown for Signup in mobile menu */}
