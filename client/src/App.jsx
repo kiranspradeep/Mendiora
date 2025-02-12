@@ -6,6 +6,7 @@ import UserProfile from './pages/User/userProfile';
 import UserSignup from './pages/User/UserSignup';
 import Login from './pages/Org&Ad/Login';
 import Signup from './pages/Org&Ad/Signup';
+import EventForm from './pages/Org&Ad/EventForm';
 import AboutUs from './pages/User/AboutUs';
 import WeddingPlanners from './pages/User/WeddingPlanners'; // Importing the Wedding Planners page
 import ContactUs from './pages/User/ContactUs';
@@ -33,6 +34,7 @@ function App () {
             <Route path='/contactus' element={<ContactUs/>}/>
             <Route path='/wedding' element={<WeddingPlanners/>}/>
             <Route path='/form' element={<VenueForm/>}/>
+            <Route path='/eventForm' element={<EventForm/>}/>
             <Route path='/adminnavbar'element={<AdminNavbar/>}/>
             <Route path='/adminlogin' element={<AdminLogin/>}/>
             <Route path='/organizer' element={<ViewOrganizers/>}/>

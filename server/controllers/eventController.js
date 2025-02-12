@@ -1,84 +1,212 @@
 const Event = require('../models/eventModels');
+const { cloudinary } = require('../config/cloudinaryConfig');
 
-// Create a new event
+const allowedCategories = [
+  "Corporate Event",
+  "Music Concerts",
+  "Fashion shows",
+  "Dj Party"
+];
+
+const addOnOptions = ["Catering", "Parking", "Security", "Wi-Fi"];
+
 const createEvent = async (req, res) => {
   try {
-    const { title, description, date, location, category, price, maxAttendees, bannerUrl } = req.body;
+    const {
+      name,
+      address,
+      city,
+      state,
+      country,
+      date,
+      capacity,
+      basePrice,
+      premiumAccess,
+      addOnServices,
+      featuredPerformer,
+      category,
+      isApproved,
+    } = req.body;
+
+    // Validate category (only one allowed)
+    if (!allowedCategories.includes(category)) {
+      return res.status(400).json({
+        message: `Invalid category value: '${category}'. Allowed categories are: ${allowedCategories.join(', ')}`,
+      });
+    }
+
+    // Ensure addOnServices is an array
+    const parsedAddOnServices = Array.isArray(addOnServices)
+      ? addOnServices
+      : addOnServices
+      ? [addOnServices]
+      : [];
+
+    // Validate addOnServices without using filter
+    let invalidAddOns = [];
+    for (let service of parsedAddOnServices) {
+      if (!addOnOptions.includes(service)) {
+        invalidAddOns.push(service);
+      }
+    }
+
+    if (invalidAddOns.length > 0) {
+      return res.status(400).json({
+        message: `Invalid add-on services: ${invalidAddOns.join(', ')}. Allowed options are: ${addOnOptions.join(', ')}`,
+      });
+    }
+
+    // Upload images to Cloudinary
+    const imageUploads = await Promise.all(
+      req.files.map((file) =>
+        cloudinary.uploader.upload(file.path, {
+          folder: 'events',
+        })
+      )
+    );
+
+    const images = imageUploads.map((upload) => upload.secure_url);
 
     const newEvent = new Event({
-      title,
-      description,
+      name,
+      location: { address, city, state, country },
       date,
-      location,
-      category,
-      price,
-      maxAttendees,
-      bannerUrl,
-      organizer: req.user.id, // req.user is set by auth middleware
+      capacity,
+      basePrice,
+      premiumAccess,
+      addOnServices: parsedAddOnServices,
+      featuredPerformer,
+      categories: [category], // Save as an array with a single category
+      images,
+      isApproved: isApproved || 'pending',
+      owner: req.user.userId, // Ensure this is correctly retrieved
     });
 
-    const savedEvent = await newEvent.save();
-    res.status(201).json({ message: 'Event created successfully', event: savedEvent });
+    const existingEvent = await Event.findOne({
+      name: newEvent.name,
+      "location.address": newEvent.location.address,
+      owner: newEvent.owner
+    });
+
+    if (existingEvent) {
+      return res.status(400).json({
+        message: `Event with name '${newEvent.name}' and location '${newEvent.location.address}' already exists. Please choose a different name or location.`,
+      });
+    }
+    
+    const event = new Event(newEvent);
+    await event.save();
+
+    res.status(201).json({ message: "Event created successfully", event: newEvent });
   } catch (error) {
-    res.status(500).json({ message: 'Server error', error: error.message });
+    console.log(error);
+    
+    if (error.code === 11000) {
+      return res.status(400).json({ message: "Duplicate event entry detected. An event with the same name, address, and date already exists for this owner." });
+    }
+    res.status(500).json({ message: "Server error", error: error.message });
   }
 };
 
-// Get all events
 const getAllEvents = async (req, res) => {
   try {
-    const events = await Event.find().sort({ date: 1 });
-    res.status(200).json({ events });
-  } catch (error) {
-    res.status(500).json({ message: 'Server error', error: error.message });
+    const {
+      category,
+      location,
+      sortBy,
+      page = 1,
+      limit = 10
+    } = req.query;
+
+    const query = {};
+
+    if (category) {
+      query.categories = category;
+    }
+
+    if (location) {
+      query.$or = [
+        { "location.city": { $regex: location, $options: "i" } },
+        { "location.country": { $regex: location, $options: "i" } }
+      ];
+    }
+
+    const skip = (page - 1) * limit;
+
+    const sortOptions = {};
+    if (sortBy === "date") sortOptions.date = 1;
+    if (sortBy === "price") sortOptions.basePrice = 1;
+
+    const events = await Event.find(query)
+      .populate("owner", "name email")
+      .sort(sortOptions)
+      .skip(skip)
+      .limit(parseInt(limit));
+
+    const totalEvents = await Event.countDocuments(query);
+
+    res.status(200).json({
+      events,
+      totalEvents,
+      currentPage: parseInt(page),
+      totalPages: Math.ceil(totalEvents / limit),
+      pageSize: parseInt(limit)
+    });
+  } catch (err) {
+    res.status(500).json({ message: "Error fetching events", error: err.message });
   }
 };
 
-// Get a single event by ID
-const getEventDetails = async (req, res) => {
+const getEventById = async (req, res) => {
   try {
     const event = await Event.findById(req.params.id);
-    if (!event) {
-      return res.status(404).json({ message: 'Event not found' });
-    }
-    res.status(200).json({ event });
-  } catch (error) {
-    res.status(500).json({ message: 'Server error', error: error.message });
+    if (!event) return res.status(404).json({ message: "Event not found" });
+    res.status(200).json(event);
+  } catch (err) {
+    res.status(500).json({ message: err.message });
   }
 };
 
-// Update an event
-const updateEvent = async (req, res) => {
+const updateEventById = async (req, res) => {
   try {
     const { id } = req.params;
-    const updatedEvent = await Event.findByIdAndUpdate(id, req.body, { new: true });
+    const updateData = req.body;
+
+    if (updateData.category && !allowedCategories.includes(updateData.category)) {
+      return res.status(400).json({
+        message: `Invalid category value: '${updateData.category}'. Allowed categories are: ${allowedCategories.join(', ')}`,
+      });
+    }
+
+    const updatedEvent = await Event.findByIdAndUpdate(id, updateData, {
+      new: true,
+      runValidators: true,
+    });
+
     if (!updatedEvent) {
-      return res.status(404).json({ message: 'Event not found' });
+      return res.status(404).json({ message: "Event not found" });
     }
-    res.status(200).json({ message: 'Event updated successfully', event: updatedEvent });
-  } catch (error) {
-    res.status(500).json({ message: 'Server error', error: error.message });
+
+    res.status(200).json({ message: "Event updated successfully", event: updatedEvent });
+  } catch (err) {
+    res.status(500).json({ message: "Error updating event", error: err.message });
   }
 };
 
-// Delete an event
-const deleteEvent = async (req, res) => {
+const deleteEventById = async (req, res) => {
   try {
-    const { id } = req.params;
-    const deletedEvent = await Event.findByIdAndDelete(id);
-    if (!deletedEvent) {
-      return res.status(404).json({ message: 'Event not found' });
-    }
-    res.status(200).json({ message: 'Event deleted successfully' });
-  } catch (error) {
-    res.status(500).json({ message: 'Server error', error: error.message });
+    const deletedEvent = await Event.findByIdAndDelete(req.params.id);
+    if (!deletedEvent) return res.status(404).json({ message: "Event not found" });
+    res.status(200).json({ message: "Event deleted successfully" });
+  } catch (err) {
+    res.status(500).json({ message: err.message });
   }
 };
 
 module.exports = {
-  createEvent,
   getAllEvents,
-  getEventDetails,
-  updateEvent,
-  deleteEvent,
+  createEvent,
+  getEventById,
+  updateEventById,
+  deleteEventById
 };
