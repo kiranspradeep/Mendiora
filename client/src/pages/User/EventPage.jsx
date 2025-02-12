@@ -40,6 +40,24 @@ function EventPage() {
       basePrice: 1000,
       category: "Fashion shows",
     },
+    {
+      name: "Music Concert",
+      image: pic1,
+      location: "Kochi, Kerala",
+      date: "March 25, 2025",
+      tickets: 120,
+      basePrice: 500,
+      category: "Music Concerts",
+    },
+    {
+      name: "Music Concert",
+      image: pic1,
+      location: "Kochi, Kerala",
+      date: "March 25, 2025",
+      tickets: 120,
+      basePrice: 500,
+      category: "Music Concerts",
+    },
   ];
 
   useEffect(() => {

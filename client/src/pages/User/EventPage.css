@@ -74,6 +74,14 @@ body, html {
     font-size: 1rem;
     transition: background-color 0.3s ease, transform 0.3s ease;
   }
+  .event-cards-container {
+    display: grid;
+    justify-content:space-evenly;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 10px; /* Adjust spacing between cards */
+    margin-left: 5px;
+    margin-bottom: 20px;
+  }
   
   .event-contact-button:hover {
     background-color: #e94e2e;
