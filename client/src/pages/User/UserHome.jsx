@@ -34,6 +34,8 @@ const handleCategoryClick = async (category) => {
     setVenueData(response.data.venues);
     navigate("/venuesection", { state: { venues: response.data.venues } }); // Pass data to VenuesSection
   } catch (error) {
+    console.log(error);
+    
     console.error("Error fetching venues:", error);
     alert("Failed to fetch venues");
   }

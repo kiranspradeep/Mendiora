@@ -18,6 +18,7 @@ import ViewOrganizers from './pages/Admin/ViewOrganizer';
 import AdminLogin from './pages/Admin/AdminLogin';
 import ViewVenues from './pages/Admin/ViewVenues';
 import OrganizerNavbar from './components/Org/organizerNavbar';
+import EventPage from './pages/User/EventPage';
 
 function App () {
         
@@ -27,6 +28,7 @@ function App () {
             <Route path='/loginuser' element={<UserLogin/>}/>
             <Route path='/signupuser' element={<UserSignup/>}/>
             <Route path='/profileuser' element={<UserProfile/>}/>
+            <Route path='/event'element={<EventPage/>}/>
             <Route path='/adminNdOrg' element={<AdmnNdOrg/>}/>
             <Route path='/loginorg' element={<Login/>}/>
             <Route path='/signuporg' element={<Signup/>}/>
