@@ -12,53 +12,20 @@ function EventPage() {
   const images = [pic1, pic2, pic3];
 
   // Sample event data
-  const events = [
-    {
-      name: "Music Concert",
-      image: pic1,
-      location: "Kochi, Kerala",
-      date: "March 25, 2025",
-      tickets: 120,
-      basePrice: 500,
-      category: "Music Concerts",
-    },
-    {
-      name: "Corporate Meetup",
-      image: pic2,
-      location: "Trivandrum, Kerala",
-      date: "April 10, 2025",
-      tickets: 200,
-      basePrice: 1500,
-      category: "Corporate Event",
-    },
-    {
-      name: "Fashion Show",
-      image: pic3,
-      location: "Kozhikode, Kerala",
-      date: "May 5, 2025",
-      tickets: 100,
-      basePrice: 1000,
-      category: "Fashion shows",
-    },
-    {
-      name: "Music Concert",
-      image: pic1,
-      location: "Kochi, Kerala",
-      date: "March 25, 2025",
-      tickets: 120,
-      basePrice: 500,
-      category: "Music Concerts",
-    },
-    {
-      name: "Music Concert",
-      image: pic1,
-      location: "Kochi, Kerala",
-      date: "March 25, 2025",
-      tickets: 120,
-      basePrice: 500,
-      category: "Music Concerts",
-    },
-  ];
+  const [events, setEvents] = useState([]); // State to hold events
+
+  useEffect(() => {
+    const fetchEvents = async () => {
+      try {
+        const response = await axios.get('http://localhost:3000/event/getAllEvents'); // Fetch events from API
+        setEvents(response.data.events); // Set events state
+      } catch (error) {
+        console.error("Error fetching events:", error);
+      }
+    };
+
+    fetchEvents(); // Call the fetch function
+  }, []);
 
   useEffect(() => {
     const interval = setInterval(() => {

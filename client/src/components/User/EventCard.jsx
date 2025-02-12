@@ -1,7 +1,7 @@
 import React from "react";
 import "./EventCard.css";
 
-const EventCard = ({ name, image, location, date, tickets, basePrice }) => {
+const EventCard = ({ name, image, location, date, basePrice }) => {
   return (
     <div className="event-card">
       <div
@@ -16,7 +16,7 @@ const EventCard = ({ name, image, location, date, tickets, basePrice }) => {
           <p className="event-card-price">💰 Starting at ${basePrice}</p>
           <div className="event-card-buttons">
             <button className="event-button-primary">Reserve</button>
-            <button className="event-button-secondary">Details</button>
+            <Link to={`/event/${name}`} className="event-button-secondary">Details</Link> {/* Updated Details button */}
           </div>
         </div>
       </div>
