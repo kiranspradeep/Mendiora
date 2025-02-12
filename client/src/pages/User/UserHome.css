@@ -275,23 +275,7 @@ body, html {
   color: #555;
 }
 
-/* Learn More Button */
-.learn-more-button {
-  margin: 0 20px 20px;
-  padding: 10px 20px;
-  background-color: #ff5733;
-  color: white;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
-  font-size: 1rem;
-  transition: background-color 0.3s ease, transform 0.3s ease;
-}
 
-.learn-more-button:hover {
-  background-color: #e94e2e;
-  transform: scale(1.05);
-}
 
 /* Keyframes for Service Section Animations */
 @keyframes fadeInUp {
