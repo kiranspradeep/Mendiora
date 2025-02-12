@@ -68,6 +68,7 @@ const handleCategoryClick = async (category) => {
         </div>
       </div>
 
+    
       <div className="services-section">
         <h2>Services by Medioraa Event Management</h2>
         <p>
