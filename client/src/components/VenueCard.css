@@ -72,19 +72,90 @@
 }
 
 /* Read More */
-.read-more-toggle {
+.venue-read-more-toggle {
   color: #007bff;
   cursor: pointer;
   font-weight: bold;
   margin-left: 5px;
 }
 
-.read-more-toggle:hover {
+.venue-read-more-toggle:hover {
   text-decoration: underline;
 }
 
+/* Date Selection */
+.venue-date-selection {
+  margin: 10px 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.venue-date-selection strong {
+  font-size: 14px;
+  color: #222;
+}
+
+.venue-date-selection input[type="date"] {
+  padding: 6px;
+  font-size: 14px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  margin-top: 5px;
+}
+
+.venue-date-selection p {
+  font-size: 14px;
+  color: red;
+  margin-top: 5px;
+}
+
+/* Capacity Selection */
+.venue-capacity-selection {
+  margin: 10px 0;
+  display: flex;
+  gap: 15px;
+  align-items: center;
+}
+
+.venue-capacity-selection strong {
+  font-size: 14px;
+  color: #222;
+}
+
+.venue-capacity-selection label {
+  font-size: 14px;
+  color: #555;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  cursor: pointer;
+}
+
+.venue-capacity-selection input[type="radio"] {
+  appearance: none;
+  width: 16px;
+  height: 16px;
+  border: 2px solid #007bff;
+  border-radius: 50%;
+  transition: background 0.2s;
+}
+
+.venue-capacity-selection input[type="radio"]:checked {
+  background-color: #007bff;
+  border: 5px solid white;
+  box-shadow: 0 0 0 2px #007bff;
+}
+
+/* Price Display */
+.venue-price-display {
+  font-size: 16px;
+  font-weight: bold;
+  color: #333;
+  margin-top: 5px;
+}
+
 /* Booking Button */
-.book-button {
+.venue-book-button {
   background-color: #28a745;
   color: white;
   padding: 0.5rem 1rem;
@@ -96,14 +167,15 @@
   transition: background-color 0.3s ease, transform 0.2s ease;
 }
 
-.book-button:hover {
+.venue-book-button:hover {
   background-color: #218838;
   transform: scale(1.05);
 }
 
-.book-button:disabled {
+.venue-book-button:disabled {
   background-color: #6c757d;
   cursor: not-allowed;
+  opacity: 0.7;
 }
 
 /* Fade In Animation */
@@ -139,6 +211,11 @@
   .venue-card-content {
     margin-top: 1rem;
   }
+
+  .venue-capacity-selection {
+    flex-direction: column;
+    align-items: center;
+  }
 }
 
 @media (max-width: 480px) {
@@ -150,7 +227,7 @@
     font-size: 1.25rem;
   }
 
-  .book-button {
+  .venue-book-button {
     padding: 0.4rem 0.8rem;
     font-size: 13px;
   }

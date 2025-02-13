@@ -123,6 +123,7 @@ const getVenueCategory = async (req, res) => {
       images: venue.images,
       categories: venue.categories,
       owner: venue.owner,
+      unavailableDates:venue.unavailableDates,
     }));
 
     res.status(200).json({ venues: detailedVenues });

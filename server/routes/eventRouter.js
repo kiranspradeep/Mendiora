@@ -27,6 +27,6 @@ eventRouter.put('/:id', Auth, role(['organizer', 'admin']), updateEventById);
 eventRouter.get('/getpendingEvents', Auth, role(['admin']),getPendingEvents);
 eventRouter.get('/approveEvents', Auth, role(['admin']), approveEvent);
 eventRouter.get('/rejectEvents', Auth, role(['admin']), rejectEvent);
-eventRouter.delete('/:id', Auth, role(['admin']), deleteEventById);
+eventRouter.delete('/:id', Auth, role(['organizer']), deleteEventById);
 
 module.exports = eventRouter
