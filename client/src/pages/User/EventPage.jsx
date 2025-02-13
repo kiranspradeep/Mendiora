@@ -1,11 +1,13 @@
 import React, { useState, useEffect } from "react";
 import "./EventPage.css";
+import axios from "axios";
 import Navbar from "../../components/User/Navbar";
 import Footer from "../../components/Footer";
 import EventCard from "../../components/User/EventCard"; // Import EventCard
 import pic1 from "../../assets/party1.jpg";
 import pic2 from "../../assets/party2.jpg";
 import pic3 from "../../assets/party3.jpg";
+
 
 function EventPage() {
   const [currentIndex, setCurrentIndex] = useState(0);
@@ -19,7 +21,11 @@ function EventPage() {
       try {
         const response = await axios.get('http://localhost:3000/event/getAllEvents'); // Fetch events from API
         setEvents(response.data.events); // Set events state
+        console.log(response.data.events);
+        
       } catch (error) {
+        console.log(error);
+        
         console.error("Error fetching events:", error);
       }
     };

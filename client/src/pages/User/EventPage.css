@@ -1,111 +1,168 @@
 /* General Styling */
 body, html {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-    font-family: Arial, sans-serif;
-  }
-  
-  .event-hero {
-    position: relative;
-    background-size: cover;
-    background-position: center;
-    height: 100vh;
-    display: flex;
-    align-items: center;
-    justify-content: flex-start;
-    padding: 0 50px;
-    overflow: hidden;
-    transition: background-image 1s ease-in-out;
-  }
-  
-  .event-hero-overlay {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background-color: rgba(0, 0, 0, 0.5);
-    z-index: 1;
-  }
-  
-  .event-hero-content {
-    position: relative;
-    color: white;
-    z-index: 2;
-    max-width: 500px;
-    animation: event-fadeIn 2s forwards;
-  }
-  
-  .event-hero-content h1 {
-    font-size: 3rem;
-    margin-bottom: 20px;
-  }
-  
-  .event-hero-content p {
-    font-size: 1.2rem;
-    margin-bottom: 20px;
-  }
-  
-  .event-social-icons {
-    display: flex;
-    gap: 15px;
-    margin: 20px 0;
-  }
-  
-  .event-icon {
-    color: white;
-    font-size: 1.5rem;
-    transition: transform 0.3s, color 0.3s;
-  }
-  
-  .event-icon:hover {
-    transform: scale(1.2);
-    color: #ff5733;
-  }
-  
-  .event-contact-button {
-    background-color: #ff5733;
-    color: white;
-    border: none;
-    padding: 12px 24px;
-    border-radius: 5px;
-    cursor: pointer;
-    font-size: 1rem;
-    transition: background-color 0.3s ease, transform 0.3s ease;
-  }
-  .event-cards-container {
-    display: grid;
-    justify-content:space-evenly;
-    grid-template-columns: repeat(4, 1fr);
-    gap: 10px; /* Adjust spacing between cards */
-    margin-left: 5px;
-    margin-bottom: 20px;
-  }
-  
-  .event-contact-button:hover {
-    background-color: #e94e2e;
-    transform: scale(1.05);
-  }
-  
-  @keyframes event-fadeIn {
-    from {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: Arial, sans-serif;
+}
+
+/* Hero Section */
+.event-hero {
+  position: relative;
+  background-size: cover;
+  background-position: center;
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  padding: 0 50px;
+  overflow: hidden;
+  transition: background-image 1s ease-in-out;
+}
+
+.event-hero-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 1;
+}
+
+.event-hero-content {
+  position: relative;
+  color: white;
+  z-index: 2;
+  max-width: 500px;
+  animation: event-fadeIn 2s forwards;
+}
+
+.event-hero-content h1 {
+  font-size: 3rem;
+  margin-bottom: 20px;
+}
+
+.event-hero-content p {
+  font-size: 1.2rem;
+  margin-bottom: 20px;
+}
+
+/* Social Icons */
+.event-social-icons {
+  display: flex;
+  gap: 15px;
+  margin: 20px 0;
+}
+
+.event-icon {
+  color: white;
+  font-size: 1.5rem;
+  transition: transform 0.3s, color 0.3s;
+}
+
+.event-icon:hover {
+  transform: scale(1.2);
+  color: #ff5733;
+}
+
+/* Contact Button */
+.event-contact-button {
+  background-color: #ff5733;
+  color: white;
+  border: none;
+  padding: 12px 24px;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 1rem;
+  transition: background-color 0.3s ease, transform 0.3s ease;
+}
+
+.event-contact-button:hover {
+  background-color: #e94e2e;
+  transform: scale(1.05);
+}
+
+/* Event Cards */
+.event-cards-container {
+  display: grid;
+  justify-content: center; /* Centers the grid */
+  grid-template-columns: repeat(4, 1fr);
+  gap: 10px; /* Adjust spacing between cards */
+  margin-left: 5px;
+  margin-bottom: 20px;
+}
+
+.event-card {
+  background-color: white;
+  border-radius: 10px;
+  padding: 15px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+/* Hover effect */
+.event-card:hover {
+  transform: scale(1.05);
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+}
+
+/* Animation */
+@keyframes event-fadeIn {
+  from {
       opacity: 0;
       transform: translateX(-100%);
-    }
-    to {
+  }
+  to {
       opacity: 1;
       transform: translateX(0);
-    }
   }
-  
-  @media (max-width: 768px) {
-    .event-hero-content {
+}
+
+/* 📱 Responsive Design */
+
+/* Tablets (max-width: 1024px) */
+@media (max-width: 1024px) {
+  .event-hero {
+      justify-content: center;
+      text-align: center;
+      padding: 0 20px;
+  }
+
+  .event-hero-content {
+      max-width: 80%;
+  }
+
+  .event-cards-container {
+      grid-template-columns: repeat(2, 1fr); /* 2 columns */
+      gap: 15px;
+  }
+}
+
+/* Mobile (max-width: 768px) */
+@media (max-width: 768px) {
+  .event-hero-content {
       text-align: center;
       max-width: 100%;
-    }
-    .event-hero-content h1 {
-      font-size: 2rem;
-    }
   }
-  
+
+  .event-hero-content h1 {
+      font-size: 2rem;
+  }
+
+  .event-hero-content p {
+      font-size: 1rem;
+  }
+
+  .event-cards-container {
+      display: flex;
+      flex-direction: column;
+      align-items: center; /* Centers the cards */
+      gap: 15px;
+  }
+
+  .event-card {
+      width: 100%; /* Takes full width */
+      max-width: 400px; /* Prevents stretching too much */
+  }
+}

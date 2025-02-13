@@ -157,6 +157,76 @@ const getAllEvents = async (req, res) => {
   }
 };
 
+const getPendingEvents = async (req, res) => {
+    try {
+      const { page = 1, limit = 10 } = req.query;
+  
+      const query = { isApproved: "pending" }; // Fetch only pending approval events
+  
+      const skip = (page - 1) * limit;
+  
+      const events = await Event.find(query)
+        .populate("owner", "name email")
+        .skip(skip)
+        .limit(parseInt(limit));
+  
+      const totalPendingEvents = await Event.countDocuments(query);
+  
+      res.status(200).json({
+        events,
+        totalPendingEvents,
+        currentPage: parseInt(page),
+        totalPages: Math.ceil(totalPendingEvents / limit),
+        pageSize: parseInt(limit),
+      });
+    } catch (err) {
+      res.status(500).json({ message: "Error fetching pending events", error: err.message });
+    }
+  };
+  
+
+ 
+  const approveEvent = async (req, res) => {
+    try {
+      const { eventId } = req.params;
+  
+      const event = await Event.findByIdAndUpdate(
+        eventId,
+        { isApproved: "approved" },
+        { new: true } // Return updated document
+      );
+  
+      if (!event) {
+        return res.status(404).json({ message: "Event not found" });
+      }
+  
+      res.status(200).json({ message: "Event approved successfully", event });
+    } catch (err) {
+      res.status(500).json({ message: "Error approving event", error: err.message });
+    }
+  };
+  
+  const rejectEvent = async (req, res) => {
+    try {
+      const { eventId } = req.params;
+  
+      const event = await Event.findByIdAndUpdate(
+        eventId,
+        { isApproved: "rejected" },
+        { new: true } // Return updated document
+      );
+  
+      if (!event) {
+        return res.status(404).json({ message: "Event not found" });
+      }
+  
+      res.status(200).json({ message: "Event rejected successfully", event });
+    } catch (err) {
+      res.status(500).json({ message: "Error rejecting event", error: err.message });
+    }
+  };  
+  
+
 const getEventById = async (req, res) => {
   try {
     const event = await Event.findById(req.params.id);
@@ -208,5 +278,8 @@ module.exports = {
   createEvent,
   getEventById,
   updateEventById,
-  deleteEventById
+  deleteEventById,
+  getPendingEvents,
+  approveEvent, 
+  rejectEvent
 };
