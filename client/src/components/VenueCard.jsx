@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import "./VenueCard.css";
+import {jwtDecode} from "jwt-decode"; 
 
 
 const VenueCard = ({ venue }) => {
@@ -56,7 +57,6 @@ const VenueCard = ({ venue }) => {
   
     const today = new Date();
     today.setHours(0, 0, 0, 0); // Normalize to start of the day
-  
     const selectedDateObj = new Date(selectedDate);
     selectedDateObj.setHours(0, 0, 0, 0); // Normalize selected date
   
@@ -78,10 +78,16 @@ const VenueCard = ({ venue }) => {
         throw new Error("Unauthorized: No token found. Please log in again.");
       }
   
+      // 🔹 Decode token to extract userId
+      const decodedToken = jwtDecode(token);
+      const userId = decodedToken.userId; // ✅ Extract userId from token
+      console.log("📌 User ID:", userId);
+      
+  
       const amountInINR = selectedCapacity === "half" ? minPrice : maxPrice;
       const amountInPaise = amountInINR * 100; // Convert INR to paise
   
-      console.log("📌 Booking Details:", { venueId: venue.id, amountInPaise, selectedDate });
+      // console.log("📌 Booking Details:", { venueId: venue.id, amountInPaise, selectedDate });
   
       const response = await fetch("http://localhost:3000/venuepayment/create-order", {
         method: "POST",
@@ -98,7 +104,7 @@ const VenueCard = ({ venue }) => {
       });
   
       const data = await response.json();
-      console.log("📌 Order Response:", data);
+      // console.log("📌 Order Response:", data);
   
       if (!response.ok) {
         throw new Error(data.message || "Failed to create Razorpay order.");
@@ -113,7 +119,7 @@ const VenueCard = ({ venue }) => {
         description: `Booking for ${venue.name}`,
         order_id: data.order.id,
         handler: async (paymentResponse) => {
-          console.log("📌 Payment Response:", paymentResponse);
+          // console.log("📌 Payment Response:", paymentResponse);
   
           const verifyResponse = await fetch("http://localhost:3000/venuepayment/verify-payment", {
             method: "POST",
@@ -125,7 +131,11 @@ const VenueCard = ({ venue }) => {
               razorpay_order_id: paymentResponse.razorpay_order_id,
               razorpay_payment_id: paymentResponse.razorpay_payment_id,
               razorpay_signature: paymentResponse.razorpay_signature,
-              bookingId: venue.id,
+              venueId: venue.id,        
+              userId: decodedToken.userId,   
+              bookingDate: selectedDate, 
+              capacity: selectedCapacity, 
+              totalPrice: amountInINR,   
             }),
           });
   

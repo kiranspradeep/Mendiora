@@ -1,6 +1,7 @@
 const Razorpay = require("razorpay");
 const crypto = require("crypto");
 require("dotenv").config();
+const mongoose = require("mongoose");
 
 const VenueBooking = require("../models/venueBookingModel");
 
@@ -33,25 +34,67 @@ const createOrder = async (req, res) =>  {
 // Verify payment
 const verifyPayment = async (req, res) => {
   try {
-    const { razorpay_order_id, razorpay_payment_id, razorpay_signature, bookingId } = req.body;
+    const {
+      razorpay_order_id,
+      razorpay_payment_id,
+      razorpay_signature,
+      venueId,
+      userId,
+      bookingDate,
+      capacity,
+      totalPrice,
+    } = req.body;
 
+    console.log("📌 Payment Verification Request:", req.body);
+
+    // 🔹 Ensure all necessary data is received
+    if (!razorpay_order_id || !razorpay_payment_id || !razorpay_signature) {
+      return res.status(400).json({ success: false, message: "Missing payment details" });
+    }
+    if (!venueId || !userId || !bookingDate || !capacity || !totalPrice) {
+      return res.status(400).json({ success: false, message: "Missing booking details" });
+    }
+
+    // 🔹 Verify Razorpay signature
     const body = razorpay_order_id + "|" + razorpay_payment_id;
     const expectedSignature = crypto
       .createHmac("sha256", process.env.RAZORPAY_KEY_SECRET)
       .update(body)
       .digest("hex");
 
+    console.log("🔍 Expected Signature:", expectedSignature);
+    console.log("🔍 Received Signature:", razorpay_signature);
+
     if (expectedSignature !== razorpay_signature) {
-      return res.status(400).json({ message: "Payment verification failed" });
+      console.error("❌ Payment verification failed: Signature mismatch");
+      return res.status(400).json({ success: false, message: "Payment verification failed" });
     }
 
-    // Update booking status to "confirmed"
-    await VenueBooking.findByIdAndUpdate(bookingId, { status: "confirmed" });
+    console.log("✅ Payment signature verified successfully!");
 
-    res.status(200).json({ success: true, message: "Payment successful" });
+    // 🔹 Save Booking to Database
+    const newBooking = new VenueBooking({
+      venueId: new mongoose.Types.ObjectId(venueId),
+      userId: new mongoose.Types.ObjectId(userId),
+      bookingDate,
+      capacity,
+      totalPrice,
+      status: "confirmed",
+      razorpayOrderId: razorpay_order_id,
+      razorpayPaymentId: razorpay_payment_id
+    });
+
+    await newBooking.save();
+
+    console.log("✅ Booking saved successfully in DB!");
+
+    res.status(200).json({ success: true, message: "Payment successful, booking confirmed!" });
   } catch (error) {
-    res.status(500).json({ message: "Error verifying payment", error: error.message });
+    console.error("❌ Error verifying payment:", error);
+    res.status(500).json({ success: false, message: "Error verifying payment", error: error.message });
   }
 };
+
+
 
 module.exports = { createOrder, verifyPayment };
