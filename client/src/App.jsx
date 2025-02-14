@@ -21,6 +21,7 @@ import AdminLogin from './pages/Admin/AdminLogin';
 import ViewVenues from './pages/Admin/ViewVenues';
 import OrganizerNavbar from './components/Org/organizerNavbar';
 import EventPage from './pages/User/EventPage';
+import ViewEvents from './pages/Admin/ViewEvents';
 
 function App () {
         
@@ -44,6 +45,7 @@ function App () {
             <Route path='/adminlogin' element={<AdminLogin/>}/>
             <Route path='/organizer' element={<ViewOrganizers/>}/>
             <Route path='/venue' element={<ViewVenues/>}/>
+            <Route path='/viewevent' element={<ViewEvents/>}/>
             <Route path='/venuesection' element={<VenuesSection/>}/>
             <Route path= '/orgnavbar' element={<OrganizerNavbar/>}/>
             <Route path= '/venuePayments' element={<VenuePayments/>}/>
