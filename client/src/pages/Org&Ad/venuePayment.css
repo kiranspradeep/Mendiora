@@ -1,0 +1,108 @@
+/* VenuePayments.css */
+
+/* Container */
+.venue-payments-container {
+    background-color: #ffffff;
+    border-radius: 12px;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+    padding: 24px;
+    margin: 20px auto;
+    max-width: 100%;
+    width: 90%;
+    transition: all 0.3s ease-in-out;
+  }
+  
+  .venue-payments-container:hover {
+    transform: translateY(-3px);
+  }
+  
+  /* Heading */
+  .venue-payments-container h2 {
+    text-align: center;
+    font-size: 24px;
+    font-weight: bold;
+    color: #333;
+    margin-bottom: 20px;
+  }
+  
+  /* Table Styling */
+  .venue-payments-table {
+    width: 100%;
+    border-collapse: collapse;
+    border-radius: 8px;
+    overflow: hidden;
+  }
+  
+  /* Table Header */
+  .venue-payments-table thead {
+    background-color: #f3f4f6;
+    color: #374151;
+  }
+  
+  .venue-payments-table th {
+    padding: 12px;
+    font-weight: 600;
+    text-align: left;
+    border-bottom: 2px solid #e5e7eb;
+  }
+  
+  /* Table Body */
+  .venue-payments-table tbody tr {
+    transition: background 0.3s ease-in-out;
+  }
+  
+  .venue-payments-table tbody tr:hover {
+    background-color: #f9fafb;
+  }
+  
+  /* Table Cells */
+  .venue-payments-table td {
+    padding: 12px;
+    color: #4b5563;
+    border-bottom: 1px solid #e5e7eb;
+  }
+  
+  /* Amount Styling */
+  .venue-payments-table td.text-green-600 {
+    font-weight: bold;
+    color: #16a34a; /* Tailwind Green-600 */
+  }
+  
+  /* Payment ID Styling */
+  .venue-payments-table td.text-red-500 {
+    font-weight: 500;
+    color: #dc2626; /* Tailwind Red-500 */
+  }
+  
+  /* Responsive Design */
+  @media (max-width: 768px) {
+    .venue-payments-container {
+      width: 95%;
+      padding: 16px;
+    }
+  
+    .venue-payments-table th,
+    .venue-payments-table td {
+      padding: 10px;
+      font-size: 14px;
+    }
+  }
+  
+  @media (max-width: 480px) {
+    .venue-payments-container h2 {
+      font-size: 20px;
+    }
+  
+    .venue-payments-table {
+      display: block;
+      overflow-x: auto;
+      white-space: nowrap;
+    }
+  
+    .venue-payments-table th,
+    .venue-payments-table td {
+      padding: 8px;
+      font-size: 12px;
+    }
+  }
+  

@@ -81,7 +81,7 @@ const VenueCard = ({ venue }) => {
       // 🔹 Decode token to extract userId
       const decodedToken = jwtDecode(token);
       const userId = decodedToken.userId; // ✅ Extract userId from token
-      console.log("📌 User ID:", userId);
+      // console.log("📌 User ID:", userId);
       
   
       const amountInINR = selectedCapacity === "half" ? minPrice : maxPrice;
@@ -140,7 +140,7 @@ const VenueCard = ({ venue }) => {
           });
   
           const verificationResult = await verifyResponse.json();
-          console.log("📌 Verification Result:", verificationResult);
+          // console.log("📌 Verification Result:", verificationResult);
   
           if (verificationResult.success) {
             alert(`✅ Payment successful! Venue "${venue.name}" booked for ${selectedDate}.`);

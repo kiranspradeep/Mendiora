@@ -24,6 +24,10 @@ const VenueBookingSchema = new mongoose.Schema({
     type: Number,
     required: true,
   },
+  razorpayPaymentId: {  
+    type: String,
+    required: true,  
+  },
   status: {
     type: String,
     enum: ["pending", "confirmed", "cancelled"],

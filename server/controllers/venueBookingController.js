@@ -45,7 +45,7 @@ const verifyPayment = async (req, res) => {
       totalPrice,
     } = req.body;
 
-    console.log("📌 Payment Verification Request:", req.body);
+    // console.log("📌 Payment Verification Request:", req.body);
 
     // 🔹 Ensure all necessary data is received
     if (!razorpay_order_id || !razorpay_payment_id || !razorpay_signature) {
@@ -62,15 +62,15 @@ const verifyPayment = async (req, res) => {
       .update(body)
       .digest("hex");
 
-    console.log("🔍 Expected Signature:", expectedSignature);
-    console.log("🔍 Received Signature:", razorpay_signature);
+    // console.log("🔍 Expected Signature:", expectedSignature);
+    // console.log("🔍 Received Signature:", razorpay_signature);
 
     if (expectedSignature !== razorpay_signature) {
       console.error("❌ Payment verification failed: Signature mismatch");
       return res.status(400).json({ success: false, message: "Payment verification failed" });
     }
 
-    console.log("✅ Payment signature verified successfully!");
+    // console.log("✅ Payment signature verified successfully!");
 
     // 🔹 Convert `bookingDate` to a Date object
     const bookedDate = new Date(bookingDate);
@@ -85,11 +85,11 @@ const verifyPayment = async (req, res) => {
       totalPrice,
       status: "confirmed",
       razorpayOrderId: razorpay_order_id,
-      razorpayPaymentId: razorpay_payment_id,
+      razorpayPaymentId: req.body.razorpay_payment_id,
     });
 
     await newBooking.save();
-    console.log("✅ Booking saved successfully in DB!");
+    // console.log("✅ Booking saved successfully in DB!");
 
     // 🔹 Add `bookingDate` to Venue's `unavailableDates` array
     const updatedVenue = await Venue.findByIdAndUpdate(
@@ -103,7 +103,7 @@ const verifyPayment = async (req, res) => {
       return res.status(404).json({ success: false, message: "Venue not found" });
     }
 
-    console.log("✅ Venue updated successfully!", updatedVenue);
+    // console.log("✅ Venue updated successfully!", updatedVenue);
     res.status(200).json({ success: true, message: "Payment successful, date added!" });
 
   } catch (error) {
@@ -112,6 +112,48 @@ const verifyPayment = async (req, res) => {
   }
 };
 
+//owner to get their bookings
+const getVenuePayments = async (req, res) => {
+  try {
+    const ownerId = req.user.userId; // 👤 Get logged-in owner's ID (assumes authentication)
+    console.log("👤 Owner ID:", req.user);
+    
+
+    if (!ownerId) {
+      return res.status(400).json({ success: false, message: "Owner ID is required" });
+    }
+
+    // 🔹 Find venues owned by the user
+    const ownedVenues = await Venue.find({ owner: new mongoose.Types.ObjectId(ownerId) }).select("_id name");
+    
+    if (!ownedVenues.length) {
+      return res.status(404).json({ success: false, message: "No venues found for this owner" });
+    }
+
+    // Extract venue IDs
+    const venueIds = ownedVenues.map(venue => venue._id);
+
+    // 🔹 Get all bookings for these venues
+    const bookings = await VenueBooking.find({ venueId: { $in: venueIds } })
+  .populate("venueId", "name")
+  .populate("userId", "name email") // Ensure `name` is included
+  .select("razorpayOrderId razorpayPaymentId totalPrice bookingDate userId venueId");
+
+console.log("📌 Fetched Bookings:", bookings);
 
 
-module.exports = { createOrder, verifyPayment };
+    if (!bookings.length) {
+      return res.status(404).json({ success: false, message: "No bookings found for your venues" });
+    }
+
+    res.status(200).json({ success: true, data: bookings });
+
+  } catch (error) {
+    console.error("❌ Error fetching venue payments:", error);
+    res.status(500).json({ success: false, message: "Error fetching venue payments", error: error.message });
+  }
+};
+
+
+
+module.exports = { createOrder, verifyPayment,getVenuePayments };
