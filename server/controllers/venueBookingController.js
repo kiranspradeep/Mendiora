@@ -2,7 +2,7 @@ const Razorpay = require("razorpay");
 const crypto = require("crypto");
 require("dotenv").config();
 const mongoose = require("mongoose");
-
+const Venue = require("../models/venueModels");
 const VenueBooking = require("../models/venueBookingModel");
 
 const razorpay = new Razorpay({
@@ -72,23 +72,40 @@ const verifyPayment = async (req, res) => {
 
     console.log("✅ Payment signature verified successfully!");
 
+    // 🔹 Convert `bookingDate` to a Date object
+    const bookedDate = new Date(bookingDate);
+    bookedDate.setHours(0, 0, 0, 0); // Normalize to avoid time zone issues
+
     // 🔹 Save Booking to Database
     const newBooking = new VenueBooking({
       venueId: new mongoose.Types.ObjectId(venueId),
       userId: new mongoose.Types.ObjectId(userId),
-      bookingDate,
+      bookingDate: bookedDate, // Store normalized date
       capacity,
       totalPrice,
       status: "confirmed",
       razorpayOrderId: razorpay_order_id,
-      razorpayPaymentId: razorpay_payment_id
+      razorpayPaymentId: razorpay_payment_id,
     });
 
     await newBooking.save();
-
     console.log("✅ Booking saved successfully in DB!");
 
-    res.status(200).json({ success: true, message: "Payment successful, booking confirmed!" });
+    // 🔹 Add `bookingDate` to Venue's `unavailableDates` array
+    const updatedVenue = await Venue.findByIdAndUpdate(
+      new mongoose.Types.ObjectId(venueId), // ✅ Convert to ObjectId
+      { $addToSet: { unavailableDates: bookedDate } },
+      { new: true }
+    );
+
+    if (!updatedVenue) {
+      console.error("❌ Venue not found or update failed!");
+      return res.status(404).json({ success: false, message: "Venue not found" });
+    }
+
+    console.log("✅ Venue updated successfully!", updatedVenue);
+    res.status(200).json({ success: true, message: "Payment successful, date added!" });
+
   } catch (error) {
     console.error("❌ Error verifying payment:", error);
     res.status(500).json({ success: false, message: "Error verifying payment", error: error.message });
