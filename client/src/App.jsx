@@ -15,6 +15,7 @@ import VenuesSection from './pages/User/VenuesSection';
 import VenueForm from './pages/Org&Ad/VenueForm';
 import AdmnNdOrg from './pages/Org&Ad/OrgndAdmnProfile';
 import AdminNavbar from './components/Admin/AdminNavbar';
+import ApprovedOrg from './pages/Admin/ApprovedOrg';
 import ViewOrganizers from './pages/Admin/ViewOrganizer';
 import AdminLogin from './pages/Admin/AdminLogin';
 import ViewVenues from './pages/Admin/ViewVenues';
@@ -39,6 +40,7 @@ function App () {
             <Route path='/form' element={<VenueForm/>}/>
             <Route path='/eventForm' element={<EventForm/>}/>
             <Route path='/adminnavbar'element={<AdminNavbar/>}/>
+            <Route path='/approvedorg'element={<ApprovedOrg/>}/>
             <Route path='/adminlogin' element={<AdminLogin/>}/>
             <Route path='/organizer' element={<ViewOrganizers/>}/>
             <Route path='/venue' element={<ViewVenues/>}/>

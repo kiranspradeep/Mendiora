@@ -36,8 +36,12 @@ const OrganizerAdminSchema = new mongoose.Schema({
         type: String,
         enum: ['pending', 'approved', 'rejected'],
         default: 'pending' // default to "pending"
-      }
-      
+      },
+
+     isBlocked: {
+        type: Boolean,
+        default: false
+    } 
 });
 
 const OrganizerAdmin = mongoose.model('OrganizerAdmin',OrganizerAdminSchema)

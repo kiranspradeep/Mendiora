@@ -54,7 +54,7 @@ async function signupUser(req, res) {
 
 
 //login
-async function loginUser(req, res) { 
+async function loginUser(req, res) {  
   try {
     const { email, password } = req.body;
 
@@ -68,6 +68,11 @@ async function loginUser(req, res) {
     // Check if the user's account is approved (must be "approved")
     if (user.isApproved !== 'approved') {
       return res.status(403).json({ message: "Account not approved" });
+    }
+
+    // Check if the user is blocked
+    if (user.isBlocked) {
+      return res.status(403).json({ message: "Your account is blocked. Please contact support." });
     }
 
     // Validate the password
@@ -91,11 +96,44 @@ async function loginUser(req, res) {
 
 
 
+
 //a function to get users with role organizer
 const getOrganizers = async (req, res) => {
   try {
     const users = await OrganizerAdmin.find({ role: "organizer" });
     res.status(200).json({ users });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Server error: " + error.message });
+  }
+};
+
+//for admin view
+const getApprovedOrganizers = async (req, res) => {  
+  try {
+    const { search } = req.query; // Get search query from request
+
+    // Query for organizers whose isApproved is "pending"
+    const query = { 
+      role: "organizer", 
+      isApproved: 'approved' 
+    };
+
+    // If a search term is provided, filter by username or email
+    if (search) {
+      query.$or = [
+        { username: { $regex: search, $options: "i" } }, // Case-insensitive search for username
+        { email: { $regex: search, $options: "i" } } // Case-insensitive search for email
+      ];
+    }
+
+    const unapprovedOrganizers = await OrganizerAdmin.find(query);
+
+    if (!unapprovedOrganizers.length) {
+      return res.status(404).json({ message: "No matching unapproved organizers found" });
+    }
+
+    res.status(200).json({ users: unapprovedOrganizers });
   } catch (error) {
     console.error(error);
     res.status(500).json({ message: "Server error: " + error.message });
@@ -122,6 +160,55 @@ const getUnapprovedOrganizers = async (req, res) => {
     res.status(500).json({ message: "Server error: " + error.message });
   }
 };
+
+//to block organizer
+  const blockOrganizer = async (req, res) => {
+  try {
+    const { userId } = req.params;
+
+    const organizer = await OrganizerAdmin.findById(userId);
+    if (!organizer) {
+      return res.status(404).json({ message: "Organizer not found" });
+    }
+
+    if (organizer.isBlocked) {
+      return res.status(400).json({ message: "Organizer is already blocked" });
+    }
+
+    organizer.isBlocked = true; // ✅ Set isBlocked to true
+    await organizer.save();
+
+    res.status(200).json({ message: "Organizer blocked successfully", organizer });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Server error: " + error.message });
+  }
+};
+
+//to unblock organizer
+const unblockOrganizer = async (req, res) => {
+  try {
+    const { userId } = req.params;
+
+    const organizer = await OrganizerAdmin.findById(userId);
+    if (!organizer) {
+      return res.status(404).json({ message: "Organizer not found" });
+    }
+
+    if (!organizer.isBlocked) {
+      return res.status(400).json({ message: "Organizer is already unblocked" });
+    }
+
+    organizer.isBlocked = false; // ✅ Set isBlocked to false
+    await organizer.save();
+
+    res.status(200).json({ message: "Organizer unblocked successfully", organizer });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Server error: " + error.message });
+  }
+};
+
 
 // Approve Organizer
 const approveOrganizer = async (req, res) => {
@@ -255,5 +342,8 @@ module.exports = {
   getLoggedInUser,
   getUnapprovedOrganizers,
   approveOrganizer,
-  rejectOrganizer
+  rejectOrganizer,
+  getApprovedOrganizers,
+  blockOrganizer,
+  unblockOrganizer
 };

@@ -1,0 +1,150 @@
+/* Container */
+.approved-organizers-container {
+    background-color: #ffffff;
+    padding: 24px;
+    margin: 20px auto;
+    max-width: 90%;
+    border-radius: 12px;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+    overflow-x: auto;
+}
+
+/* Heading */
+.approved-organizers-heading {
+    text-align: center;
+    font-size: 24px;
+    font-weight: bold;
+    color: #333;
+    margin-bottom: 20px;
+}
+
+/* Search Input */
+.search-input {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    font-size: 16px;
+    margin-bottom: 20px;
+}
+
+/* Table Wrapper */
+.table-wrapper {
+    overflow-x: auto;
+}
+
+/* Table Styling */
+.approved-organizers-table {
+    width: 100%;
+    border-collapse: collapse;
+    table-layout: fixed; /* Fixes inconsistent column sizing */
+    min-width: 600px; /* Prevents shrinking */
+}
+
+/* Table Header */
+.approved-organizers-table thead {
+    background-color: #f3f4f6;
+    color: #374151;
+}
+
+/* Table Cells */
+.approved-organizers-table th,
+.approved-organizers-table td {
+    padding: 12px;
+    text-align: left;
+    border-bottom: 1px solid #e5e7eb;
+    white-space: nowrap; /* Prevents table from expanding */
+}
+
+/* Set specific column widths */
+.approved-organizers-table th:nth-child(1),
+.approved-organizers-table td:nth-child(1) {
+    width: 30%;
+}
+
+.approved-organizers-table th:nth-child(2),
+.approved-organizers-table td:nth-child(2) {
+    width: 35%;
+}
+
+.approved-organizers-table th:nth-child(3),
+.approved-organizers-table td:nth-child(3) {
+    width: 15%;
+    text-align: center;
+}
+
+.approved-organizers-table th:nth-child(4),
+.approved-organizers-table td:nth-child(4) {
+    width: 20%;
+    text-align: center;
+}
+
+/* Status Styles */
+.status-approved {
+    color: #16a34a; /* Green */
+    font-weight: bold;
+}
+
+.status-blocked {
+    color: #dc2626; /* Red */
+    font-weight: bold;
+}
+
+/* Block/Unblock Button */
+.block-btn {
+    padding: 8px 16px;
+    font-size: 14px;
+    font-weight: bold;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: all 0.3s ease-in-out;
+    border: none;
+    width: 100px; /* Ensures button size remains consistent */
+}
+
+/* Button Colors */
+.block-btn.block {
+    background-color: #dc2626; /* Red */
+    color: white;
+}
+
+.block-btn.unblock {
+    background-color: #16a34a; /* Green */
+    color: white;
+}
+
+.block-btn:hover {
+    opacity: 0.8;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .approved-organizers-container {
+        width: 95%;
+        padding: 16px;
+    }
+
+    .approved-organizers-table th,
+    .approved-organizers-table td {
+        padding: 10px;
+        font-size: 14px;
+    }
+}
+
+@media (max-width: 480px) {
+    .approved-organizers-heading {
+        font-size: 20px;
+    }
+
+    .approved-organizers-table {
+        display: block;
+        overflow-x: auto;
+        white-space: nowrap;
+    }
+
+    .approved-organizers-table th,
+    .approved-organizers-table td {
+        padding: 8px;
+        font-size: 12px;
+    }
+}
