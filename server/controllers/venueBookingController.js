@@ -115,44 +115,36 @@ const verifyPayment = async (req, res) => {
 //owner to get their bookings
 const getVenuePayments = async (req, res) => {
   try {
-    const ownerId = req.user.userId; // 👤 Get logged-in owner's ID (assumes authentication)
-    console.log("👤 Owner ID:", req.user);
-    
+    const ownerId = req.user?.userId;
 
     if (!ownerId) {
       return res.status(400).json({ success: false, message: "Owner ID is required" });
     }
 
-    // 🔹 Find venues owned by the user
+    // Find venues owned by the user
     const ownedVenues = await Venue.find({ owner: new mongoose.Types.ObjectId(ownerId) }).select("_id name");
     
-    if (!ownedVenues.length) {
-      return res.status(404).json({ success: false, message: "No venues found for this owner" });
+    if (!ownedVenues || ownedVenues.length === 0) {
+      return res.status(200).json({ success: true, data: [] }); // Return empty array instead of error
     }
 
     // Extract venue IDs
     const venueIds = ownedVenues.map(venue => venue._id);
 
-    // 🔹 Get all bookings for these venues
+    // Get all bookings for these venues
     const bookings = await VenueBooking.find({ venueId: { $in: venueIds } })
-  .populate("venueId", "name")
-  .populate("userId", "name email") // Ensure `name` is included
-  .select("razorpayOrderId razorpayPaymentId totalPrice bookingDate userId venueId");
+      .populate("venueId", "name")
+      .populate("userId", "name email")
+      .select("razorpayOrderId razorpayPaymentId totalPrice bookingDate userId venueId");
 
-console.log("📌 Fetched Bookings:", bookings);
-
-
-    if (!bookings.length) {
-      return res.status(404).json({ success: false, message: "No bookings found for your venues" });
-    }
-
-    res.status(200).json({ success: true, data: bookings });
+    res.status(200).json({ success: true, data: bookings.length > 0 ? bookings : [] });
 
   } catch (error) {
     console.error("❌ Error fetching venue payments:", error);
     res.status(500).json({ success: false, message: "Error fetching venue payments", error: error.message });
   }
 };
+
 
 
 

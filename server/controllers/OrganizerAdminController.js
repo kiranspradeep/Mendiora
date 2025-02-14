@@ -113,7 +113,7 @@ const getApprovedOrganizers = async (req, res) => {
   try {
     const { search } = req.query; // Get search query from request
 
-    // Query for organizers whose isApproved is "pending"
+    // Query for organizers whose isApproved is "approved"
     const query = { 
       role: "organizer", 
       isApproved: 'approved' 
@@ -127,18 +127,17 @@ const getApprovedOrganizers = async (req, res) => {
       ];
     }
 
-    const unapprovedOrganizers = await OrganizerAdmin.find(query);
+    const approvedOrganizers = await OrganizerAdmin.find(query);
 
-    if (!unapprovedOrganizers.length) {
-      return res.status(404).json({ message: "No matching unapproved organizers found" });
-    }
+    // ✅ Return an empty array instead of 404 error
+    return res.status(200).json({ users: approvedOrganizers || [] });
 
-    res.status(200).json({ users: unapprovedOrganizers });
   } catch (error) {
     console.error(error);
     res.status(500).json({ message: "Server error: " + error.message });
   }
 };
+
 
 
 //get unapproved users 

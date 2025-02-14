@@ -28,7 +28,7 @@ const VenuePayments = () => {
           return;
         }
 
-        console.log("📌 Sending token:", token); // Debugging
+        // console.log("📌 Sending token:", token); // Debugging
 
         const response = await fetch(
           "http://localhost:3000/venuepayment/bookings",
@@ -51,7 +51,7 @@ const VenuePayments = () => {
         const data = await response.json();
         setBookings(data.data || []);
       } catch (err) {
-        console.error("❌ Error fetching payments:", err.message);
+        // console.error("❌ Error fetching payments:", err.message);
         setError(err.message);
       } finally {
         setLoading(false);
