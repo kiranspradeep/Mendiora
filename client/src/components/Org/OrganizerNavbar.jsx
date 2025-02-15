@@ -18,7 +18,7 @@ const OrganizerNavbar = () => {
       </div>
       <nav className={`organizer-navbar-links ${menuActive ? "active" : ""}`}>
         <Link to="/form">Add Venue</Link>
-        <Link to="/organizer/orders">Orders</Link>
+        <Link to="/eventForm">Add Event</Link>
         <Link to="/venuePayments">Venue Orders</Link>
         <Link to="/adminNdOrg">Profile</Link>
 
