@@ -26,6 +26,7 @@ const VenueForm = () => {
   });
 
   const [newDate, setNewDate] = useState('');
+  const [loading, setLoading] = useState(false);
   const fileInputRef = useRef();
 
   const handleChange = (e) => {
@@ -48,7 +49,7 @@ const VenueForm = () => {
   };
 
   const handleAddDate = () => {
-    const dateRegex = /^\d{4}-\d{2}-\d{2}$/; // Format YYYY-MM-DD
+    const dateRegex = /^\d{4}-\d{2}-\d{2}$/;
     if (!dateRegex.test(newDate)) {
       alert('Invalid date format. Please use YYYY-MM-DD.');
       return;
@@ -56,7 +57,7 @@ const VenueForm = () => {
 
     const selectedDate = new Date(newDate);
     const currentDate = new Date();
-    currentDate.setHours(0, 0, 0, 0); // Ignore time part for accurate comparison
+    currentDate.setHours(0, 0, 0, 0);
 
     if (selectedDate <= currentDate) {
       alert('Date must be greater than the current date.');
@@ -84,7 +85,8 @@ const VenueForm = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-  
+    setLoading(true);
+
     const formDataToSend = new FormData();
     for (const key in formData) {
       if (key === 'images') {
@@ -92,14 +94,14 @@ const VenueForm = () => {
           formDataToSend.append('images', formData[key][i]);
         }
       } else if (key === 'categories') {
-        formDataToSend.append(key, formData[key].join(',')); 
+        formDataToSend.append(key, formData[key].join(','));
       } else if (key === 'unavailableDates') {
-        formData[key].forEach((date) => formDataToSend.append('unavailableDates', date)); 
+        formData[key].forEach((date) => formDataToSend.append('unavailableDates', date));
       } else {
         formDataToSend.append(key, formData[key]);
       }
     }
-  
+
     try {
       const token = localStorage.getItem('token');
       const response = await axios.post('http://localhost:3000/venue/createVenue', formDataToSend, {
@@ -108,7 +110,7 @@ const VenueForm = () => {
           'Authorization': `Bearer ${token}`,
         },
       });
-  
+
       setFormData({
         name: '',
         description: '',
@@ -123,105 +125,105 @@ const VenueForm = () => {
         unavailableDates: [],
         images: null,
       });
-  
+
       fileInputRef.current.value = '';
       alert(response.data.message);
     } catch (error) {
       alert(error.response?.data?.message || 'Error creating venue');
+    } finally {
+      setLoading(false);
     }
   };
-  
 
   return (
-    <>
     <div className="form-container">
-    <form className="venue-form" onSubmit={handleSubmit}>
-      <h2 className='venue-form-h2'>Venue Application Form</h2>
-      <label>
-        Venue Name:
-        <input type="text" name="name" placeholder="VENUE-NAME" onChange={handleChange} value={formData.name} required />
-      </label>
+      <form className="venue-form" onSubmit={handleSubmit}>
+        <h2 className="venue-form-h2">Venue Application Form</h2>
 
-      <label>
-        Description:
-        <textarea name="description" placeholder="DESCRIPTION" onChange={handleChange} value={formData.description} required />
-      </label>
+        <label>
+          Venue Name:
+          <input type="text" name="name" placeholder="VENUE-NAME" onChange={handleChange} value={formData.name} required />
+        </label>
 
-      <label>
-        Address:
-        <input type="text" name="address" placeholder="ADDRESS" onChange={handleChange} value={formData.address} required />
-      </label>
+        <label>
+          Description:
+          <textarea name="description" placeholder="DESCRIPTION" onChange={handleChange} value={formData.description} required />
+        </label>
 
-      <label>
-        City:
-        <input type="text" name="city" placeholder="CITY" onChange={handleChange} value={formData.city} required />
-      </label>
+        <label>
+          Address:
+          <input type="text" name="address" placeholder="ADDRESS" onChange={handleChange} value={formData.address} required />
+        </label>
 
-      <label>
-        State:
-        <input type="text" name="state" placeholder="STATE" onChange={handleChange} value={formData.state} required />
-      </label>
+        <label>
+          City:
+          <input type="text" name="city" placeholder="CITY" onChange={handleChange} value={formData.city} required />
+        </label>
 
-      <label>
-        Country:
-        <input type="text" name="country" placeholder="COUNTRY" onChange={handleChange} value={formData.country} required />
-      </label>
+        <label>
+          State:
+          <input type="text" name="state" placeholder="STATE" onChange={handleChange} value={formData.state} required />
+        </label>
 
-      <label>
-        Capacity:
-        <input type="number" name="capacity" placeholder="CAPACITY" onChange={handleChange} value={formData.capacity} required />
-      </label>
+        <label>
+          Country:
+          <input type="text" name="country" placeholder="COUNTRY" onChange={handleChange} value={formData.country} required />
+        </label>
 
-      <label>
-        Minimum Price:
-        <input type="number" name="minPrice" placeholder="MIN-PRICE" onChange={handleChange} value={formData.minPrice} required />
-      </label>
+        <label>
+          Capacity:
+          <input type="number" name="capacity" placeholder="CAPACITY" onChange={handleChange} value={formData.capacity} required />
+        </label>
 
-      <label>
-        Maximum Price:
-        <input type="number" name="maxPrice" placeholder="MAX-PRICE" onChange={handleChange} value={formData.maxPrice} required />
-      </label>
+        <label>
+          Minimum Price:
+          <input type="number" name="minPrice" placeholder="MIN-PRICE" onChange={handleChange} value={formData.minPrice} required />
+        </label>
 
-      <label>Categories (Select One or More):</label>
-      {allowedCategories.map((category) => (
-        <div key={category}>
-          <input
-            type="checkbox"
-            id={category}
-            value={category}
-            onChange={handleCategoryChange}
-            checked={formData.categories.includes(category)}
-          />
-          <label htmlFor={category}>{category}</label>
-        </div>
-      ))}
+        <label>
+          Maximum Price:
+          <input type="number" name="maxPrice" placeholder="MAX-PRICE" onChange={handleChange} value={formData.maxPrice} required />
+        </label>
 
-      <label>
-        Add Unavailable Date (YYYY-MM-DD format):
-        <input type="text" value={newDate} onChange={(e) => setNewDate(e.target.value)} />
-        <button type="button" onClick={handleAddDate}>Add Date</button>
-      </label>
-
-      <ul>
-        {formData.unavailableDates.map((date, index) => (
-          <li key={index}>
-            {date}
-            <button type="button" onClick={() => handleRemoveDate(date)}>
-              Remove
-            </button>
-          </li>
+        <label>Categories (Select One or More):</label>
+        {allowedCategories.map((category) => (
+          <div key={category}>
+            <input
+              type="checkbox"
+              id={category}
+              value={category}
+              onChange={handleCategoryChange}
+              checked={formData.categories.includes(category)}
+            />
+            <label htmlFor={category}>{category}</label>
+          </div>
         ))}
-      </ul>
 
-      <label>
-        Images (Upload Multiple):
-        <input type="file" name="images" multiple onChange={handleFileChange} ref={fileInputRef} required />
-      </label>
+        <label>
+          Add Unavailable Date (YYYY-MM-DD format):
+          <input type="text" value={newDate} onChange={(e) => setNewDate(e.target.value)} />
+          <button type="button" onClick={handleAddDate}>Add Date</button>
+        </label>
 
-      <button type="submit">Create Venue</button>
-    </form>
+        <ul>
+          {formData.unavailableDates.map((date, index) => (
+            <li key={index}>
+              {date}
+              <button type="button" onClick={() => handleRemoveDate(date)}>Remove</button>
+            </li>
+          ))}
+        </ul>
+
+        <label>
+          Images (Upload Multiple):
+          <input type="file" name="images" multiple onChange={handleFileChange} ref={fileInputRef} required />
+        </label>
+
+        <button type="submit" disabled={loading}>
+          {loading ? <div className="spinner"></div> : "Create Venue"}
+        </button>
+      </form>
     </div>
-    </>
   );
 };
 

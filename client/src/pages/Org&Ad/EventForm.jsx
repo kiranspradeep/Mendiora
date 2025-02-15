@@ -19,7 +19,8 @@ const EventForm = () => {
     category: "",
     images: [],
   });
-
+  
+  const [loading, setLoading] = useState(false);
   const fileInputRef = useRef();
   const allowedCategories = ["Corporate Event", "Music Concerts", "Fashion shows", "Dj Party"];
   const addOnOptions = ["Catering", "Parking", "Security", "Wi-Fi"];
@@ -27,20 +28,11 @@ const EventForm = () => {
   const handleChange = useCallback((e) => {
     const { name, value, type, checked, files } = e.target;
     if (type === "checkbox") {
-      setFormData((prev) => ({
-        ...prev,
-        [name]: checked,
-      }));
+      setFormData((prev) => ({ ...prev, [name]: checked }));
     } else if (type === "file") {
-      setFormData((prev) => ({
-        ...prev,
-        images: files,
-      }));
+      setFormData((prev) => ({ ...prev, images: files }));
     } else {
-      setFormData((prev) => ({
-        ...prev,
-        [name]: value,
-      }));
+      setFormData((prev) => ({ ...prev, [name]: value }));
     }
   }, []);
 
@@ -56,8 +48,9 @@ const EventForm = () => {
 
   const handleSubmit = useCallback(async (e) => {
     e.preventDefault();
-    const formDataToSend = new FormData();
+    setLoading(true); 
     
+    const formDataToSend = new FormData();
     for (const key in formData) {
       if (key === "images") {
         for (let i = 0; i < formData[key]?.length; i++) {
@@ -69,16 +62,16 @@ const EventForm = () => {
         formDataToSend.append(key, formData[key]);
       }
     }
-  
+
     try {
       const token = localStorage.getItem("token");
-      await axios.post("http://localhost:3000/event/createEvents", formDataToSend, {
+      await axios.post("http://localhost:3000/event/createEvent", formDataToSend, {
         headers: {
           "Authorization": `Bearer ${token}`,
           "Content-Type": "multipart/form-data",
         },
       });
-  
+
       alert("Event created successfully!");
       
       setFormData({
@@ -96,17 +89,17 @@ const EventForm = () => {
         category: "",
         images: [],
       });
-  
+
       if (fileInputRef.current) {
         fileInputRef.current.value = "";
       }
     } catch (error) {
       console.error("Error creating event", error);
       alert(`Error creating event: ${error.response?.data?.message || error.message}`);
+    } finally {
+      setLoading(false);
     }
   }, [formData]);
-  
-
   return (
     <>
     <OrganizerNavbar/>
@@ -184,11 +177,19 @@ const EventForm = () => {
         </div>
 
         <div className="form-group full-width">
-          <label htmlFor="images">Upload Images:</label>
-          <input type="file" id="images" multiple ref={fileInputRef} onChange={handleChange} />
-        </div>
+            <label htmlFor="images">Upload Images:</label>
+            <input type="file" id="images" multiple ref={fileInputRef} onChange={handleChange} />
+          </div>
 
-        <button type="submit">Create Event</button>
+          <button type="submit" disabled={loading} className={loading ? "button-loading" : ""}>
+            {loading ? (
+              <>
+                Creating Event... <span className="spinner"></span>
+              </>
+            ) : (
+              "Create Event"
+            )}
+          </button>
       </form>
     </div>
     </>

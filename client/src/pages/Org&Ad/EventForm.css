@@ -10,7 +10,6 @@
   margin: 20px 0;
 }
 
-
 /* Form Styles */
 form {
   background: #ffffff;
@@ -25,7 +24,6 @@ form {
   margin: 10px 0;
 }
 
-
 /* Full-width fields */
 .full-width {
   grid-column: span 2;
@@ -34,29 +32,30 @@ form {
 /* Input Fields */
 input, select {
   width: 100%;
-  padding: 5px;
+  padding: 6px;
   border: 1px solid #ccc;
   border-radius: 5px;
-  font-size: 12px;
-  transition: border-color 0.3s;
+  font-size: 14px;
+  transition: border-color 0.3s, box-shadow 0.3s;
 }
 
 input:focus, select:focus {
   border-color: #007bff;
   outline: none;
+  box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
 }
 
 /* Checkbox and Radio Fields */
 label {
-  font-size: 12px;
+  font-size: 14px;
   display: flex;
   align-items: center;
   gap: 6px;
 }
 
 input[type="checkbox"] {
-  width: 14px;
-  height: 14px;
+  width: 16px;
+  height: 16px;
   cursor: pointer;
 }
 
@@ -64,7 +63,7 @@ input[type="checkbox"] {
 input[type="file"] {
   border: none;
   padding: 4px;
-  font-size: 12px;
+  font-size: 14px;
 }
 
 /* Button */
@@ -72,16 +71,42 @@ button {
   background: #007bff;
   color: #fff;
   border: none;
-  padding: 8px;
-  font-size: 14px;
+  padding: 10px;
+  font-size: 16px;
+  font-weight: bold;
   border-radius: 5px;
   cursor: pointer;
   transition: background 0.3s ease-in-out;
   grid-column: span 2;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 8px;
 }
 
 button:hover {
   background: #0056b3;
+}
+
+/* Disabled Button */
+button:disabled {
+  background: #cccccc;
+  cursor: not-allowed;
+}
+
+/* Spinner */
+.spinner {
+  width: 16px;
+  height: 16px;
+  border: 3px solid white;
+  border-top: 3px solid transparent;
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
 }
 
 /* Fieldset for Add-On Services */
@@ -94,7 +119,7 @@ fieldset {
 
 legend {
   font-weight: bold;
-  font-size: 12px;
+  font-size: 14px;
   margin-bottom: 5px;
 }
 
@@ -111,11 +136,6 @@ legend {
   flex: 0 0 auto;
   width: 48%;
   margin: 5px 0;
-}
-
-
-.add-on-services label {
-  flex: 0 1 48%;
   display: flex;
   align-items: center;
   gap: 8px;
@@ -136,7 +156,7 @@ legend {
   }
 
   button {
-    font-size: 12px;
+    font-size: 14px;
   }
 
   .add-on-services label {

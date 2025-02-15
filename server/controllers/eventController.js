@@ -99,6 +99,8 @@ const createEvent = async (req, res) => {
 
     res.status(201).json({ message: "Event created successfully", event: newEvent });
   } catch (error) {
+    console.log("❌ Error creating event:", error);
+    
     console.log(error);
     
     if (error.code === 11000) {
@@ -107,6 +109,9 @@ const createEvent = async (req, res) => {
     res.status(500).json({ message: "Server error", error: error.message });
   }
 };
+
+
+
 
 const getAllEvents = async (req, res) => {
     try {
