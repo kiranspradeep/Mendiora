@@ -114,47 +114,38 @@ const createEvent = async (req, res) => {
 
 
 const getAllEvents = async (req, res) => {
-    try {
-      const { category, location, sortBy, page = 1, limit = 10 } = req.query;
-  
-      const query = { isApproved: "approved" }; // Only fetch approved events
-  
-      if (category) {
-        query.categories = category;
-      }
-  
-      if (location) {
-        query.$or = [
-          { "location.city": { $regex: location, $options: "i" } },
-          { "location.country": { $regex: location, $options: "i" } }
-        ];
-      }
-  
+  try {
+      const { sortBy, page = 1, limit = 10 } = req.query;
+
+      const query = { isApproved: "approved" };
+
       const skip = (page - 1) * limit;
-  
+
       const sortOptions = {};
       if (sortBy === "date") sortOptions.date = 1;
       if (sortBy === "price") sortOptions.basePrice = 1;
-  
+
       const events = await Event.find(query)
-        .populate("owner", "name email")
-        .sort(sortOptions)
-        .skip(skip)
-        .limit(parseInt(limit));
-  
+          .populate("owner", "name email")
+          .sort(sortOptions)
+          .skip(skip)
+          .limit(parseInt(limit));
+
       const totalEvents = await Event.countDocuments(query);
-  
+
       res.status(200).json({
-        events,
-        totalEvents,
-        currentPage: parseInt(page),
-        totalPages: Math.ceil(totalEvents / limit),
-        pageSize: parseInt(limit)
+          events,
+          totalEvents,
+          currentPage: parseInt(page),
+          totalPages: Math.ceil(totalEvents / limit),
+          pageSize: parseInt(limit)
       });
-    } catch (err) {
+  } catch (err) {
       res.status(500).json({ message: "Error fetching events", error: err.message });
-    }
-  };
+  }
+};
+
+
   
   
 //to get all pending events

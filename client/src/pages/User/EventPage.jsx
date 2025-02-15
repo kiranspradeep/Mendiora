@@ -13,17 +13,20 @@ function EventPage() {
   const images = [pic1, pic2, pic3];
 
   const [events, setEvents] = useState([]); 
-  const [sortBy, setSortBy] = useState(""); // Sorting state
+  const [sortBy, setSortBy] = useState(""); 
+  const [currentPage, setCurrentPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
+  const limit = 8; // Adjust the number of events per page
 
   useEffect(() => {
     fetchEvents();
-  }, [sortBy]); // Refetch when sorting changes
+  }, [sortBy, currentPage]); 
 
   const fetchEvents = async () => {
     try {
-      const response = await axios.get(`http://localhost:3000/event/getAllEvents?sortBy=${sortBy}`); 
+      const response = await axios.get(`http://localhost:3000/event/getAllEvents?sortBy=${sortBy}&page=${currentPage}&limit=${limit}`); 
       setEvents(response.data.events); 
-      console.log(response.data.events);
+      setTotalPages(response.data.totalPages);
     } catch (error) {
       console.error("Error fetching events:", error);
     }
@@ -69,6 +72,26 @@ function EventPage() {
             <EventCard key={index} {...event} />
           ))}
         </div>
+
+        {/* Pagination Controls */}
+        <div className="pagination">
+          <button 
+            onClick={() => setCurrentPage(currentPage - 1)} 
+            disabled={currentPage === 1} 
+            className="pagination-btn"
+          >
+            Previous
+          </button>
+          <span>Page {currentPage} of {totalPages}</span>
+          <button 
+            onClick={() => setCurrentPage(currentPage + 1)} 
+            disabled={currentPage >= totalPages} 
+            className="pagination-btn"
+          >
+            Next
+          </button>
+        </div>
+
       </section>
 
       <Footer />
