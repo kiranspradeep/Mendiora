@@ -152,33 +152,26 @@ const getAllEvents = async (req, res) => {
   };
   
   
-
-const getPendingEvents = async (req, res) => {
+//to get all pending events
+  const getPendingEvents = async (req, res) => {
     try {
-      const { page = 1, limit = 10 } = req.query;
+      const events = await Event.find({ isApproved: "pending" }).populate("owner", "name email");
+      
+      console.log("✅ Events Fetched:", events);
   
-      const query = { isApproved: "pending" }; // Fetch only pending approval events
+      if (events.length === 0) {
+        return res.status(200).json({ message: "No pending events found", events: [] });
+      }
   
-      const skip = (page - 1) * limit;
-  
-      const events = await Event.find(query)
-        .populate("owner", "name email")
-        .skip(skip)
-        .limit(parseInt(limit));
-  
-      const totalPendingEvents = await Event.countDocuments(query);
-  
-      res.status(200).json({
-        events,
-        totalPendingEvents,
-        currentPage: parseInt(page),
-        totalPages: Math.ceil(totalPendingEvents / limit),
-        pageSize: parseInt(limit),
-      });
+      res.status(200).json({ events });
     } catch (err) {
+      console.log("❌hghdthtdtts:", err);
+      
+      console.error("❌ Error fetching pending events:", err); // This will show the exact error
       res.status(500).json({ message: "Error fetching pending events", error: err.message });
     }
   };
+  
   
 
  
@@ -224,6 +217,8 @@ const getPendingEvents = async (req, res) => {
   
 
 const getEventById = async (req, res) => {
+  console.log("🔍 Fetching event by ID...");
+  
   try {
     const event = await Event.findById(req.params.id);
     if (!event) return res.status(404).json({ message: "Event not found" });

@@ -18,11 +18,7 @@ const eventSchema = new mongoose.Schema({
   addOnServices: { type: [String], default: [] },
   featuredPerformer: { type: String },
   images: { type: [String], default: [] },
-  isApproved: {
-    type: String,
-    enum: ['pending', 'approved', 'rejected'],
-    default: 'pending',
-  },
+  isApproved: { type: String, enum: ["pending", "approved", "rejected"], default: "pending" },
   createdAt: { type: Date, default: Date.now },
 });
 

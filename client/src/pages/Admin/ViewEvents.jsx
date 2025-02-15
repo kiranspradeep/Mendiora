@@ -1,46 +1,59 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-import './ViewEvents.css'
+import './ViewEvents.css';
 
 const ViewEvents = () => {
   const [events, setEvents] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
 
-  useEffect(() => {
-    fetchAllEvents();
-  }, []);
-
-  const fetchAllEvents = async () => {
+  const fetchPendingEvents = async () => {
     try {
-      const response = await axios.get("http://localhost:3000/event/getAllEvents");
+      const token = localStorage.getItem("token");
+      const response = await axios.get("http://localhost:3000/event/getpendingEvents", {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+
+      // console.log("✅ API Response:", response.data);
       setEvents(response.data.events || []);
       setLoading(false);
-    } catch (err) {
-      setError(`Error fetching events: ${err.message}`);
-      console.error("Error fetching events:", err);
+    } catch (error) {
+      console.error("❌ Error fetching events:", error.response?.data || error.message);
+      setError("Failed to fetch events.");
       setLoading(false);
     }
   };
+
+  useEffect(() => {
+    fetchPendingEvents();
+  }, []);
 
   const handleApprove = async (Id) => {
     try {
-      await axios.patch(`http://localhost:3000/event/approveEvents/${Id}`);
-      fetchAllEvents();
+      const token = localStorage.getItem("token"); // Get auth token
+      await axios.put(`http://localhost:3000/event/approveEvent/${Id}`, {}, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      fetchPendingEvents();
     } catch (err) {
+      console.error("❌ Error approving event:", err.response?.data || err.message);
       alert("Error approving event.");
     }
   };
-
+  
   const handleReject = async (Id) => {
     try {
-      await axios.patch(`http://localhost:3000/event/rejectEvents/${Id}`);
-      fetchAllEvents();
+      const token = localStorage.getItem("token"); // Get auth token
+      await axios.put(`http://localhost:3000/event/rejectEvent/${Id}`, {}, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      fetchPendingEvents();
     } catch (err) {
+      console.error("❌ Error rejecting event:", err.response?.data || err.message);
       alert("Error rejecting event.");
     }
   };
-
+  
   return (
     <div className="view-events-container">
       <h1 className="view-events-title">All Events</h1>
@@ -62,7 +75,7 @@ const ViewEvents = () => {
                 <th>Date</th>
                 <th>Location</th>
                 <th>Category</th>
-                <th>Owner</th>
+                <th className="owner-column">Owner</th>
                 <th>Status</th>
                 <th>Actions</th>
               </tr>
@@ -72,10 +85,10 @@ const ViewEvents = () => {
                 <tr key={event._id}>
                   <td>{event.name}</td>
                   <td>{new Date(event.date).toLocaleDateString()}</td>
-                  <td>{`${event.location.city}, ${event.location.country}`}</td>
-                  <td>{event.categories.join(", ")}</td>
-                  <td>
-                    {event.owner?.name} ({event.owner?.email})
+                  <td>{`${event.location?.city || "N/A"}, ${event.location?.country || "N/A"}`}</td>
+                  <td>{event.categories?.join(", ") || "N/A"}</td>
+                  <td className="owner-column">
+                     {event.owner?.email || "UNAVAILABLE"} 
                   </td>
                   <td>
                     {event.isApproved === "approved" ? "Approved" : 
