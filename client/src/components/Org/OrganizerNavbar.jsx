@@ -19,7 +19,9 @@ const OrganizerNavbar = () => {
       <nav className={`organizer-navbar-links ${menuActive ? "active" : ""}`}>
         <Link to="/form">Add Venue</Link>
         <Link to="/organizer/orders">Orders</Link>
+        <Link to="/venuePayments">Venue Orders</Link>
         <Link to="/adminNdOrg">Profile</Link>
+
       </nav>
       <div className="hamburger" onClick={toggleMenu}>
         <div></div>
@@ -29,6 +31,7 @@ const OrganizerNavbar = () => {
       <div className={`organizer-navbar-menu ${menuActive ? "active" : ""}`}>
         <Link to="/organizer/add-venue">Add Venue</Link>
         <Link to="/organizer/orders">Orders</Link>
+        <Link to="/venuePayments">Venue Orders</Link>
         <Link to="/organizer/profile">Profile</Link>
       </div>
     </header>

@@ -22,6 +22,7 @@ import ViewVenues from './pages/Admin/ViewVenues';
 import OrganizerNavbar from './components/Org/organizerNavbar';
 import EventPage from './pages/User/EventPage';
 import ViewEvents from './pages/Admin/ViewEvents';
+import DashboardGraph from './pages/Admin/DashboardGraph';
 
 function App () {
         
@@ -49,6 +50,7 @@ function App () {
             <Route path='/venuesection' element={<VenuesSection/>}/>
             <Route path= '/orgnavbar' element={<OrganizerNavbar/>}/>
             <Route path= '/venuePayments' element={<VenuePayments/>}/>
+            <Route path='/graph' element={<DashboardGraph/>}/>
         </Routes>
     );
 };
