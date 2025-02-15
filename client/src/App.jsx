@@ -23,6 +23,10 @@ import OrganizerNavbar from './components/Org/organizerNavbar';
 import EventPage from './pages/User/EventPage';
 import ViewEvents from './pages/Admin/ViewEvents';
 import DashboardGraph from './pages/Admin/DashboardGraph';
+import AdminPage from './pages/Admin/AdminPage';
+import AdminFooter from './components/Admin/AdminFooter';
+import OrganizerDashboard from './pages/Org&Ad/OrganizerDashboard';
+import OrganizerPage from './pages/Org&Ad/OrganizerPage';
 
 function App () {
         
@@ -51,6 +55,9 @@ function App () {
             <Route path= '/orgnavbar' element={<OrganizerNavbar/>}/>
             <Route path= '/venuePayments' element={<VenuePayments/>}/>
             <Route path='/graph' element={<DashboardGraph/>}/>
+            <Route path='/adpage' element={<AdminPage/>}/>
+            <Route path='/orgnavdash' element={<OrganizerPage/>}/>
+            <Route path='/adminfooter' element={<AdminFooter/>}/>
         </Routes>
     );
 };

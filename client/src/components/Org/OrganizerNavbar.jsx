@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import "./OrganizerNavbar.css";
 import logo from "../../assets/logo.webp";
 import { Link } from "react-router-dom";
+import OrganizerDashboard from "../../pages/Org&Ad/OrganizerDashboard";
 
 const OrganizerNavbar = () => {
   const [menuActive, setMenuActive] = useState(false);
@@ -11,6 +12,7 @@ const OrganizerNavbar = () => {
   };
 
   return (
+    <>
     <header className="organizer-navbar">
       <div className="organizer-navbar-logo">
         <img src={logo} alt="Logo" />
@@ -35,6 +37,7 @@ const OrganizerNavbar = () => {
         <Link to="/organizer/profile">Profile</Link>
       </div>
     </header>
+    </>
   );
 };
 

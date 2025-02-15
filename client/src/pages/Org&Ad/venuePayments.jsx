@@ -10,6 +10,8 @@ import {
 } from "../../components/Table";
 import './venuePayment.css';
 import axios from "axios";
+import OrganizerNavbar from "../../components/Org/organizerNavbar";
+import OrganizerFooter from "../../components/Org/OrganizerFooter";
 
 
 const VenuePayments = () => {
@@ -67,6 +69,8 @@ const VenuePayments = () => {
     return <p className="text-center text-red-500 font-semibold">Error: {error}</p>;
 
   return (
+    <>
+    <OrganizerNavbar/>
     <Card className="venue-payments-container">
       <CardContent>
         <h2 className="venue-payments-heading">Venue Payments</h2>
@@ -112,6 +116,8 @@ const VenuePayments = () => {
         )}
       </CardContent>
     </Card>
+    <OrganizerFooter/>
+    </>
   );
 };
 

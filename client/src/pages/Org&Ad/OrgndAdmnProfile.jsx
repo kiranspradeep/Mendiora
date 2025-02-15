@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import "./AdmnNdOrg.css";
+import OrganizerFooter from '../../components/Org/OrganizerFooter';
+import OrganizerNavbar from '../../components/Org/organizerNavbar';
 
 const ProfilePage = () => {
   const [formData, setFormData] = useState({
@@ -95,6 +97,8 @@ const ProfilePage = () => {
   };
 
   return (
+    <>
+    <OrganizerNavbar/>
     <div className="profile-update-container">
       <h1 className="profile-update-title">Profile</h1>
       <form className="profile-update-form" onSubmit={handleSubmit}>
@@ -147,6 +151,8 @@ const ProfilePage = () => {
       </button>
       {message && <p className="form-message">{message}</p>}
     </div>
+    <OrganizerFooter/>
+    </>
   );
 };
 

@@ -2,6 +2,7 @@ import React, { useState, useRef, useCallback } from "react";
 import axios from "axios";
 import "./EventForm.css";
 import OrganizerNavbar from "../../components/Org/organizerNavbar";
+import OrganizerFooter from "../../components/Org/OrganizerFooter";
 
 const EventForm = () => {
   const [formData, setFormData] = useState({
@@ -104,7 +105,7 @@ const EventForm = () => {
     <>
     <OrganizerNavbar/>
     <div className="eventForm-body">
-      <form onSubmit={handleSubmit}>
+      <form className="form3"onSubmit={handleSubmit}>
         <div className="form-group">
           <label htmlFor="name">Event Name:</label>
           <input type="text" id="name" name="name" value={formData.name} onChange={handleChange} required />
@@ -192,6 +193,7 @@ const EventForm = () => {
           </button>
       </form>
     </div>
+    <OrganizerFooter/>
     </>
   );
 };

@@ -2,6 +2,8 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import './ViewEvents.css';
 import AdminNavbar from "../../components/Admin/AdminNavbar";
+import AdminPage from "./AdminPage";
+import AdminFooter from "../../components/Admin/AdminFooter";
 
 const ViewEvents = () => {
   const [events, setEvents] = useState([]);
@@ -57,7 +59,7 @@ const ViewEvents = () => {
   
   return (
     <>
-    <AdminNavbar/>
+    <AdminPage/>
     <div className="view-events-container">
       <h1 className="view-events-title">All Events</h1>
       {loading ? (
@@ -123,6 +125,8 @@ const ViewEvents = () => {
         </div>
       )}
     </div>
+    <br></br><br></br>
+    <AdminFooter/>
     </>
   );
 };
