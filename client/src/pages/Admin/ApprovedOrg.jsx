@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import "./ApprovedOrganizers.css"; // Import CSS file
+import AdminNavbar from "../../components/Admin/AdminNavbar";
 
 const ApprovedOrganizers = () => {
   const [organizers, setOrganizers] = useState([]);
@@ -80,6 +81,8 @@ const ApprovedOrganizers = () => {
   };
 
   return (
+    <>
+    <AdminNavbar/>
     <div className="approved-organizers-container">
       <h2 className="approved-organizers-heading">Approved Organizers</h2>
 
@@ -130,6 +133,7 @@ const ApprovedOrganizers = () => {
         </div>
       )}
     </div>
+    </>
   );
 };
 

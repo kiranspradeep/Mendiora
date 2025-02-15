@@ -1,6 +1,7 @@
 import React, { useState, useRef, useCallback } from "react";
 import axios from "axios";
 import "./EventForm.css";
+import OrganizerNavbar from "../../components/Org/organizerNavbar";
 
 const EventForm = () => {
   const [formData, setFormData] = useState({
@@ -80,7 +81,6 @@ const EventForm = () => {
   
       alert("Event created successfully!");
       
-      // Reset form fields
       setFormData({
         name: "",
         address: "",
@@ -97,7 +97,6 @@ const EventForm = () => {
         images: [],
       });
   
-      // Clear file input field
       if (fileInputRef.current) {
         fileInputRef.current.value = "";
       }
@@ -109,22 +108,57 @@ const EventForm = () => {
   
 
   return (
+    <>
+    <OrganizerNavbar/>
     <div className="eventForm-body">
       <form onSubmit={handleSubmit}>
-        <input type="text" name="name" placeholder="Event Name" value={formData.name} onChange={handleChange} required />
-        <input type="text" name="address" placeholder="Address" value={formData.address} onChange={handleChange} required />
-        <input type="text" name="city" placeholder="City" value={formData.city} onChange={handleChange} required />
-        <input type="text" name="state" placeholder="State" value={formData.state} onChange={handleChange} required />
-        <input type="text" name="country" placeholder="Country" value={formData.country} onChange={handleChange} required />
-        <input type="date" name="date" value={formData.date} onChange={handleChange} required />
-        <input type="number" name="capacity" placeholder="Capacity" value={formData.capacity} onChange={handleChange} required />
-        <input type="number" name="basePrice" placeholder="Base Price" value={formData.basePrice} onChange={handleChange} required />
-        
-        <label>
-          Premium Access:
-          <input type="checkbox" name="premiumAccess" checked={formData.premiumAccess} onChange={handleChange} />
-        </label>
-        
+        <div className="form-group">
+          <label htmlFor="name">Event Name:</label>
+          <input type="text" id="name" name="name" value={formData.name} onChange={handleChange} required />
+        </div>
+
+        <div className="form-group">
+          <label htmlFor="city">City:</label>
+          <input type="text" id="city" name="city" value={formData.city} onChange={handleChange} required />
+        </div>
+
+        <div className="form-group">
+          <label htmlFor="state">State:</label>
+          <input type="text" id="state" name="state" value={formData.state} onChange={handleChange} required />
+        </div>
+
+        <div className="form-group">
+          <label htmlFor="country">Country:</label>
+          <input type="text" id="country" name="country" value={formData.country} onChange={handleChange} required />
+        </div>
+
+        <div className="form-group full-width">
+          <label htmlFor="address">Address:</label>
+          <input type="text" id="address" name="address" value={formData.address} onChange={handleChange} required />
+        </div>
+
+        <div className="form-group">
+          <label htmlFor="date">Date:</label>
+          <input type="date" id="date" name="date" value={formData.date} onChange={handleChange} required />
+        </div>
+
+        <div className="form-group">
+          <label htmlFor="capacity">Capacity:</label>
+          <input type="number" id="capacity" name="capacity" value={formData.capacity} onChange={handleChange} required />
+        </div>
+
+        <div className="form-group">
+          <label htmlFor="basePrice">Base Price:</label>
+          <input type="number" id="basePrice" name="basePrice" value={formData.basePrice} onChange={handleChange} required />
+        </div>
+
+        <div className="form-group">
+          <label>
+            Premium Access:
+            <input type="checkbox" name="premiumAccess" checked={formData.premiumAccess} onChange={handleChange} />
+          </label>
+        </div>
+
         <fieldset>
           <legend>Add-On Services:</legend>
           {addOnOptions.map((option) => (
@@ -134,20 +168,30 @@ const EventForm = () => {
           ))}
         </fieldset>
 
-        <input type="text" name="featuredPerformer" placeholder="Featured Performer" value={formData.featuredPerformer} onChange={handleChange} />
-        
-        <select name="category" value={formData.category} onChange={handleChange} required>
-          <option value="">Select Category</option>
-          {allowedCategories.map((cat) => (
-            <option key={cat} value={cat}>{cat}</option>
-          ))}
-        </select>
+        <div className="form-group">
+          <label htmlFor="featuredPerformer">Featured Performer:</label>
+          <input type="text" id="featuredPerformer" name="featuredPerformer" value={formData.featuredPerformer} onChange={handleChange} />
+        </div>
 
-        <input type="file" multiple ref={fileInputRef} onChange={handleChange} />
-        
+        <div className="form-group">
+          <label htmlFor="category">Category:</label>
+          <select id="category" name="category" value={formData.category} onChange={handleChange} required>
+            <option value="">Select Category</option>
+            {allowedCategories.map((cat) => (
+              <option key={cat} value={cat}>{cat}</option>
+            ))}
+          </select>
+        </div>
+
+        <div className="form-group full-width">
+          <label htmlFor="images">Upload Images:</label>
+          <input type="file" id="images" multiple ref={fileInputRef} onChange={handleChange} />
+        </div>
+
         <button type="submit">Create Event</button>
       </form>
     </div>
+    </>
   );
 };
 
