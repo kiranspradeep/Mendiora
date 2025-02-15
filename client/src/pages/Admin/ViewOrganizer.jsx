@@ -2,6 +2,8 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import "./ViewOrganizer.css"
 import AdminNavbar from "../../components/Admin/AdminNavbar";
+import AdminPage from "./AdminPage";
+import AdminFooter from "../../components/Admin/AdminFooter";
 
 const ViewOrganizer = () => {
   const [organizers, setOrganizers] = useState([]);
@@ -57,7 +59,7 @@ const ViewOrganizer = () => {
 
   return (
     <>
-    <AdminNavbar/>
+    <AdminPage/>
     <div className="organizer-table-container">
       <h2>View Unapproved Organizers</h2>
       {organizers.length > 0 ? (
@@ -92,6 +94,7 @@ const ViewOrganizer = () => {
         <p>No unapproved organizers available.</p>
       )}
     </div>
+    <AdminFooter/>
     </>
   );
 };

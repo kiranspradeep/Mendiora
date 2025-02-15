@@ -1,229 +1,177 @@
-import React, { useState, useRef } from 'react';
-import axios from 'axios';
-import './VenueForm.css';
-
-const allowedCategories = [
-  "Corporate Event Management",
-  "Wedding Planners & Management",
-  "Entertainment & Show Management",
-  "Birthday Party & Venue Management"
-];
+import React, { useState, useRef, useCallback } from "react";
+import axios from "axios";
+import "./VenueForm.css";
+import OrganizerNavbar from "../../components/Org/organizerNavbar";
+import OrganizerFooter from "../../components/Org/OrganizerFooter";
 
 const VenueForm = () => {
   const [formData, setFormData] = useState({
-    name: '',
-    description: '',
-    address: '',
-    city: '',
-    state: '',
-    country: '',
-    capacity: '',
-    minPrice: '',
-    maxPrice: '',
+    name: "",
+    address: "",
+    city: "",
+    state: "",
+    country: "",
+    capacity: "",
+    minPrice: "",
+    maxPrice: "",
     categories: [],
-    unavailableDates: [],
-    images: null,
+    images: [],
   });
 
-  const [newDate, setNewDate] = useState('');
   const [loading, setLoading] = useState(false);
   const fileInputRef = useRef();
+  const allowedCategories = [
+    "Corporate Event Management",
+    "Wedding Planners & Management",
+    "Entertainment & Show Management",
+    "Birthday Party & Venue Management",
+  ];
 
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setFormData({ ...formData, [name]: value });
-  };
+  const handleChange = useCallback((e) => {
+    const { name, value, type, files } = e.target;
+    if (type === "file") {
+      setFormData((prev) => ({ ...prev, images: files }));
+    } else {
+      setFormData((prev) => ({ ...prev, [name]: value }));
+    }
+  }, []);
 
-  const handleCategoryChange = (e) => {
+  const handleCategoryChange = useCallback((e) => {
     const { value, checked } = e.target;
-    setFormData((prevData) => ({
-      ...prevData,
-      categories: checked
-        ? [...prevData.categories, value]
-        : prevData.categories.filter((category) => category !== value),
-    }));
-  };
+    setFormData((prev) => {
+      const updatedCategories = checked
+        ? [...prev.categories, value]
+        : prev.categories.filter((category) => category !== value);
+      return { ...prev, categories: updatedCategories };
+    });
+  }, []);
 
-  const handleFileChange = (e) => {
-    setFormData({ ...formData, images: e.target.files });
-  };
+  const handleSubmit = useCallback(
+    async (e) => {
+      e.preventDefault();
+      setLoading(true);
 
-  const handleAddDate = () => {
-    const dateRegex = /^\d{4}-\d{2}-\d{2}$/;
-    if (!dateRegex.test(newDate)) {
-      alert('Invalid date format. Please use YYYY-MM-DD.');
-      return;
-    }
-
-    const selectedDate = new Date(newDate);
-    const currentDate = new Date();
-    currentDate.setHours(0, 0, 0, 0);
-
-    if (selectedDate <= currentDate) {
-      alert('Date must be greater than the current date.');
-      return;
-    }
-
-    if (formData.unavailableDates.includes(newDate)) {
-      alert('Date already added.');
-      return;
-    }
-
-    setFormData((prevData) => ({
-      ...prevData,
-      unavailableDates: [...prevData.unavailableDates, newDate],
-    }));
-    setNewDate('');
-  };
-
-  const handleRemoveDate = (date) => {
-    setFormData((prevData) => ({
-      ...prevData,
-      unavailableDates: prevData.unavailableDates.filter((d) => d !== date),
-    }));
-  };
-
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    setLoading(true);
-
-    const formDataToSend = new FormData();
-    for (const key in formData) {
-      if (key === 'images') {
-        for (let i = 0; i < formData[key]?.length; i++) {
-          formDataToSend.append('images', formData[key][i]);
+      const formDataToSend = new FormData();
+      for (const key in formData) {
+        if (key === "images") {
+          for (let i = 0; i < formData[key]?.length; i++) {
+            formDataToSend.append("images", formData[key][i]);
+          }
+        } else if (key === "categories") {
+          formData.categories.forEach((category) => formDataToSend.append("categories", category));
+        } else {
+          formDataToSend.append(key, formData[key]);
         }
-      } else if (key === 'categories') {
-        formDataToSend.append(key, formData[key].join(','));
-      } else if (key === 'unavailableDates') {
-        formData[key].forEach((date) => formDataToSend.append('unavailableDates', date));
-      } else {
-        formDataToSend.append(key, formData[key]);
       }
-    }
 
-    try {
-      const token = localStorage.getItem('token');
-      const response = await axios.post('http://localhost:3000/venue/createVenue', formDataToSend, {
-        headers: {
-          'Content-Type': 'multipart/form-data',
-          'Authorization': `Bearer ${token}`,
-        },
-      });
+      try {
+        const token = localStorage.getItem("token");
+        await axios.post("http://localhost:3000/venue/createVenue", formDataToSend, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "multipart/form-data",
+          },
+        });
 
-      setFormData({
-        name: '',
-        description: '',
-        address: '',
-        city: '',
-        state: '',
-        country: '',
-        capacity: '',
-        minPrice: '',
-        maxPrice: '',
-        categories: [],
-        unavailableDates: [],
-        images: null,
-      });
-
-      fileInputRef.current.value = '';
-      alert(response.data.message);
-    } catch (error) {
-      alert(error.response?.data?.message || 'Error creating venue');
-    } finally {
-      setLoading(false);
-    }
-  };
+        alert("Venue created successfully!");
+        setFormData({
+          name: "",
+          address: "",
+          city: "",
+          state: "",
+          country: "",
+          capacity: "",
+          minPrice: "",
+          maxPrice: "",
+          categories: [],
+          images: [],
+        });
+        if (fileInputRef.current) {
+          fileInputRef.current.value = "";
+        }
+      } catch (error) {
+        console.error("Error creating venue", error);
+        alert(`Error creating venue: ${error.response?.data?.message || error.message}`);
+      } finally {
+        setLoading(false);
+      }
+    },
+    [formData]
+  );
 
   return (
-    <div className="form-container">
-      <form className="venue-form" onSubmit={handleSubmit}>
-        <h2 className="venue-form-h2">Venue Application Form</h2>
-
-        <label>
-          Venue Name:
-          <input type="text" name="name" placeholder="VENUE-NAME" onChange={handleChange} value={formData.name} required />
-        </label>
-
-        <label>
-          Description:
-          <textarea name="description" placeholder="DESCRIPTION" onChange={handleChange} value={formData.description} required />
-        </label>
-
-        <label>
-          Address:
-          <input type="text" name="address" placeholder="ADDRESS" onChange={handleChange} value={formData.address} required />
-        </label>
-
-        <label>
-          City:
-          <input type="text" name="city" placeholder="CITY" onChange={handleChange} value={formData.city} required />
-        </label>
-
-        <label>
-          State:
-          <input type="text" name="state" placeholder="STATE" onChange={handleChange} value={formData.state} required />
-        </label>
-
-        <label>
-          Country:
-          <input type="text" name="country" placeholder="COUNTRY" onChange={handleChange} value={formData.country} required />
-        </label>
-
-        <label>
-          Capacity:
-          <input type="number" name="capacity" placeholder="CAPACITY" onChange={handleChange} value={formData.capacity} required />
-        </label>
-
-        <label>
-          Minimum Price:
-          <input type="number" name="minPrice" placeholder="MIN-PRICE" onChange={handleChange} value={formData.minPrice} required />
-        </label>
-
-        <label>
-          Maximum Price:
-          <input type="number" name="maxPrice" placeholder="MAX-PRICE" onChange={handleChange} value={formData.maxPrice} required />
-        </label>
-
-        <label>Categories (Select One or More):</label>
-        {allowedCategories.map((category) => (
-          <div key={category}>
-            <input
-              type="checkbox"
-              id={category}
-              value={category}
-              onChange={handleCategoryChange}
-              checked={formData.categories.includes(category)}
-            />
-            <label htmlFor={category}>{category}</label>
+    <>
+      <OrganizerNavbar />
+      <div className="venueForm-body">
+        <form className="form3" onSubmit={handleSubmit}>
+          <div className="form-group">
+            <label htmlFor="name">Venue Name:</label>
+            <input type="text" id="name" name="name" value={formData.name} onChange={handleChange} required />
           </div>
-        ))}
 
-        <label>
-          Add Unavailable Date (YYYY-MM-DD format):
-          <input type="text" value={newDate} onChange={(e) => setNewDate(e.target.value)} />
-          <button type="button" onClick={handleAddDate}>Add Date</button>
-        </label>
+          <div className="form-group">
+            <label htmlFor="city">City:</label>
+            <input type="text" id="city" name="city" value={formData.city} onChange={handleChange} required />
+          </div>
 
-        <ul>
-          {formData.unavailableDates.map((date, index) => (
-            <li key={index}>
-              {date}
-              <button type="button" onClick={() => handleRemoveDate(date)}>Remove</button>
-            </li>
-          ))}
-        </ul>
+          <div className="form-group">
+            <label htmlFor="state">State:</label>
+            <input type="text" id="state" name="state" value={formData.state} onChange={handleChange} required />
+          </div>
 
-        <label>
-          Images (Upload Multiple):
-          <input type="file" name="images" multiple onChange={handleFileChange} ref={fileInputRef} required />
-        </label>
+          <div className="form-group">
+            <label htmlFor="country">Country:</label>
+            <input type="text" id="country" name="country" value={formData.country} onChange={handleChange} required />
+          </div>
 
-        <button type="submit" disabled={loading}>
-          {loading ? <div className="spinner"></div> : "Create Venue"}
-        </button>
-      </form>
-    </div>
+          <div className="form-group full-width">
+            <label htmlFor="address">Address:</label>
+            <input type="text" id="address" name="address" value={formData.address} onChange={handleChange} required />
+          </div>
+
+          <div className="form-group">
+            <label htmlFor="capacity">Capacity:</label>
+            <input type="number" id="capacity" name="capacity" value={formData.capacity} onChange={handleChange} required />
+          </div>
+
+          <div className="form-group">
+            <label htmlFor="minPrice">Minimum Price:</label>
+            <input type="number" id="minPrice" name="minPrice" value={formData.minPrice} onChange={handleChange} required />
+          </div>
+
+          <div className="form-group">
+            <label htmlFor="maxPrice">Maximum Price:</label>
+            <input type="number" id="maxPrice" name="maxPrice" value={formData.maxPrice} onChange={handleChange} required />
+          </div>
+
+          <fieldset>
+            <legend>Categories:</legend>
+            {allowedCategories.map((category) => (
+              <label key={category}>
+                <input type="checkbox" value={category} checked={formData.categories.includes(category)} onChange={handleCategoryChange} />{" "}
+                {category}
+              </label>
+            ))}
+          </fieldset>
+
+          <div className="form-group full-width">
+            <label htmlFor="images">Upload Images:</label>
+            <input type="file" id="images" multiple ref={fileInputRef} onChange={handleChange} />
+          </div>
+
+          <button type="submit" disabled={loading} className={loading ? "button-loading" : ""}>
+            {loading ? (
+              <>
+                Creating Venue... <span className="spinner"></span>
+              </>
+            ) : (
+              "Create Venue"
+            )}
+          </button>
+        </form>
+      </div>
+      <OrganizerFooter/>
+    </>
   );
 };
 

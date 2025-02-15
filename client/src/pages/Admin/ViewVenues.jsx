@@ -2,6 +2,8 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import "./ViewVenues.css";
 import AdminNavbar from "../../components/Admin/AdminNavbar";
+import AdminPage from "./AdminPage";
+import AdminFooter from "../../components/Admin/AdminFooter";
 
 const ViewVenues = () => {
   const [venues, setVenues] = useState([]);
@@ -61,7 +63,7 @@ const ViewVenues = () => {
 
   return (
     <>
-    <AdminNavbar/>
+    <AdminPage/>
     <div className="venue-table-container">
       <h2>View Unapproved Venues</h2>
       {venues.length > 0 ? (
@@ -110,6 +112,7 @@ const ViewVenues = () => {
         <p>No unapproved venues available.</p>
       )}
     </div>
+    <AdminFooter/>
     </>
   );
 };

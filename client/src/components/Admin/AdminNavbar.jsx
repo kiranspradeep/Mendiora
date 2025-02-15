@@ -29,7 +29,7 @@ const AdminNavbar = () => {
         <Link to="/venue">Venues</Link>
         <Link to="/viewevent">Events</Link>
         <Link to="/approvedorg">Approved Organizer</Link>
-        <Link to="/venuePayments">Venue Orders</Link>
+        
       </nav>
       <div className="hamburger" onClick={toggleMenu}>
         <div></div>
@@ -41,10 +41,10 @@ const AdminNavbar = () => {
         <Link to="/venue">Venues</Link>
         <Link to="/viewevent">Events</Link>
         <Link to="/approvedorg">Approved Organizer</Link>
-        <Link to="/venuePayments">Venue Orders</Link>
+        
       </div>
     </header>
-    <DashboardGraph/>
+
     </>
   );
 };

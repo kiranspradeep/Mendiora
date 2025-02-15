@@ -1,0 +1,80 @@
+/* Admin Footer General Styling */
+.admin-footer {
+    background-color: #222;
+    color: white;
+    padding: 2rem;
+    text-align: center;
+  }
+  
+  .admin-footer-content {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-around;
+    gap: 2rem;
+  }
+  
+  .admin-footer-logo-section {
+    max-width: 300px;
+  }
+  
+  .admin-footer-logo {
+    color: white;
+    font-size: 1.7rem;
+    font-weight: bold;
+    margin-bottom: 1rem;
+  }
+  
+  .admin-footer-section h4 {
+    margin-bottom: 1rem;
+    font-size: 1.2rem;
+  }
+  
+  .admin-footer-section address {
+    font-style: normal;
+    line-height: 1.6;
+  }
+  
+  .admin-footer-section a {
+    color: white;
+    text-decoration: none;
+  }
+  
+  .admin-footer-social-icons {
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+  }
+  
+  .admin-footer-icon {
+    color: white;
+    font-size: 1.5rem;
+    transition: transform 0.3s, color 0.3s;
+  }
+  
+  .admin-footer-icon:hover {
+    transform: scale(1.2);
+    color: #ff5733;
+    text-shadow: 0 0 8px rgba(255, 87, 51, 0.7);
+  }
+  
+  .admin-footer-bottom {
+    margin-top: 2rem;
+    font-size: 0.9rem;
+    border-top: 1px solid #444;
+    padding-top: 1rem;
+  }
+  
+  /* Responsive Design */
+  @media (max-width: 768px) {
+    .admin-footer-content {
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+    }
+  
+    .admin-footer-social-icons {
+      flex-direction: row;
+      margin: 1rem 0;
+    }
+  }
+  
