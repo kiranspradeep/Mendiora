@@ -18,7 +18,7 @@ const OrganizerEventOrders = () => {
           return;
         }
   
-        console.log("Sending token:", token); // Debugging
+        // console.log("Sending token:", token); // Debugging
   
         const response = await axios.get("http://localhost:3000/eventbooking/organizerEventOrders", {
           headers: { Authorization: `Bearer ${token}` },
