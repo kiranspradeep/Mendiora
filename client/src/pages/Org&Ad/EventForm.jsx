@@ -147,7 +147,7 @@ const EventForm = () => {
         </div>
 
         <div className="form-group">
-          <label>
+          <label className="checkbox-label">
             Premium Access:
             <input type="checkbox" name="premiumAccess" checked={formData.premiumAccess} onChange={handleChange} />
           </label>
@@ -182,7 +182,7 @@ const EventForm = () => {
             <input type="file" id="images" multiple ref={fileInputRef} onChange={handleChange} />
           </div>
 
-          <button type="submit" disabled={loading} className={loading ? "button-loading" : ""}>
+          <button  type="submit" disabled={loading} className={loading ? "button-loading" : ""}>
             {loading ? (
               <>
                 Creating Event... <span className="spinner"></span>

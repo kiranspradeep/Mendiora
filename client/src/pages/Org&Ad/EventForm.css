@@ -23,6 +23,11 @@
   gap: 10px;
   margin: 10px 0;
 }
+.checkbox-label{
+  margin-top: 15px;
+  margin-left: 4px;
+}
+
 
 /* Full-width fields */
 .full-width {

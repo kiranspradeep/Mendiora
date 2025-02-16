@@ -22,6 +22,8 @@ function UserLogin() {
       setMessage(response.data.message || "Login successful");
       navigate('/'); // Redirect to home after successful login
     } catch (error) {
+      console.log(error);
+      
       setMessage(error.response?.data.message || "Something went wrong");
     }
   };

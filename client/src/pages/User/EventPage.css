@@ -81,9 +81,10 @@ body, html {
 .event-cards-container {
   display: grid;
   justify-content: center;
-  grid-template-columns: repeat(4, 1fr);
+  grid-template-columns: repeat(3, 1fr);
   gap: 15px;
   margin: 20px auto;
+  margin-left: 60px;
 }
 
 .event-card {

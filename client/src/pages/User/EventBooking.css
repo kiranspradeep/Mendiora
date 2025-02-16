@@ -1,0 +1,91 @@
+.book-now{
+    background-color: #d82424;
+    border: 1px solid #e7e7e7;
+    border-radius: 5px;
+    padding: 8px;
+    margin: 10px 0;
+    box-shadow: 0 0 5px rgba(0,0,0,0.1);
+    margin-top: -18px;
+}
+.evnt-bk-h2{
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: whitesmoke;
+    margin-bottom: 10px;
+}
+.event-price{
+    font-size: 1rem;
+    color:whitesmoke;
+}
+.event-checkbox:hover{
+    cursor: pointer;
+    background-color: rgb(36, 133, 218);
+}
+.event-checkbox{
+    color:whitesmoke;
+}
+
+.event-ticket {
+    display: flex;
+    align-items: center;
+    margin: 10px 0;
+    gap: 10px;
+    font-size: 16px;
+    font-weight: bold;
+    color:whitesmoke;
+}
+
+.event-ticket input {
+    width: 50px;
+    text-align: center;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+  }
+  .event-ticket {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 18px;
+}
+
+.ticket-selector {
+  padding: 5px;
+  font-size: 16px;
+  border-radius: 5px;
+  border: 1px solid #ccc;
+  cursor: pointer;
+}
+
+.minus-button,
+.plus-button{
+   all:unset;
+    cursor: pointer;
+    padding: 5px;
+    border-radius: 5px;
+    background-color: #d82424;
+    color: whitesmoke;
+    font-size: 15px;
+    font-weight: bold;
+}
+.total-price{
+    color: whitesmoke;
+}
+.ticket-controls {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  
+  
+  
+  
+
+  
+
+  
+  
+ 
+  
+  
+  
+  

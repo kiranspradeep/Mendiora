@@ -34,7 +34,10 @@ eventSchema.methods.calculateDynamicPrice = function () {
   if (this.premiumAccess) price += 100;
   if (this.addOnServices.includes("catering")) price += 50;
   if (this.addOnServices.includes("parking")) price += 25;
-  if (this.featuredPerformer === "Top Artist") price *= 1.5;
+  if (this.addOnServices.includes("Security")) price += 100;
+  if (this.addOnServices.includes("Wi-Fi")) price += 20;
+  if (this.featuredPerformer) price *= 1.5;
+
 
   const dayOfWeek = new Date(this.date).getDay();
   if (dayOfWeek === 0 || dayOfWeek === 6) price *= 1.2;

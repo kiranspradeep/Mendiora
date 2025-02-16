@@ -9,6 +9,9 @@
   padding: 20px 10px;
   margin: 20px 0;
 }
+.form-group{
+  padding-left: 10px;
+}
 
 /* Form Styles */
 .form3 {

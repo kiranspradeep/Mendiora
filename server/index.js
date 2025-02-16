@@ -7,6 +7,7 @@ const userRouter=require("./routes/userRouter")
 const eventRouter=require("./routes/eventRouter")
 const venueRouter=require("./routes/venueRouter")
 const paymentRouter=require("./routes/venueBookingRouter")
+const eventBookingRouter=require("./routes/eventBookingRouter")
 
 require('dotenv').config()
 app.use(cors())
@@ -27,6 +28,7 @@ app.use('/user',userRouter)
 app.use('/event',eventRouter)
 app.use('/venue',venueRouter)
 app.use('/venuepayment',paymentRouter)
+app.use('/eventbooking',eventBookingRouter)
 
 
 

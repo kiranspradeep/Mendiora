@@ -16,7 +16,7 @@ function EventPage() {
   const [sortBy, setSortBy] = useState(""); 
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
-  const limit = 8; // Adjust the number of events per page
+  const limit = 9; // Adjust the number of events per page
 
   useEffect(() => {
     fetchEvents();
@@ -24,13 +24,15 @@ function EventPage() {
 
   const fetchEvents = async () => {
     try {
-      const response = await axios.get(`http://localhost:3000/event/getAllEvents?sortBy=${sortBy}&page=${currentPage}&limit=${limit}`); 
-      setEvents(response.data.events); 
+      const response = await axios.get(`http://localhost:3000/event/getAllEvents?sortBy=${sortBy}&page=${currentPage}&limit=${limit}`);
+      console.log("Fetched Events:", response.data.events); // DEBUGGING
+      setEvents(response.data.events);
       setTotalPages(response.data.totalPages);
     } catch (error) {
       console.error("Error fetching events:", error);
     }
   };
+  
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -68,14 +70,19 @@ function EventPage() {
 
         {/* Event Cards */}
         <div className="event-cards-container">
-          {events.map((event, index) => (
-            <EventCard key={index} {...event} />
-          ))}
-        </div>
+  {events.length > 0 ? (
+    events.map((event, index) => (
+      <EventCard key={index} event={event} />
+    ))
+  ) : (
+    <p>No events available. Please try again later.</p>
+  )}
+</div>
+
 
         {/* Pagination Controls */}
         <div className="pagination">
-          <button 
+          <button  
             onClick={() => setCurrentPage(currentPage - 1)} 
             disabled={currentPage === 1} 
             className="pagination-btn"

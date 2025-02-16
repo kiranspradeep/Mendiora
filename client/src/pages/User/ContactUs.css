@@ -106,7 +106,7 @@
     border-radius: 5px;
 }
 
-.contact-content-section button {
+.cotact-button{
     background-color: #ff5733;
     color: white;
     border: none;
@@ -117,7 +117,7 @@
     transition: background-color 0.3s ease, transform 0.3s ease;
 }
 
-.contact-content-section button:hover {
+cotact-button:hover {
     background-color: #e94e2e;
     transform: scale(1.05);
 }

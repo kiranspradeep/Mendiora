@@ -68,7 +68,7 @@ function ContactUs() {
           <input type="email" required />
           <label>Message:</label>
           <textarea required></textarea>
-          <button type="submit">Send Message</button>
+          <button className='cotact-button' type="submit">Send Message</button>
         </form>
       </div>
       <Footer />
