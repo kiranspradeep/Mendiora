@@ -2,21 +2,23 @@ import React, { useState } from "react";
 import "./Navbar.css";
 import logo from "../../assets/logo.webp";
 import { FaPhoneAlt, FaWhatsapp } from "react-icons/fa";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 const Navbar = () => {
   const [menuActive, setMenuActive] = useState(false);
-  const [dropdownActive, setDropdownActive] = useState(false);
+  const navigate = useNavigate();
+  const isLoggedIn = !!localStorage.getItem("token"); // Check if user is logged in
 
   const toggleMenu = () => {
     setMenuActive(!menuActive);
   };
 
-  const toggleDropdown = () => {
-    setDropdownActive(!dropdownActive);
+  // Logout function
+  const handleLogout = () => {
+    localStorage.removeItem("token"); // Remove token
+    navigate("/"); // Redirect to homepage
+    window.location.reload(); // Reload page to update state
   };
-
-  const isLoggedIn = !!localStorage.getItem('token'); // Check if user is logged in
 
   return (
     <header className="navbar">
@@ -29,19 +31,15 @@ const Navbar = () => {
         <Link to="/aboutus">About Us</Link>
         <Link to="/#service">Service</Link>
         <Link to="/event">Events</Link>
-        {isLoggedIn && <Link to="/profileuser">Profile</Link>} {/* Conditionally render profile link */}
-        
-        {/* Dropdown for Signup */}
-        <div className="signup-dropdown" onClick={toggleDropdown}>
-          <a href="#">Signup</a>
-          {dropdownActive && (
-            <div className="dropdown-menu">
-              <Link to="/signupuser">Signup as User</Link>
-              <Link to="/signuporg">Signup as Organizer</Link>
-            </div>
-          )}
-        </div>
+        {isLoggedIn && <Link to="/profileuser">Profile</Link>}
+        {!isLoggedIn && <Link to="/loginuser">Login</Link>} {/* Conditionally render login */}
+        <Link to="/signupuser">Signup</Link>
         <Link to="/contactus">Contact Us</Link>
+        {isLoggedIn && (
+          <button className="navbar-logout-btn" onClick={handleLogout}>
+            Logout
+          </button>
+        )}
       </nav>
       <div className="navbar-contact">
         <a href="tel:+912000058886">
@@ -61,19 +59,15 @@ const Navbar = () => {
         <Link to="/aboutus">About Us</Link>
         <Link to="/#service">Services</Link>
         <Link to="/event">Events</Link>
-        {isLoggedIn && <Link to="/profileuser">Profile</Link>} {/* Conditionally render profile link */}
-
-        {/* Dropdown for Signup in mobile menu */}
-        <div className="signup-dropdown" onClick={toggleDropdown}>
-          <a href="#">Signup</a>
-          {dropdownActive && (
-            <div className="dropdown-menu">
-              <a href="/signupuser">Signup as User</a>
-              <a href="/signuporg">Signup as Organizer</a> {/* Updated link */}
-            </div>
-          )}
-        </div>
-        <Link to="/contactus">Contact Us</Link>  
+        {isLoggedIn && <Link to="/profileuser">Profile</Link>}
+        {!isLoggedIn && <Link to="/loginuser">Login</Link>}
+        <Link to="/signupuser">Signup</Link>
+        <Link to="/contactus">Contact Us</Link>
+        {isLoggedIn && (
+          <button className="navbar-logout-btn" onClick={handleLogout}>
+            Logout
+          </button>
+        )}
       </div>
     </header>
   );

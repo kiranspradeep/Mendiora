@@ -1,4 +1,3 @@
-/* Navbar styling */
 .navbar {
   display: flex;
   justify-content: space-between;
@@ -177,4 +176,18 @@
   .navbar-links .signup-dropdown.active .dropdown-menu {
     display: flex;
   }
+}
+.navbar-logout-btn {
+  background-color: transparent;
+  border: none;
+  color: #000000;
+  cursor: pointer;
+  font-size: 1rem;
+  padding: 0.5rem 1rem;
+  text-align: left;
+  margin-top: -9px;
+}
+
+.navbar-logout-btn:hover {
+  background-color: #ff5733;
 }

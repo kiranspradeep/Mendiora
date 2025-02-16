@@ -4,13 +4,13 @@ import axios from "axios";
 import Navbar from "../../components/User/Navbar";
 import Footer from "../../components/Footer";
 import EventCard from "../../components/User/EventCard"; 
-import pic1 from "../../assets/party1.jpg";
 import pic2 from "../../assets/party2.jpg";
-import pic3 from "../../assets/party3.jpg";
+import event2 from '../../assets/EVENT2.jpg'
+import event1 from "../../assets/EVENT1.jpg"
 
 function EventPage() {
   const [currentIndex, setCurrentIndex] = useState(0);
-  const images = [pic1, pic2, pic3];
+  const images = [event1, pic2, event2];
 
   const [events, setEvents] = useState([]); 
   const [sortBy, setSortBy] = useState(""); 

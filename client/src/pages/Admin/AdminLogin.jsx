@@ -2,12 +2,12 @@ import React, { useState } from 'react';
 import '../Org&Ad/Login'; // Importing the updated CSS file
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
+import Swal from 'sweetalert2'; // Import SweetAlert2
 import Footer from '../../components/Footer';
 
 function AdminLogin() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [message, setMessage] = useState('');
   const [isLoading, setIsLoading] = useState(false); // Adding loading state
 
   const navigate = useNavigate();
@@ -15,55 +15,48 @@ function AdminLogin() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setIsLoading(true); // Start loading state
-    setMessage(''); // Clear previous messages
-  
+
     try {
       const response = await axios.post(
         'http://localhost:3000/loginAdminOrg', // Adjusted endpoint
         { email, password }
       );
-  
+
       if (response.data.token) {
         localStorage.setItem('token', response.data.token);
-        setMessage(response.data.message || 'Login successful');
-        navigate('/adminnavbar'); // Redirect to home after successful login
+
+        // Show success alert
+        Swal.fire({
+          icon: 'success',
+          title: 'Login Successful',
+          text: response.data.message || 'You have successfully logged in!',
+          timer: 2000,
+          showConfirmButton: false
+        });
+
+        navigate('/adminnavbar'); // Redirect after successful login
       } else {
-        setMessage(response.data.message || 'Login Failed');
+        Swal.fire({
+          icon: 'error',
+          title: 'Login Failed',
+          text: response.data.message || 'Invalid credentials. Please try again.',
+        });
       }
     } catch (error) {
-      setMessage(error.response?.data.message || 'Something went wrong');
+      Swal.fire({
+        icon: 'error',
+        title: 'Error',
+        text: error.response?.data.message || 'Something went wrong. Please try again later.',
+      });
       console.error('Error during login:', error);
     } finally {
       setIsLoading(false); // Stop loading state after completion
     }
   };
-  
-  const fetchData = async () => {
-    const token = localStorage.getItem('token'); // Retrieve the token from localStorage
-  
-    if (!token) {
-      console.log("No token found, user not authenticated");
-      return;
-    }
-  
-    try {
-      const response = await axios.get('http://localhost:3000/protectedRoute', {
-        headers: {
-          'Authorization': `Bearer ${token}` // Send the token in the Authorization header
-        }
-      });
-  
-      // Handle the response from the protected route
-      console.log(response.data);
-    } catch (error) {
-      console.error('Error fetching protected data:', error);
-    }
-  };
-  
 
   return (
     <>
-      <div className="login-container"> {/* Keeping original class name */}
+      <div className="login-container">
         <form action="#" autoComplete="off" className="form1" onSubmit={handleSubmit}>
           <h2>Admin Login</h2>
           <div className="inputBox">
@@ -74,7 +67,7 @@ function AdminLogin() {
               required
               onChange={(e) => setEmail(e.target.value)}
               value={email}
-              aria-label="Email Address" // Accessibility improvement
+              aria-label="Email Address"
             />
           </div>
           <div className="inputBox">
@@ -85,7 +78,7 @@ function AdminLogin() {
               required
               onChange={(e) => setPassword(e.target.value)}
               value={password}
-              aria-label="Password" // Accessibility improvement
+              aria-label="Password"
             />
           </div>
           <div className="submit-btn-container">
@@ -101,7 +94,6 @@ function AdminLogin() {
           <div className="link-container">
             <a href="#signup">Signup</a>
           </div>
-          {message && <p>{message}</p>} {/* Error message styling */}
         </form>
       </div>
       <br />
