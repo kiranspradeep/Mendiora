@@ -54,10 +54,10 @@ const EventBooking = ({ event }) => {
       if (!token) {
         throw new Error("Unauthorized: Please log in.");
       }
-  
+
       const decodedToken = jwtDecode(token);
       const userId = decodedToken.userId;
-  
+
       // ✅ Make booking request
       const response = await axios.post(
         "http://localhost:3000/eventbooking/create-order",
@@ -71,9 +71,9 @@ const EventBooking = ({ event }) => {
         },
         { headers: { Authorization: `Bearer ${token}` } }
       );
-  
+
       const { order } = response.data;
-  
+
       // ✅ Proceed with Razorpay Payment
       const options = {
         key: "rzp_test_nW4vVqRdlXrom0",
@@ -94,10 +94,12 @@ const EventBooking = ({ event }) => {
                 tickets,
                 totalPrice,
                 userId,
+                premiumAccess,
+                addOnServices: selectedAddOns,
               },
               { headers: { Authorization: `Bearer ${token}` } }
             );
-  
+
             if (verifyResponse.data.success) {
               alert("✅ Payment successful! Your event booking is confirmed.");
             } else {
@@ -111,19 +113,18 @@ const EventBooking = ({ event }) => {
         },
         theme: { color: "#3399cc" },
       };
-  
+
       const razorpay = new window.Razorpay(options);
       razorpay.open();
     } catch (error) {
       console.error("❌ Booking Error:", error);
-  
-      // ✅ If the backend sent a "tickets not available" error, show an alert
+
       if (error.response && error.response.status === 400) {
         alert(error.response.data.error);
       } else {
         alert("Booking failed. Please try again.");
       }
-      
+
       setIsBooking(false);
     }
   };

@@ -19,7 +19,6 @@ const createOrder = async (req, res) => {
 
     // ✅ Fetch Event Details
     const event = await Event.findById(eventId);
-    
 
     if (!event) {
       return res.status(404).json({ success: false, error: "Event not found" });
@@ -35,12 +34,11 @@ const createOrder = async (req, res) => {
       });
     }
 
-    // ✅ Ensure totalAmount is in paise for Razorpay
     const amountInPaise = Math.round(totalAmount * 100);
 
     // 🔥 Create Razorpay Order
     const razorpayOrder = await razorpay.orders.create({
-      amount: amountInPaise, // Amount in paise
+      amount: amountInPaise,
       currency: "INR",
       payment_capture: 1,
     });
@@ -51,19 +49,18 @@ const createOrder = async (req, res) => {
 
     console.log("✅ Razorpay Order Created:", razorpayOrder);
 
-    // ✅ Save order details in MongoDB
     const newBooking = new EventBooking({
       event: eventId,
       user: userId,
       tickets,
       premiumAccess,
       addOnServices,
-      totalAmount, // Store the original amount in INR
-      razorpayOrderId: razorpayOrder.id, // ✅ Corrected reference
-      paymentStatus: "pending", // ✅ Ensure lowercase
+      totalAmount,
+      razorpayOrderId: razorpayOrder.id,
+      paymentStatus: "pending",
     });
 
-    await newBooking.save(); // ✅ Store the order in the database
+    await newBooking.save();
 
     res.json({ success: true, order: razorpayOrder });
 
@@ -72,6 +69,7 @@ const createOrder = async (req, res) => {
     res.status(500).json({ success: false, error: "Error creating order" });
   }
 };
+
 
 
 const verifyPayment = async (req, res) => {
@@ -85,10 +83,7 @@ const verifyPayment = async (req, res) => {
       return res.status(400).json({ success: false, message: "Missing payment details" });
     }
 
-    // 🔍 Find the order in EventBooking
     const order = await EventBooking.findOne({ razorpayOrderId: razorpay_order_id });
-    // console.log("📌 Found Order:", order);
-    
 
     if (!order) {
       console.error("❌ Order Not Found:", razorpay_order_id);
@@ -101,29 +96,19 @@ const verifyPayment = async (req, res) => {
       .digest("hex");
 
     if (expectedSignature !== razorpay_signature) {
-      console.error("❌ Signature Mismatch:", expectedSignature, "!==", razorpay_signature);
       return res.status(400).json({ success: false, message: "Invalid payment signature" });
     }
 
-    // ✅ Update EventBooking Order Status
-    order.isPaid = true;
-    order.paymentStatus = "paid"; // ✅ Mark the payment as completed
-    order.paymentId = razorpay_payment_id;
+    order.paymentStatus = "paid";
+    order.razorpayPaymentId = razorpay_payment_id;
+    await order.save();
 
-    await order.save(); // Save the updated order
-
-    // ✅ Update ticketsSold in the Event Model
     const event = await Event.findById(order.event);
-
     if (event) {
-      event.ticketsSold += order.tickets; // ✅ Increment ticketsSold by the booked tickets
+      event.ticketsSold += order.tickets;
       await event.save();
-    } else {
-      console.error("❌ Event Not Found:", order.eventId);
-      return res.status(400).json({ success: false, message: "Associated event not found" });
     }
 
-    console.log("✅ Payment Verified & Tickets Updated Successfully!");
     res.json({ success: true, message: "Payment verified & tickets updated" });
 
   } catch (error) {
@@ -133,7 +118,7 @@ const verifyPayment = async (req, res) => {
 };
 
 
-
+//user
 const getUserBookings = async (req, res) => {
   try {
     const userId = req.user.userId; // Ensure correct field from Auth middleware
@@ -155,6 +140,35 @@ const getUserBookings = async (req, res) => {
 };
 
 
+//organizerexport 
+const getOrganizerEventOrders = async (req, res) => {
+  
+  try {
+    const organizerId = req.user.userId; // Organizer's ID from JWT
+    // Fetch all events created by the organizer
+    const events = await Event.find({ owner: organizerId });
+
+    
+
+    if (!events.length) {
+      return res.status(404).json({ success: false, message: "No events found for this organizer." });
+    }
+
+    // Get all bookings for the organizer's events
+    const eventIds = events.map(event => event._id);
+    const bookings = await EventBooking.find({ event: { $in: eventIds } })
+      .populate("event", "name addons premiumAccess") // Get event name, addons, and premiumAccess
+      .populate("user", "username email"); // Get user details
+
+    res.json({ success: true, bookings });
+    console.log("🚀 Organizer Event Orders:", bookings);
+    
+  } catch (error) {
+    console.error("❌ Error fetching organizer event orders:", error);
+    res.status(500).json({ success: false, message: "Server error. Try again later." });
+  }
+};
+
 const deleteEventBooking = async (req, res) => {
   try {
     const { bookingId } = req.params;
@@ -169,5 +183,6 @@ module.exports = {
   createOrder,
   getUserBookings,
   deleteEventBooking,
-  verifyPayment
+  verifyPayment,
+  getOrganizerEventOrders
 };
