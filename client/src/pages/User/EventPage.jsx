@@ -25,7 +25,7 @@ function EventPage() {
   const fetchEvents = async () => {
     try {
       const response = await axios.get(`http://localhost:3000/event/getAllEvents?sortBy=${sortBy}&page=${currentPage}&limit=${limit}`);
-      console.log("Fetched Events:", response.data.events); // DEBUGGING
+      // console.log("Fetched Events:", response.data.events); // DEBUGGING
       setEvents(response.data.events);
       setTotalPages(response.data.totalPages);
     } catch (error) {

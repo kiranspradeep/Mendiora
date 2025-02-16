@@ -25,8 +25,9 @@ import ViewEvents from './pages/Admin/ViewEvents';
 import DashboardGraph from './pages/Admin/DashboardGraph';
 import AdminPage from './pages/Admin/AdminPage';
 import AdminFooter from './components/Admin/AdminFooter';
-import OrganizerDashboard from './pages/Org&Ad/OrganizerDashboard';
 import OrganizerPage from './pages/Org&Ad/OrganizerPage';
+import UserEventBookings from './pages/User/UserEventBookings';
+
 
 function App () {
         
@@ -58,6 +59,7 @@ function App () {
             <Route path='/adpage' element={<AdminPage/>}/>
             <Route path='/orgnavdash' element={<OrganizerPage/>}/>
             <Route path='/adminfooter' element={<AdminFooter/>}/>
+            <Route path='/UserEventBookings' element={<UserEventBookings/>}/>
         </Routes>
     );
 };

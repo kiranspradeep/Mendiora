@@ -5,10 +5,11 @@ const Auth = require("../middlewares/authMiddleware");
 // const role = require("../middlewares/roleMiddleware");
 
 // Create a booking
-Bookingrouter.post("/book",Auth, bookingController.createBooking);
+Bookingrouter.post("/create-order",Auth, bookingController.createOrder);
+Bookingrouter.post("/verify-payment",Auth, bookingController.verifyPayment);
 
 // Get all bookings for a user
-Bookingrouter.get("/user/:userId",Auth, bookingController.getUserBookings);
+Bookingrouter.get("/userEventBooking",Auth, bookingController.getUserBookings);
 
 // Cancel a booking
 Bookingrouter.delete("/cancel/:bookingId", bookingController.deleteEventBooking);

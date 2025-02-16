@@ -1,16 +1,30 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import "./EventBooking.css";
+import { jwtDecode } from "jwt-decode";
 
 const EventBooking = ({ event }) => {
   const [selectedAddOns, setSelectedAddOns] = useState([]);
   const [premiumAccess, setPremiumAccess] = useState(false);
   const [tickets, setTickets] = useState(1);
   const [totalPrice, setTotalPrice] = useState(event.basePrice || 0);
+  const [isBooking, setIsBooking] = useState(false);
 
   useEffect(() => {
     calculatePrice();
   }, [selectedAddOns, premiumAccess, tickets]);
+
+  useEffect(() => {
+    const loadRazorpayScript = () => {
+      if (!window.Razorpay) {
+        const script = document.createElement("script");
+        script.src = "https://checkout.razorpay.com/v1/checkout.js";
+        script.async = true;
+        document.body.appendChild(script);
+      }
+    };
+    loadRazorpayScript();
+  }, []);
 
   const handleAddOnChange = (addOn) => {
     setSelectedAddOns((prev) =>
@@ -34,43 +48,86 @@ const EventBooking = ({ event }) => {
   };
 
   const handleBooking = async () => {
+    setIsBooking(true);
     try {
-      await axios.post("http://localhost:3000/booking", {
-        eventId: event._id,
-        tickets,
-        premiumAccess,
-        addOnServices: selectedAddOns,
-        totalAmount: totalPrice,
-      });
-      alert("Booking Successful!");
+      const token = localStorage.getItem("token");
+      if (!token) {
+        throw new Error("Unauthorized: Please log in.");
+      }
+  
+      const decodedToken = jwtDecode(token);
+      const userId = decodedToken.userId;
+  
+      // ✅ Make booking request
+      const response = await axios.post(
+        "http://localhost:3000/eventbooking/create-order",
+        {
+          eventId: event._id,
+          tickets,
+          premiumAccess,
+          addOnServices: selectedAddOns,
+          totalAmount: totalPrice,
+          userId,
+        },
+        { headers: { Authorization: `Bearer ${token}` } }
+      );
+  
+      const { order } = response.data;
+  
+      // ✅ Proceed with Razorpay Payment
+      const options = {
+        key: "rzp_test_nW4vVqRdlXrom0",
+        amount: order.amount,
+        currency: order.currency,
+        name: "Event Booking",
+        description: `Booking for ${event.name}`,
+        order_id: order.id,
+        handler: async (paymentResponse) => {
+          try {
+            const verifyResponse = await axios.post(
+              "http://localhost:3000/eventbooking/verify-payment",
+              {
+                razorpay_order_id: paymentResponse.razorpay_order_id,
+                razorpay_payment_id: paymentResponse.razorpay_payment_id,
+                razorpay_signature: paymentResponse.razorpay_signature,
+                eventId: event._id,
+                tickets,
+                totalPrice,
+                userId,
+              },
+              { headers: { Authorization: `Bearer ${token}` } }
+            );
+  
+            if (verifyResponse.data.success) {
+              alert("✅ Payment successful! Your event booking is confirmed.");
+            } else {
+              alert("❌ Payment verification failed. Please try again.");
+            }
+          } catch (error) {
+            console.error("❌ Payment Verification Error:", error);
+            alert("Error verifying payment. Please contact support.");
+          }
+          setIsBooking(false);
+        },
+        theme: { color: "#3399cc" },
+      };
+  
+      const razorpay = new window.Razorpay(options);
+      razorpay.open();
     } catch (error) {
-      console.error("Booking Error:", error);
+      console.error("❌ Booking Error:", error);
+  
+      // ✅ If the backend sent a "tickets not available" error, show an alert
+      if (error.response && error.response.status === 400) {
+        alert(error.response.data.error);
+      } else {
+        alert("Booking failed. Please try again.");
+      }
+      
+      setIsBooking(false);
     }
   };
-
-  // Set max tickets based on available capacity
-  const maxTickets = event.capacity ? event.capacity - event.ticketsSold : 10;
-  console.log("Max Tickets:", maxTickets);
   
-  // Function to increase ticket count
-const handleIncrement = () => {
-  console.log("Max Tickets:", maxTickets);
-  setTickets((prev) => {
-    const newTickets = prev < maxTickets ? prev + 1 : maxTickets;
-    console.log("Incremented Tickets:", newTickets);
-    return newTickets;
-  });
-};
-
-// Function to decrease ticket count
-const handleDecrement = () => {
-  setTickets((prev) => {
-    const newTickets = Math.max(1, prev - 1);
-    console.log("Decremented Tickets:", newTickets);
-    return newTickets;
-  });
-};
-
 
   return (
     <div>
@@ -102,37 +159,20 @@ const handleDecrement = () => {
         Wi-Fi (+Rs20)
       </label>
 
-      {/* Ticket Counter */}
-      <div className="calculation">
       <div className="event-ticket">
         <span>Number of Tickets:</span>
-        <button className="minus-button" type="button" onClick={handleDecrement}>
-  -
-</button>
-
-<input
-  type="number"
-  value={tickets}
-  min="1"
-  max={maxTickets}
-  onChange={(e) => {
-    const value = parseInt(e.target.value, 10);
-    if (!isNaN(value) && value >= 1 && value <= maxTickets) {
-      setTickets(value);
-    }
-  }}
-/>
-
-<button className="plus-button" type="button" onClick={handleIncrement}>
-  +
-</button>
-
-      </div>
+        <button className="minus-button" type="button" onClick={() => setTickets(Math.max(1, tickets - 1))}>
+          -
+        </button>
+        <input type="number" value={tickets} min="1" onChange={(e) => setTickets(parseInt(e.target.value, 10))} />
+        <button className="plus-button" type="button" onClick={() => setTickets(tickets + 1)}>
+          +
+        </button>
       </div>
 
       <h3 className="total-price">Total Price: Rs{totalPrice}</h3>
-      <button className="book-now" onClick={handleBooking}>
-        Book Now
+      <button className="book-now" onClick={handleBooking} disabled={isBooking}>
+        {isBooking ? "Processing..." : "Pay & Book Event"}
       </button>
     </div>
   );
