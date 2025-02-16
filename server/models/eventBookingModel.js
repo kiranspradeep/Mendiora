@@ -9,6 +9,8 @@ const bookingSchema = new mongoose.Schema({
   razorpayOrderId: { type: String },
   razorpayPaymentId: { type: String },
   razorpaySignature: { type: String },
+  premiumAccess: { type: Boolean, default: false }, // ✅ Added Premium Access
+  addOnServices: { type: [String], default: [] },   // ✅ Added Add-On Services
   createdAt: { type: Date, default: Date.now },
 });
 
