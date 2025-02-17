@@ -19,7 +19,7 @@ import ApprovedOrg from './pages/Admin/ApprovedOrg';
 import ViewOrganizers from './pages/Admin/ViewOrganizer';
 import AdminLogin from './pages/Admin/AdminLogin';
 import ViewVenues from './pages/Admin/ViewVenues';
-import OrganizerNavbar from './components/Org/organizerNavbar';
+import OrganizerNavbar from './components/Org/OrganizerNavbar';
 import EventPage from './pages/User/EventPage';
 import ViewEvents from './pages/Admin/ViewEvents';
 import DashboardGraph from './pages/Admin/DashboardGraph';

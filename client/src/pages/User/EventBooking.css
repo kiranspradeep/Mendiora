@@ -1,64 +1,56 @@
-.book-now{
+.book-now {
     background-color: #d82424;
     border: 1px solid #e7e7e7;
     border-radius: 5px;
     padding: 8px;
     margin: 10px 0;
-    box-shadow: 0 0 5px rgba(0,0,0,0.1);
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
     margin-top: -18px;
-}
-.evnt-bk-h2{
+    width: 100%;
+    max-width: 300px;
+  }
+  
+  .evnt-bk-h2 {
     font-size: 1.5rem;
     font-weight: 600;
     color: whitesmoke;
     margin-bottom: 10px;
-}
-.event-price{
+  }
+  
+  .event-price {
     font-size: 1rem;
-    color:whitesmoke;
-}
-.event-checkbox:hover{
+    color: whitesmoke;
+  }
+  
+  .event-checkbox {
+    color: whitesmoke;
+  }
+  
+  .event-checkbox:hover {
     cursor: pointer;
     background-color: rgb(36, 133, 218);
-}
-.event-checkbox{
-    color:whitesmoke;
-}
-
-.event-ticket {
+  }
+  
+  .event-ticket {
     display: flex;
     align-items: center;
     margin: 10px 0;
     gap: 10px;
     font-size: 16px;
     font-weight: bold;
-    color:whitesmoke;
-}
-
-.event-ticket input {
+    color: whitesmoke;
+  }
+  
+  .event-ticket input {
     width: 50px;
     text-align: center;
     border: 1px solid #ccc;
     border-radius: 4px;
   }
-  .event-ticket {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  font-size: 18px;
-}
-
-.ticket-selector {
-  padding: 5px;
-  font-size: 16px;
-  border-radius: 5px;
-  border: 1px solid #ccc;
-  cursor: pointer;
-}
-
-.minus-button,
-.plus-button{
-   all:unset;
+  
+  .minus-button,
+  .plus-button {
+    all: unset;
     cursor: pointer;
     padding: 5px;
     border-radius: 5px;
@@ -66,26 +58,85 @@
     color: whitesmoke;
     font-size: 15px;
     font-weight: bold;
-}
-.total-price{
+  }
+  
+  .total-price {
     color: whitesmoke;
-}
-.ticket-controls {
+  }
+  
+  .ticket-controls {
     display: flex;
     align-items: center;
     gap: 8px;
   }
   
+  @media screen and (max-width: 768px) {
+    /* Tablet/Smaller screen styles */
+    .evnt-bk-h2 {
+      font-size: 1.25rem;
+    }
   
+    .event-price,
+    .event-ticket {
+      font-size: 14px;
+    }
   
+    .book-now {
+      font-size: 14px;
+      padding: 12px;
+      max-width: 100%;
+    }
   
-
+    .event-checkbox {
+      font-size: 14px;
+      margin-bottom: 8px;
+    }
   
-
+    .event-ticket input {
+      width: 45px;
+      font-size: 14px;
+    }
   
+    .ticket-controls {
+      gap: 5px;
+    }
+  }
   
- 
+  @media screen and (max-width: 480px) {
+    /* Mobile screen styles */
+    .evnt-bk-h2 {
+      font-size: 1.1rem;
+    }
   
+    .event-price,
+    .event-ticket {
+      font-size: 12px;
+    }
   
+    .event-checkbox {
+      font-size: 12px;
+      margin-bottom: 5px;
+    }
   
+    .minus-button,
+    .plus-button {
+      padding: 3px 8px;
+      font-size: 13px;
+    }
+  
+    .ticket-controls {
+      gap: 3px;
+    }
+  
+    .book-now {
+      font-size: 13px;
+      padding: 12px;
+      max-width: 100%;
+    }
+  
+    .event-ticket input {
+      width: 40px;
+      font-size: 12px;
+    }
+  }
   

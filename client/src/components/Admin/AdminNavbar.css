@@ -44,6 +44,31 @@
   color: #ff5733; /* Highlight color */
 }
 
+/* Logout button styling */
+.logout-button {
+  background-color: #ff5733; /* Set the button color */
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  font-size: 1rem;
+  font-weight: bold;
+  cursor: pointer;
+  border-radius: 5px;
+  transition: background-color 0.3s ease, transform 0.3s ease;
+  display: inline-block; /* Ensure button sits inline with links */
+  margin-left: 20px; /* Add space between logout and other links */
+}
+
+.logout-button:hover {
+  background-color: #e14e2c; /* Darker shade for hover effect */
+  transform: translateY(-2px); /* Slight hover effect */
+}
+
+.logout-button:focus {
+  outline: none;
+  box-shadow: 0 0 0 2px rgba(255, 87, 51, 0.5); /* Focus style */
+}
+
 /* Dropdown menu styling */
 .admin-navbar-links .signup-dropdown {
   position: relative;
@@ -127,11 +152,11 @@
 @media (max-width: 768px) {
   /* Hide the navbar links on mobile */
   .admin-navbar-links {
-      display: none;
+    display: none;
   }
 
   /* Show hamburger menu on mobile */
   .hamburger {
-      display: flex;
+    display: flex;
   }
 }

@@ -34,7 +34,7 @@ function AdminLogin() {
           showConfirmButton: false
         });
 
-        navigate('/adminnavbar'); // Redirect after successful login
+        navigate('/adpage'); // Redirect after successful login
       } else {
         Swal.fire({
           icon: 'error',
