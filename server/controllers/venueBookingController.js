@@ -145,6 +145,9 @@ const getVenuePayments = async (req, res) => {
   }
 };
 
+//usergetting info
+
+
 
 
 

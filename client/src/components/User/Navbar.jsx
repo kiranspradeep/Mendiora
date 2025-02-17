@@ -35,6 +35,7 @@ const Navbar = () => {
         {!isLoggedIn && <Link to="/loginuser">Login</Link>} {/* Conditionally render login */}
         <Link to="/signupuser">Signup</Link>
         <Link to="/contactus">Contact Us</Link>
+        <Link to="/UserEventBookings">event bookings</Link>
         {isLoggedIn && (
           <button className="navbar-logout-btn" onClick={handleLogout}>
             Logout

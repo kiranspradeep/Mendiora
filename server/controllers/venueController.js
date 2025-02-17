@@ -29,8 +29,18 @@ const createVenue = async (req, res) => {
       isApproved,
     } = req.body;
 
+    // Ensure categories is an array
+    let categoryList = [];
+
+    if (Array.isArray(categories)) {
+      categoryList = categories.map((category) => category.trim());
+    } else if (typeof categories === "string") {
+      categoryList = categories.split(",").map((category) => category.trim());
+    } else {
+      return res.status(400).json({ message: "Invalid category format" });
+    }
+
     // Validate categories
-    const categoryList = categories.split(",").map((category) => category.trim());
     const invalidCategories = categoryList.filter(category => !allowedCategories.includes(category));
 
     if (invalidCategories.length > 0) {
@@ -81,13 +91,11 @@ const createVenue = async (req, res) => {
 
     res.status(201).json({ message: "Venue created successfully", venue });
   } catch (error) {
-    console.log(error);
+    console.error(error);
     if (error.code === 11000) {
       return res.status(400).json({ message: "Duplicate venue entry detected." });
     }
     res.status(500).json({ message: "Server error", error: error.message });
-    console.log("sdfghj",error);
-    
   }
 };
 
