@@ -2,12 +2,15 @@ import React from 'react';
 import { useLocation } from 'react-router-dom';
 import VenueCard from '../../components/VenueCard';
 import './VenuesSection.css';
+import Navbar from '../../components/User/Navbar';
 
 const VenuesSection = () => {
   const { state } = useLocation();
   const venues = state?.venues || []; // Access the venues from the state
 
   return (
+    <>
+    <Navbar />
     <div className="venues-section">
       <h2>Venues</h2>
       {venues.length > 0 ? (
@@ -20,6 +23,7 @@ const VenuesSection = () => {
         <p>No venues found for this category.</p>
       )}
     </div>
+    </>
   );
 };
 

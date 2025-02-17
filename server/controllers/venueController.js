@@ -86,6 +86,8 @@ const createVenue = async (req, res) => {
       return res.status(400).json({ message: "Duplicate venue entry detected." });
     }
     res.status(500).json({ message: "Server error", error: error.message });
+    console.log("sdfghj",error);
+    
   }
 };
 

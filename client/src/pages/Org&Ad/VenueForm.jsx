@@ -16,6 +16,7 @@ const VenueForm = () => {
     maxPrice: "",
     categories: [],
     images: [],
+    description: "", // Added description field
   });
 
   const [loading, setLoading] = useState(false);
@@ -85,6 +86,7 @@ const VenueForm = () => {
           maxPrice: "",
           categories: [],
           images: [],
+          description: "", // Reset description field
         });
         if (fileInputRef.current) {
           fileInputRef.current.value = "";
@@ -144,12 +146,16 @@ const VenueForm = () => {
             <input type="number" id="maxPrice" name="maxPrice" value={formData.maxPrice} onChange={handleChange} required />
           </div>
 
+          <div className="form-group full-width">
+            <label htmlFor="description">Description:</label>
+            <textarea id="description" name="description" value={formData.description} onChange={handleChange} required />
+          </div>
+
           <fieldset>
             <legend>Categories:</legend>
             {allowedCategories.map((category) => (
               <label key={category}>
-                <input type="checkbox" value={category} checked={formData.categories.includes(category)} onChange={handleCategoryChange} />{" "}
-                {category}
+                <input type="checkbox" value={category} checked={formData.categories.includes(category)} onChange={handleCategoryChange} /> {category}
               </label>
             ))}
           </fieldset>
@@ -161,16 +167,14 @@ const VenueForm = () => {
 
           <button type="submit" disabled={loading} className={loading ? "button-loading" : ""}>
             {loading ? (
-              <>
-                Creating Venue... <span className="spinner"></span>
-              </>
+              <>Creating Venue... <span className="spinner"></span></>
             ) : (
               "Create Venue"
             )}
           </button>
         </form>
       </div>
-      <OrganizerFooter/>
+      <OrganizerFooter />
     </>
   );
 };

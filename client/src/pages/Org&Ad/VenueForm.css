@@ -9,7 +9,8 @@
   padding: 20px 10px;
   margin: 20px 0;
 }
-.form-group{
+
+.form-group {
   padding-left: 10px;
 }
 
@@ -33,7 +34,7 @@
 }
 
 /* Input Fields */
-input, select {
+input, select, textarea {
   width: 100%;
   padding: 6px;
   border: 1px solid #ccc;
@@ -42,10 +43,16 @@ input, select {
   transition: border-color 0.3s, box-shadow 0.3s;
 }
 
-input:focus, select:focus {
+input:focus, select:focus, textarea:focus {
   border-color: #007bff;
   outline: none;
   box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
+}
+
+/* Textarea for Description */
+textarea {
+  resize: vertical;
+  min-height: 80px;
 }
 
 /* Checkbox and Radio Fields */
