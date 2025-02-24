@@ -29,6 +29,7 @@ import OrganizerPage from './pages/Org&Ad/OrganizerPage';
 import UserEventBookings from './pages/User/UserEventBookings';
 import OrganizerEventOrders from './pages/Org&Ad/OrganizerEventOrder';
 import Navbar from './components/User/Navbar';
+import Venueorderu from  "./pages/User/UderBooking"
 
 
 function App () {
@@ -64,6 +65,7 @@ function App () {
             <Route path='/UserEventBookings' element={<UserEventBookings/>}/>
             <Route path='/OrganizerEventOrders' element={<OrganizerEventOrders/>}/>
             <Route path='/usernav' element={<Navbar/>}/>
+            <Route path='/venueorder' element={<Venueorderu/>}/>
         </Routes>
     );
 };

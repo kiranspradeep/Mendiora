@@ -146,9 +146,29 @@ const getVenuePayments = async (req, res) => {
 };
 
 //usergetting info
+const getUserBookings = async (req, res) => {
+  try {
+    const userId = req.user?.userId;
+
+    if (!userId) {
+      return res.status(400).json({ success: false, message: "User ID is required" });
+    }
+
+    // Find all venue bookings made by the user
+    const bookings = await VenueBooking.find({ userId: new mongoose.Types.ObjectId(userId) })
+      .populate("venueId", "name location")
+      .select("razorpayOrderId razorpayPaymentId totalPrice bookingDate venueId status");
+
+    res.status(200).json({ success: true, data: bookings.length > 0 ? bookings : [] });
+
+  } catch (error) {
+    console.error("❌ Error fetching user bookings:", error);
+    res.status(500).json({ success: false, message: "Error fetching user bookings", error: error.message });
+  }
+};
 
 
 
 
 
-module.exports = { createOrder, verifyPayment,getVenuePayments };
+module.exports = { createOrder, verifyPayment,getVenuePayments,getUserBookings };
