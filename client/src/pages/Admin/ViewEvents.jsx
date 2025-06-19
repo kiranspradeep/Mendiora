@@ -13,7 +13,7 @@ const ViewEvents = () => {
   const fetchPendingEvents = async () => {
     try {
       const token = localStorage.getItem("token");
-      const response = await axios.get("http://localhost:3000/event/getpendingEvents", {
+      const response = await axios.get("https://mendiora-2.onrender.com/event/getpendingEvents", {
         headers: { Authorization: `Bearer ${token}` },
       });
 
@@ -34,7 +34,7 @@ const ViewEvents = () => {
   const handleApprove = async (Id) => {
     try {
       const token = localStorage.getItem("token"); // Get auth token
-      await axios.put(`http://localhost:3000/event/approveEvent/${Id}`, {}, {
+      await axios.put(`https://mendiora-2.onrender.com/event/approveEvent/${Id}`, {}, {
         headers: { Authorization: `Bearer ${token}` },
       });
       fetchPendingEvents();
@@ -47,7 +47,7 @@ const ViewEvents = () => {
   const handleReject = async (Id) => {
     try {
       const token = localStorage.getItem("token"); // Get auth token
-      await axios.put(`http://localhost:3000/event/rejectEvent/${Id}`, {}, {
+      await axios.put(`https://mendiora-2.onrender.com/event/rejectEvent/${Id}`, {}, {
         headers: { Authorization: `Bearer ${token}` },
       });
       fetchPendingEvents();

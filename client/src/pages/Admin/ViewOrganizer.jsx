@@ -13,7 +13,7 @@ const ViewOrganizer = () => {
     const fetchOrganizers = async () => {
       try {
         const token = localStorage.getItem("token"); // Get auth token
-        const response = await axios.get("http://localhost:3000/getunapprovedOrg", {
+        const response = await axios.get("https://mendiora-2.onrender.com/getunapprovedOrg", {
           headers: { Authorization: `Bearer ${token}` },
         });
         setOrganizers(response.data.users || []); // Set the unapproved organizers
@@ -30,7 +30,7 @@ const ViewOrganizer = () => {
       const token = localStorage.getItem("token");
       // Send PUT request to approve organizer
       const response = await axios.put(
-        `http://localhost:3000/approveOrg/${id}`, // Use the ID of the organizer in the URL
+        `https://mendiora-2.onrender.com/approveOrg/${id}`, // Use the ID of the organizer in the URL
         {},
         { headers: { Authorization: `Bearer ${token}` } }
       );
@@ -46,7 +46,7 @@ const ViewOrganizer = () => {
       const token = localStorage.getItem("token");
       // Send PUT request to reject organizer
       const response = await axios.put(
-        `http://localhost:3000/rejectOrg/${id}`, // Use the ID of the organizer in the URL
+        `https://mendiora-2.onrender.com/rejectOrg/${id}`, // Use the ID of the organizer in the URL
         {},
         { headers: { Authorization: `Bearer ${token}` } }
       );

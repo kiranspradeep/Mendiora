@@ -89,7 +89,7 @@ const VenueCard = ({ venue }) => {
   
       // console.log("📌 Booking Details:", { venueId: venue.id, amountInPaise, selectedDate });
   
-      const response = await fetch("http://localhost:3000/venuepayment/create-order", {
+      const response = await fetch("https://mendiora-2.onrender.com//venuepayment/create-order", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -121,7 +121,7 @@ const VenueCard = ({ venue }) => {
         handler: async (paymentResponse) => {
           // console.log("📌 Payment Response:", paymentResponse);
   
-          const verifyResponse = await fetch("http://localhost:3000/venuepayment/verify-payment", {
+          const verifyResponse = await fetch("https://mendiora-2.onrender.com/venuepayment/verify-payment", {
             method: "POST",
             headers: {
               "Content-Type": "application/json",

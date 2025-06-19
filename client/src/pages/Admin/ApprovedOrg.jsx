@@ -24,7 +24,7 @@ const ApprovedOrganizers = () => {
       }
 
       const response = await axios.get(
-        `http://localhost:3000/getAprovedOrg?search=${search}`,
+        `https://mendiora-2.onrender.com/getAprovedOrg?search=${search}`,
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -51,7 +51,7 @@ const ApprovedOrganizers = () => {
         throw new Error("User not authenticated");
       }
 
-      const url = `http://localhost:3000/${
+      const url = `https://mendiora-2.onrender.com/${
         isBlocked ? "unblock" : "block"
       }/${organizerId}`;
 

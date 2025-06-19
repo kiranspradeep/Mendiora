@@ -13,7 +13,7 @@ const ViewVenues = () => {
     const fetchVenues = async () => {
       try {
         const token = localStorage.getItem("token"); // Get auth token
-        const response = await axios.get("http://localhost:3000/venue", {
+        const response = await axios.get("https://mendiora-2.onrender.com/venue", {
           headers: { Authorization: `Bearer ${token}` },
         });
         setVenues(response.data.venues || []); // Set the unapproved venues

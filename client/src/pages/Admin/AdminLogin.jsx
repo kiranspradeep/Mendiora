@@ -18,7 +18,7 @@ function AdminLogin() {
 
     try {
       const response = await axios.post(
-        'http://localhost:3000/loginAdminOrg', // Adjusted endpoint
+        'https://mendiora-2.onrender.com//loginAdminOrg', // Adjusted endpoint
         { email, password }
       );
 
