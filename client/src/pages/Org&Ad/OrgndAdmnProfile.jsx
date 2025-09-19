@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import "./AdmnNdOrg.css";
 import OrganizerFooter from '../../components/Org/OrganizerFooter';
-import OrganizerNavbar from '../../components/Org/organizerNavbar';
+import OrganizerNavbar from '../../components/Org/OrganizerNavbar';
 
 const ProfilePage = () => {
   const [formData, setFormData] = useState({

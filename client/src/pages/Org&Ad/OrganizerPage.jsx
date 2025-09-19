@@ -1,5 +1,5 @@
 import React from 'react'
-import OrganizerNavbar from '../../components/Org/organizerNavbar'
+import OrganizerNavbar from '../../components/Org/OrganizerNavbar'
 import OrganizerDashboard from './OrganizerDashboard'
 
 function OrganizerPage() {

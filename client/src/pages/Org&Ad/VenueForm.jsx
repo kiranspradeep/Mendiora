@@ -1,7 +1,7 @@
 import React, { useState, useRef, useCallback } from "react";
 import axios from "axios";
 import "./VenueForm.css";
-import OrganizerNavbar from "../../components/Org/organizerNavbar";
+import OrganizerNavbar from "../../components/Org/OrganizerNavbar";
 import OrganizerFooter from "../../components/Org/OrganizerFooter";
 
 const VenueForm = () => {
