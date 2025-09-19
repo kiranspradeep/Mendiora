@@ -10,7 +10,7 @@ import {
 } from "../../components/Table";
 import './venuePayment.css';
 import axios from "axios";
-import OrganizerNavbar from "../../components/Org/organizerNavbar";
+import OrganizerNavbar from "../../components/Org/OrganizerNavbar";
 import OrganizerFooter from "../../components/Org/OrganizerFooter";
 
 
